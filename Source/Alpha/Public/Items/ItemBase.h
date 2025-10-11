@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/ItemDataStructs.h"
+#include "Alpha/ItemDataStructs.h"
 #include "Alpha/AlphaCharacter.h"
 #include "ItemBase.generated.h"
 
