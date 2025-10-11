@@ -77,9 +77,21 @@
     <ClCompile Include="..\..\Source\Alpha\Private\Items\ItemBase.cpp">
       <Filter>Source\Alpha\Private\Items</Filter>
     </ClCompile>
+    <Filter Include="Source\Alpha\Private\World">
+      <UniqueIdentifier>{0A39D262-06FF-3C17-A232-B7A55A441A8A}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Alpha\Private\World\InterfaceTestActor.cpp">
+      <Filter>Source\Alpha\Private\World</Filter>
+    </ClCompile>
     <Filter Include="Source\Alpha\Public">
       <UniqueIdentifier>{3573188E-76DE-30EB-BED4-216A3CC062D5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Alpha\Public\Data">
+      <UniqueIdentifier>{13E1401C-9B50-3586-BDAA-A52EFB08D09B}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\Data\ItemDataStructs.h">
+      <Filter>Source\Alpha\Public\Data</Filter>
+    </ClInclude>
     <Filter Include="Source\Alpha\Public\Interfaces">
       <UniqueIdentifier>{163939DE-36C2-3570-A0D8-D10C4C23E4B4}</UniqueIdentifier>
     </Filter>
@@ -92,15 +104,11 @@
     <ClInclude Include="..\..\Source\Alpha\Public\Items\ItemBase.h">
       <Filter>Source\Alpha\Public\Items</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Source\Alpha\Public\Data">
-      <UniqueIdentifier>{ed849f40-1d11-4412-bce1-b971913409e8}</UniqueIdentifier>
+    <Filter Include="Source\Alpha\Public\World">
+      <UniqueIdentifier>{29999A70-0EAC-36B6-817F-2E6CC660655E}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\Alpha\Public\Data\ItemDataStructs.h">
-      <Filter>Source\Alpha\Public\Data</Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\World\InterfaceTestActor.h">
+      <Filter>Source\Alpha\Public\World</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
