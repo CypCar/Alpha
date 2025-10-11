@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "Alpha/ItemDataStructs.h"
+#include "Data/ItemDataStructs.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
@@ -49,7 +49,7 @@ struct Z_Construct_UEnum_Alpha_EItemQuality_Statics
 		{ "Grandmaster.Name", "EItemQuality::Grandmaster" },
 		{ "Masterwork.DisplayName", "Masterwork" },
 		{ "Masterwork.Name", "EItemQuality::Masterwork" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 		{ "Qulaity.DisplayName", "Quality" },
 		{ "Qulaity.Name", "EItemQuality::Qulaity" },
 		{ "Shoddy.DisplayName", "Shoddy" },
@@ -109,7 +109,7 @@ struct Z_Construct_UEnum_Alpha_EItemType_Statics
 		{ "Armor.Name", "EItemType::Armor" },
 		{ "Consumable.DisplayName", "Consumable" },
 		{ "Consumable.Name", "EItemType::Consumable" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 		{ "Mundane.DisplayName", "Mundane" },
 		{ "Mundane.Name", "EItemType::Mundane" },
 		{ "Quest.DisplayName", "Quest" },
@@ -169,23 +169,23 @@ struct Z_Construct_UScriptStruct_FItemStatistics_Statics
 {
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ArmorRating_MetaData[] = {
 		{ "Category", "ItemStatistics" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DamageValue_MetaData[] = {
 		{ "Category", "ItemStatistics" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_RestorationAmount_MetaData[] = {
 		{ "Category", "ItemStatistics" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SellValue_MetaData[] = {
 		{ "Category", "ItemStatistics" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_ArmorRating;
@@ -247,23 +247,23 @@ struct Z_Construct_UScriptStruct_FItemTextData_Statics
 {
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Name_MetaData[] = {
 		{ "Category", "ItemTextData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Description_MetaData[] = {
 		{ "Category", "ItemTextData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_InteractionText_MetaData[] = {
 		{ "Category", "ItemTextData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_UsageText_MetaData[] = {
 		{ "Category", "ItemTextData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FTextPropertyParams NewProp_Name;
@@ -325,19 +325,19 @@ struct Z_Construct_UScriptStruct_FItemNumericData_Statics
 {
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Weight_MetaData[] = {
 		{ "Category", "ItemNumericData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MaxStackSize_MetaData[] = {
 		{ "Category", "ItemNumericData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_bIsStackable_MetaData[] = {
 		{ "Category", "ItemNumericData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_Weight;
@@ -401,15 +401,15 @@ struct Z_Construct_UScriptStruct_FItemAssetData_Statics
 {
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Icon_MetaData[] = {
 		{ "Category", "ItemAssetData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Mesh_MetaData[] = {
 		{ "Category", "ItemAssetData" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Icon;
@@ -466,35 +466,35 @@ struct Z_Construct_UScriptStruct_FItemData_Statics
 {
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ID_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ItemType_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ItemQuality_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ItemStatistics_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TextData_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_NumericData_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_AssetData_MetaData[] = {
 		{ "Category", "Item Data" },
-		{ "ModuleRelativePath", "ItemDataStructs.h" },
+		{ "ModuleRelativePath", "Public/Data/ItemDataStructs.h" },
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FNamePropertyParams NewProp_ID;
@@ -515,13 +515,13 @@ struct Z_Construct_UScriptStruct_FItemData_Statics
 };
 const UECodeGen_Private::FNamePropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ID = { "ID", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ID), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ID_MetaData), NewProp_ID_MetaData) };
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemType_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FEnumPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemType = { "ItemType", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ItemType), Z_Construct_UEnum_Alpha_EItemType, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemType_MetaData), NewProp_ItemType_MetaData) }; // 547998196
+const UECodeGen_Private::FEnumPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemType = { "ItemType", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ItemType), Z_Construct_UEnum_Alpha_EItemType, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemType_MetaData), NewProp_ItemType_MetaData) }; // 3676791577
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemQuality_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FEnumPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemQuality = { "ItemQuality", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ItemQuality), Z_Construct_UEnum_Alpha_EItemQuality, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemQuality_MetaData), NewProp_ItemQuality_MetaData) }; // 3311530907
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemStatistics = { "ItemStatistics", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ItemStatistics), Z_Construct_UScriptStruct_FItemStatistics, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemStatistics_MetaData), NewProp_ItemStatistics_MetaData) }; // 3553551581
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_TextData = { "TextData", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, TextData), Z_Construct_UScriptStruct_FItemTextData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TextData_MetaData), NewProp_TextData_MetaData) }; // 1730460238
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_NumericData = { "NumericData", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, NumericData), Z_Construct_UScriptStruct_FItemNumericData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_NumericData_MetaData), NewProp_NumericData_MetaData) }; // 111970342
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_AssetData = { "AssetData", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, AssetData), Z_Construct_UScriptStruct_FItemAssetData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_AssetData_MetaData), NewProp_AssetData_MetaData) }; // 826149325
+const UECodeGen_Private::FEnumPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemQuality = { "ItemQuality", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ItemQuality), Z_Construct_UEnum_Alpha_EItemQuality, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemQuality_MetaData), NewProp_ItemQuality_MetaData) }; // 3203675754
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemStatistics = { "ItemStatistics", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, ItemStatistics), Z_Construct_UScriptStruct_FItemStatistics, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemStatistics_MetaData), NewProp_ItemStatistics_MetaData) }; // 140346620
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_TextData = { "TextData", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, TextData), Z_Construct_UScriptStruct_FItemTextData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TextData_MetaData), NewProp_TextData_MetaData) }; // 3460715622
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_NumericData = { "NumericData", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, NumericData), Z_Construct_UScriptStruct_FItemNumericData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_NumericData_MetaData), NewProp_NumericData_MetaData) }; // 158047502
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FItemData_Statics::NewProp_AssetData = { "AssetData", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FItemData, AssetData), Z_Construct_UScriptStruct_FItemAssetData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_AssetData_MetaData), NewProp_AssetData_MetaData) }; // 998741295
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UScriptStruct_FItemData_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ID,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FItemData_Statics::NewProp_ItemType_Underlying,
@@ -558,24 +558,24 @@ UScriptStruct* Z_Construct_UScriptStruct_FItemData()
 // ********** End ScriptStruct FItemData ***********************************************************
 
 // ********** Begin Registration *******************************************************************
-struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_ItemDataStructs_h__Script_Alpha_Statics
+struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Data_ItemDataStructs_h__Script_Alpha_Statics
 {
 	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
-		{ EItemQuality_StaticEnum, TEXT("EItemQuality"), &Z_Registration_Info_UEnum_EItemQuality, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3311530907U) },
-		{ EItemType_StaticEnum, TEXT("EItemType"), &Z_Registration_Info_UEnum_EItemType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 547998196U) },
+		{ EItemQuality_StaticEnum, TEXT("EItemQuality"), &Z_Registration_Info_UEnum_EItemQuality, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3203675754U) },
+		{ EItemType_StaticEnum, TEXT("EItemType"), &Z_Registration_Info_UEnum_EItemType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3676791577U) },
 	};
 	static constexpr FStructRegisterCompiledInInfo ScriptStructInfo[] = {
-		{ FItemStatistics::StaticStruct, Z_Construct_UScriptStruct_FItemStatistics_Statics::NewStructOps, TEXT("ItemStatistics"), &Z_Registration_Info_UScriptStruct_FItemStatistics, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemStatistics), 3553551581U) },
-		{ FItemTextData::StaticStruct, Z_Construct_UScriptStruct_FItemTextData_Statics::NewStructOps, TEXT("ItemTextData"), &Z_Registration_Info_UScriptStruct_FItemTextData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemTextData), 1730460238U) },
-		{ FItemNumericData::StaticStruct, Z_Construct_UScriptStruct_FItemNumericData_Statics::NewStructOps, TEXT("ItemNumericData"), &Z_Registration_Info_UScriptStruct_FItemNumericData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemNumericData), 111970342U) },
-		{ FItemAssetData::StaticStruct, Z_Construct_UScriptStruct_FItemAssetData_Statics::NewStructOps, TEXT("ItemAssetData"), &Z_Registration_Info_UScriptStruct_FItemAssetData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemAssetData), 826149325U) },
-		{ FItemData::StaticStruct, Z_Construct_UScriptStruct_FItemData_Statics::NewStructOps, TEXT("ItemData"), &Z_Registration_Info_UScriptStruct_FItemData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemData), 67418139U) },
+		{ FItemStatistics::StaticStruct, Z_Construct_UScriptStruct_FItemStatistics_Statics::NewStructOps, TEXT("ItemStatistics"), &Z_Registration_Info_UScriptStruct_FItemStatistics, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemStatistics), 140346620U) },
+		{ FItemTextData::StaticStruct, Z_Construct_UScriptStruct_FItemTextData_Statics::NewStructOps, TEXT("ItemTextData"), &Z_Registration_Info_UScriptStruct_FItemTextData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemTextData), 3460715622U) },
+		{ FItemNumericData::StaticStruct, Z_Construct_UScriptStruct_FItemNumericData_Statics::NewStructOps, TEXT("ItemNumericData"), &Z_Registration_Info_UScriptStruct_FItemNumericData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemNumericData), 158047502U) },
+		{ FItemAssetData::StaticStruct, Z_Construct_UScriptStruct_FItemAssetData_Statics::NewStructOps, TEXT("ItemAssetData"), &Z_Registration_Info_UScriptStruct_FItemAssetData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemAssetData), 998741295U) },
+		{ FItemData::StaticStruct, Z_Construct_UScriptStruct_FItemData_Statics::NewStructOps, TEXT("ItemData"), &Z_Registration_Info_UScriptStruct_FItemData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FItemData), 413592012U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_ItemDataStructs_h__Script_Alpha_1485338507(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Data_ItemDataStructs_h__Script_Alpha_207211443(TEXT("/Script/Alpha"),
 	nullptr, 0,
-	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_ItemDataStructs_h__Script_Alpha_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_ItemDataStructs_h__Script_Alpha_Statics::ScriptStructInfo),
-	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_ItemDataStructs_h__Script_Alpha_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_ItemDataStructs_h__Script_Alpha_Statics::EnumInfo));
+	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Data_ItemDataStructs_h__Script_Alpha_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Data_ItemDataStructs_h__Script_Alpha_Statics::ScriptStructInfo),
+	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Data_ItemDataStructs_h__Script_Alpha_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Data_ItemDataStructs_h__Script_Alpha_Statics::EnumInfo));
 // ********** End Registration *********************************************************************
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
