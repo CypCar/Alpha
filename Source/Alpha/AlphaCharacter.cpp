@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+
 #include "AlphaCharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
@@ -11,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Alpha.h"
+#include "DrawDebugHelpers.h"
 
 AAlphaCharacter::AAlphaCharacter()
 {
@@ -45,6 +47,11 @@ AAlphaCharacter::AAlphaCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	InteractionCheckFrequency = 0.1;
+	InteractionCheckDistance = 225.0f;
+	BaseEyeHeight = 74.0f;
+
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -131,3 +138,88 @@ void AAlphaCharacter::DoJumpEnd()
 	// signal the character to stop jumping
 	StopJumping();
 }
+
+void AAlphaCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AAlphaCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (GetWorld()->TimeSince(InteractionData.LastInteractionCheckTime) > InteractionCheckFrequency)
+	{
+		PerformInteractionCheck();
+	}	
+
+}
+
+void AAlphaCharacter::PerformInteractionCheck()
+{
+	InteractionData.LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
+
+	FVector TraceStart{GetPawnViewLocation()};
+	FVector TraceEnd{ TraceStart + (GetViewRotation().Vector() * InteractionCheckDistance) };
+
+
+	float LookDirection = FVector::DotProduct(GetActorForwardVector(), GetViewRotation().Vector()); 
+
+	if (LookDirection > 0)
+	{	
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f, 0, 2.0f);
+
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+		FHitResult TraceHit;
+
+	
+		if (GetWorld()->LineTraceSingleByChannel(TraceHit, TraceStart, TraceEnd, ECC_Visibility, QueryParams))
+		{
+			if (TraceHit.GetActor()->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
+			{
+				const float Distance = (TraceStart - TraceHit.ImpactPoint).Size();
+
+				if (TraceHit.GetActor() != InteractionData.CurrentInteractable && Distance <= InteractionCheckDistance)
+				{
+					FoundInteractable(TraceHit.GetActor());
+					return;
+				}
+
+				if (TraceHit.GetActor() == InteractionData.CurrentInteractable)
+				{
+					return;
+				}
+			}
+		}
+	}
+
+	NoInteractableFound();
+}
+
+void AAlphaCharacter::FoundInteractable(AActor* NewInteractable)
+{
+
+}
+
+void AAlphaCharacter::NoInteractableFound()
+{
+
+}
+
+void AAlphaCharacter::BeginInteract()
+{
+
+}
+
+void AAlphaCharacter::EndInteract()
+{
+
+}
+
+void AAlphaCharacter::Interact()
+{
+
+}
+
+
