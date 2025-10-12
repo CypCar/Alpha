@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 // ********** Begin Class AInterfaceTestActor ******************************************************
 ALPHA_API UClass* Z_Construct_UClass_AInterfaceTestActor_NoRegister();
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_12_INCLASS_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_13_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAInterfaceTestActor(); \
 	friend struct Z_Construct_UClass_AInterfaceTestActor_Statics; \
@@ -27,10 +27,11 @@ private: \
 	friend ALPHA_API UClass* Z_Construct_UClass_AInterfaceTestActor_NoRegister(); \
 public: \
 	DECLARE_CLASS2(AInterfaceTestActor, AActor, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/Alpha"), Z_Construct_UClass_AInterfaceTestActor_NoRegister) \
-	DECLARE_SERIALIZER(AInterfaceTestActor)
+	DECLARE_SERIALIZER(AInterfaceTestActor) \
+	virtual UObject* _getUObject() const override { return const_cast<AInterfaceTestActor*>(this); }
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_12_ENHANCED_CONSTRUCTORS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_13_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	AInterfaceTestActor(AInterfaceTestActor&&) = delete; \
 	AInterfaceTestActor(const AInterfaceTestActor&) = delete; \
@@ -40,12 +41,12 @@ public: \
 	NO_API virtual ~AInterfaceTestActor();
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_9_PROLOG
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_12_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_10_PROLOG
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_13_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_12_INCLASS_NO_PURE_DECLS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_12_ENHANCED_CONSTRUCTORS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_13_INCLASS_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h_13_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

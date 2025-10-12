@@ -72,11 +72,19 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
+
+		/*// Begin Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::BeginInteract);
+
+		// End Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AAlphaCharacter::EndInteract);*/
 	}
 	else
 	{
 		UE_LOG(LogAlpha, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AAlphaCharacter::BeginInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AAlphaCharacter::EndInteract);
 }
 
 void AAlphaCharacter::Move(const FInputActionValue& Value)
@@ -199,27 +207,85 @@ void AAlphaCharacter::PerformInteractionCheck()
 
 void AAlphaCharacter::FoundInteractable(AActor* NewInteractable)
 {
+	if (IsInteracting())
+	{
+		EndInteract();
+	}
 
+	if (InteractionData.CurrentInteractable)
+	{
+		TargetInteractable = InteractionData.CurrentInteractable;
+		TargetInteractable->EndFocus();
+	}
+
+	InteractionData.CurrentInteractable = NewInteractable;
+	TargetInteractable = NewInteractable;
+
+	TargetInteractable->BeginFocus();
 }
 
 void AAlphaCharacter::NoInteractableFound()
 {
+	if (IsInteracting())
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle_Interaction);
+	}
 
+	if (InteractionData.CurrentInteractable)
+	{
+		if (IsValid(TargetInteractable.GetObject()))
+		{
+			TargetInteractable->EndFocus();
+		}
+
+		//hide interaction widget on the HUD
+
+		InteractionData.CurrentInteractable = nullptr;
+		TargetInteractable = nullptr;
+	}
 }
 
 void AAlphaCharacter::BeginInteract()
 {
+	//Verify nothing has changed with interactable state since beginning interaction
+	PerformInteractionCheck();
 
+	if (InteractionData.CurrentInteractable)
+	{
+		if (IsValid(TargetInteractable.GetObject()))
+		{
+			TargetInteractable->BeginInteract();
+
+			if (FMath::IsNearlyZero(TargetInteractable->InteractableData.InteractionDuration, 0.1f))
+			{
+				Interact();
+			}
+			else
+			{
+				GetWorldTimerManager().SetTimer(TimerHandle_Interaction, this, &AAlphaCharacter::Interact, TargetInteractable->InteractableData.InteractionDuration, false);
+			}
+		}
+	}
 }
 
 void AAlphaCharacter::EndInteract()
 {
+	GetWorldTimerManager().ClearTimer(TimerHandle_Interaction);
 
+	if (IsValid(TargetInteractable.GetObject()))
+	{
+		TargetInteractable->EndInteract();
+	}
 }
 
 void AAlphaCharacter::Interact()
 {
+	GetWorldTimerManager().ClearTimer(TimerHandle_Interaction);
 
+	if (IsValid(TargetInteractable.GetObject()))
+	{
+		TargetInteractable->Interact();
+	}
 }
 
 
