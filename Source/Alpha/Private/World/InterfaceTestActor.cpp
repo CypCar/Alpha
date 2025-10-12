@@ -57,7 +57,7 @@ void AInterfaceTestActor::EndInteract()
 	UE_LOG(LogTemp, Warning, TEXT("Calling EndInteract ovveride on interface test actor"));
 }
 
-void AInterfaceTestActor::Interact()
+void AInterfaceTestActor::Interact(AAlphaCharacter* PlayerCharacter)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Calling Interact ovveride on interface test actor"));
 }

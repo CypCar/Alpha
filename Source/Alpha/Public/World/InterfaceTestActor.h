@@ -31,5 +31,5 @@ protected:
 	virtual void EndFocus() override;
 	virtual void BeginInteract() override;
 	virtual void EndInteract() override;
-	virtual void Interact() override;
+	virtual void Interact(AAlphaCharacter* PlayerCharacter) override;
 };

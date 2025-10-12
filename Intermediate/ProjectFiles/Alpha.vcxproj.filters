@@ -77,6 +77,15 @@
     <ClCompile Include="..\..\Source\Alpha\Private\Items\ItemBase.cpp">
       <Filter>Source\Alpha\Private\Items</Filter>
     </ClCompile>
+    <Filter Include="Source\Alpha\Private\UserInterface">
+      <UniqueIdentifier>{CFC903D4-D43C-309E-ADAB-A49F426DF5CA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Private\UserInterface\Interaction">
+      <UniqueIdentifier>{B6760841-8C4B-339C-A492-0EBC3F6AB408}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\InteractionWidget.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Interaction</Filter>
+    </ClCompile>
     <Filter Include="Source\Alpha\Private\World">
       <UniqueIdentifier>{0A39D262-06FF-3C17-A232-B7A55A441A8A}</UniqueIdentifier>
     </Filter>
@@ -103,6 +112,15 @@
     </Filter>
     <ClInclude Include="..\..\Source\Alpha\Public\Items\ItemBase.h">
       <Filter>Source\Alpha\Public\Items</Filter>
+    </ClInclude>
+    <Filter Include="Source\Alpha\Public\UserInterface">
+      <UniqueIdentifier>{C4B2464A-CCA1-3D07-A688-68FF9A816290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Public\UserInterface\Interaction">
+      <UniqueIdentifier>{C069DE8C-34A2-3103-A115-665589A8E9F5}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\InteractionWidget.h">
+      <Filter>Source\Alpha\Public\UserInterface\Interaction</Filter>
     </ClInclude>
     <Filter Include="Source\Alpha\Public\World">
       <UniqueIdentifier>{29999A70-0EAC-36B6-817F-2E6CC660655E}</UniqueIdentifier>

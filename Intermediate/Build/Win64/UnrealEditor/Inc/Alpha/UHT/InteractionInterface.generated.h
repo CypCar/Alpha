@@ -17,7 +17,7 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 // ********** Begin ScriptStruct FInteractableData *************************************************
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_22_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_24_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FInteractableData_Statics; \
 	ALPHA_API static class UScriptStruct* StaticStruct();
 
@@ -28,7 +28,7 @@ struct FInteractableData;
 // ********** Begin Interface UInteractionInterface ************************************************
 ALPHA_API UClass* Z_Construct_UClass_UInteractionInterface_NoRegister();
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_ENHANCED_CONSTRUCTORS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	ALPHA_API UInteractionInterface(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	/** Deleted move- and copy-constructors, should never be used */ \
@@ -40,7 +40,7 @@ ALPHA_API UClass* Z_Construct_UClass_UInteractionInterface_NoRegister();
 	virtual ~UInteractionInterface() = default;
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_GENERATED_UINTERFACE_BODY() \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_GENERATED_UINTERFACE_BODY() \
 private: \
 	static void StaticRegisterNativesUInteractionInterface(); \
 	friend struct Z_Construct_UClass_UInteractionInterface_Statics; \
@@ -51,15 +51,15 @@ public: \
 	DECLARE_SERIALIZER(UInteractionInterface)
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_GENERATED_BODY \
 	PRAGMA_DISABLE_DEPRECATION_WARNINGS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_GENERATED_UINTERFACE_BODY() \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_ENHANCED_CONSTRUCTORS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_GENERATED_UINTERFACE_BODY() \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_ENHANCED_CONSTRUCTORS \
 private: \
 	PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_INCLASS_IINTERFACE_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_INCLASS_IINTERFACE_NO_PURE_DECLS \
 protected: \
 	virtual ~IInteractionInterface() {} \
 public: \
@@ -68,11 +68,11 @@ public: \
 	virtual UObject* _getUObject() const { return nullptr; }
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_51_PROLOG
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_62_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_53_PROLOG
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_64_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_54_INCLASS_IINTERFACE_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Interfaces_InteractionInterface_h_56_INCLASS_IINTERFACE_NO_PURE_DECLS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
