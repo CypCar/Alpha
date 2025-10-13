@@ -13,6 +13,7 @@
 #include "InputActionValue.h"
 #include "Alpha.h"
 #include "DrawDebugHelpers.h"
+#include "UserInterface/AlphaHUD.h"
 
 AAlphaCharacter::AAlphaCharacter()
 {
@@ -150,6 +151,8 @@ void AAlphaCharacter::DoJumpEnd()
 void AAlphaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	HUD = Cast<AAlphaHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 }
 
 void AAlphaCharacter::Tick(float DeltaSeconds)
@@ -220,6 +223,8 @@ void AAlphaCharacter::FoundInteractable(AActor* NewInteractable)
 	InteractionData.CurrentInteractable = NewInteractable;
 	TargetInteractable = NewInteractable;
 
+	HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
+
 	TargetInteractable->BeginFocus();
 }
 
@@ -237,7 +242,7 @@ void AAlphaCharacter::NoInteractableFound()
 			TargetInteractable->EndFocus();
 		}
 
-		//hide interaction widget on the HUD
+		HUD->HideInteractionWidget();
 
 		InteractionData.CurrentInteractable = nullptr;
 		TargetInteractable = nullptr;
