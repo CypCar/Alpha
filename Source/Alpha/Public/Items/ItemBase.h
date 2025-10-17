@@ -7,20 +7,19 @@
 #include "Alpha/AlphaCharacter.h"
 #include "ItemBase.generated.h"
 
-/**
- * 
- */
+class UInventoryComponent;
+
 UCLASS()
 class ALPHA_API UItemBase : public UObject
 {
 	GENERATED_BODY()
 	
 public:
-
-	//Properties & Variables
-
-	//UPROPERTY()
-	//UInventoryComponent* OwningInventory;
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
+	UPROPERTY()
+	UInventoryComponent* OwningInventory;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	int32 Quantity;
@@ -46,7 +45,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FItemAssetData AssetData;
 
-	//Functions
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 
 	UItemBase();
 
