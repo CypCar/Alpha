@@ -65,6 +65,12 @@
     <Filter Include="Source\Alpha\Private">
       <UniqueIdentifier>{C3C2F8E8-1ABE-3970-A93A-36D435FFF442}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Alpha\Private\Components">
+      <UniqueIdentifier>{6606B765-C425-372F-ACDF-B09D7A20F796}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Alpha\Private\Components\InventoryComponent.cpp">
+      <Filter>Source\Alpha\Private\Components</Filter>
+    </ClCompile>
     <Filter Include="Source\Alpha\Private\Interfaces">
       <UniqueIdentifier>{CFA33B4A-D732-380D-839F-62E2C8BEBC72}</UniqueIdentifier>
     </Filter>
@@ -110,6 +116,12 @@
     <Filter Include="Source\Alpha\Public">
       <UniqueIdentifier>{3573188E-76DE-30EB-BED4-216A3CC062D5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Alpha\Public\Components">
+      <UniqueIdentifier>{6A84959E-571D-3840-8073-BC0A1203D9FD}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\Components\InventoryComponent.h">
+      <Filter>Source\Alpha\Public\Components</Filter>
+    </ClInclude>
     <Filter Include="Source\Alpha\Public\Data">
       <UniqueIdentifier>{13E1401C-9B50-3586-BDAA-A52EFB08D09B}</UniqueIdentifier>
     </Filter>

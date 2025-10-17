@@ -20,7 +20,7 @@ class AAlphaCharacter;
 class UItemBase;
 
 // ********** Begin Class UItemBase ****************************************************************
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execUse); \
 	DECLARE_FUNCTION(execSetQuantity); \
 	DECLARE_FUNCTION(execIsFullItemStack); \
@@ -31,7 +31,7 @@ class UItemBase;
 
 ALPHA_API UClass* Z_Construct_UClass_UItemBase_NoRegister();
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_INCLASS_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUItemBase(); \
 	friend struct Z_Construct_UClass_UItemBase_Statics; \
@@ -42,7 +42,7 @@ public: \
 	DECLARE_SERIALIZER(UItemBase)
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_ENHANCED_CONSTRUCTORS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	UItemBase(UItemBase&&) = delete; \
 	UItemBase(const UItemBase&) = delete; \
@@ -52,13 +52,13 @@ public: \
 	NO_API virtual ~UItemBase();
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_13_PROLOG
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_12_PROLOG
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_INCLASS_NO_PURE_DECLS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_16_ENHANCED_CONSTRUCTORS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_INCLASS_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_Items_ItemBase_h_15_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
