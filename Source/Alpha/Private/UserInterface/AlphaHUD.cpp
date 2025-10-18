@@ -32,7 +32,7 @@ void AAlphaHUD::DisplayMenu()
 {
 	if (MainMenuWidget)
 	{
-		bIsMainMenuVisible = true;
+		bIsMenuVisible = true;
 		MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
@@ -41,8 +41,27 @@ void AAlphaHUD::HideMenu()
 {
 	if (MainMenuWidget)
 	{
-		bIsMainMenuVisible = false;
+		bIsMenuVisible = false;
 		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void AAlphaHUD::ToggleMenu()
+{
+	if (bIsMenuVisible)
+	{
+		HideMenu();
+
+		const FInputModeGameOnly InputMode;
+		GetOwningPlayerController()->SetInputMode(InputMode);
+		GetOwningPlayerController()->SetShowMouseCursor(false);
+	}
+	else
+	{
+		DisplayMenu();
+		const FInputModeGameAndUI InputMode;
+		GetOwningPlayerController()->SetInputMode(InputMode);
+		GetOwningPlayerController()->SetShowMouseCursor(true);
 	}
 }
 
@@ -51,7 +70,6 @@ void AAlphaHUD::ShowInteractionWidget() const
 	if (InteractionWidget)
 	{
 		InteractionWidget->SetVisibility(ESlateVisibility::Visible);
-
 	}
 }
 

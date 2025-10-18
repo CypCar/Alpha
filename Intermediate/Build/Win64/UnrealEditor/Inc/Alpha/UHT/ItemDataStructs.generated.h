@@ -69,7 +69,7 @@ struct FItemData;
 #define FOREACH_ENUM_EITEMQUALITY(op) \
 	op(EItemQuality::Shoddy) \
 	op(EItemQuality::Common) \
-	op(EItemQuality::Qulaity) \
+	op(EItemQuality::Quality) \
 	op(EItemQuality::Masterwork) \
 	op(EItemQuality::Grandmaster) 
 

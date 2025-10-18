@@ -83,6 +83,12 @@
     <ClCompile Include="..\..\Source\Alpha\Private\Items\ItemBase.cpp">
       <Filter>Source\Alpha\Private\Items</Filter>
     </ClCompile>
+    <Filter Include="Source\Alpha\Private\Player">
+      <UniqueIdentifier>{D47E2E8F-4398-3C6E-9035-C9DBB2392981}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Alpha\Private\Player\MyAlphaPlayerController.cpp">
+      <Filter>Source\Alpha\Private\Player</Filter>
+    </ClCompile>
     <Filter Include="Source\Alpha\Private\UserInterface">
       <UniqueIdentifier>{CFC903D4-D43C-309E-ADAB-A49F426DF5CA}</UniqueIdentifier>
     </Filter>
@@ -101,7 +107,19 @@
     <Filter Include="Source\Alpha\Private\UserInterface\Inventory">
       <UniqueIdentifier>{E78BE5BC-6F10-3F9B-A629-8DD5F6F96C12}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\DragItemVisual.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\InventoryItemSlot.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Inventory</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\InventoryPanel.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\InventoryTooltip.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\ItemDragDropOperation.cpp">
       <Filter>Source\Alpha\Private\UserInterface\Inventory</Filter>
     </ClCompile>
     <Filter Include="Source\Alpha\Private\World">
@@ -140,6 +158,12 @@
     <ClInclude Include="..\..\Source\Alpha\Public\Items\ItemBase.h">
       <Filter>Source\Alpha\Public\Items</Filter>
     </ClInclude>
+    <Filter Include="Source\Alpha\Public\Player">
+      <UniqueIdentifier>{B149B307-60E1-3F18-B958-B1A57435AAB1}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\Player\MyAlphaPlayerController.h">
+      <Filter>Source\Alpha\Public\Player</Filter>
+    </ClInclude>
     <Filter Include="Source\Alpha\Public\UserInterface">
       <UniqueIdentifier>{C4B2464A-CCA1-3D07-A688-68FF9A816290}</UniqueIdentifier>
     </Filter>
@@ -158,7 +182,19 @@
     <Filter Include="Source\Alpha\Public\UserInterface\Inventory">
       <UniqueIdentifier>{706F74CC-3D9A-3DC1-922E-E3B0C9142A9A}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\DragItemVisual.h">
+      <Filter>Source\Alpha\Public\UserInterface\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryItemSlot.h">
+      <Filter>Source\Alpha\Public\UserInterface\Inventory</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryPanel.h">
+      <Filter>Source\Alpha\Public\UserInterface\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryTooltip.h">
+      <Filter>Source\Alpha\Public\UserInterface\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\ItemDragDropOperation.h">
       <Filter>Source\Alpha\Public\UserInterface\Inventory</Filter>
     </ClInclude>
     <Filter Include="Source\Alpha\Public\World">

@@ -286,6 +286,9 @@
     <ClCompile Include="..\..\Source\Alpha\Private\Items\ItemBase.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\Player\MyAlphaPlayerController.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\AlphaHUD.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -295,7 +298,19 @@
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\InteractionWidget.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\DragItemVisual.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\InventoryItemSlot.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\InventoryPanel.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\InventoryTooltip.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\ItemDragDropOperation.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\World\InterfaceTestActor.cpp">
@@ -308,10 +323,15 @@
     <ClInclude Include="..\..\Source\Alpha\Public\Data\ItemDataStructs.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\Interfaces\InteractionInterface.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\Items\ItemBase.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\Player\MyAlphaPlayerController.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\AlphaHUD.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\MainMenu.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\InteractionWidget.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\DragItemVisual.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryItemSlot.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryPanel.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryTooltip.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\ItemDragDropOperation.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\World\InterfaceTestActor.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\World\Pickup.h"/>
   </ItemGroup>

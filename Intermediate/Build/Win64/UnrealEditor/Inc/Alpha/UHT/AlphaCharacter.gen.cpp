@@ -16,6 +16,7 @@ ALPHA_API UClass* Z_Construct_UClass_AAlphaCharacter();
 ALPHA_API UClass* Z_Construct_UClass_AAlphaCharacter_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_AAlphaHUD_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UInteractionInterface_NoRegister();
+ALPHA_API UClass* Z_Construct_UClass_UInventoryComponent_NoRegister();
 ALPHA_API UScriptStruct* Z_Construct_UScriptStruct_FInteractionData();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_ACharacter();
@@ -409,6 +410,11 @@ struct Z_Construct_UClass_AAlphaCharacter_Statics
 		{ "Category", "Character | Interaction" },
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_PlayerInventory_MetaData[] = {
+		{ "Category", "Character | Inventory" },
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_CameraBoom;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_FollowCamera;
@@ -419,6 +425,7 @@ struct Z_Construct_UClass_AAlphaCharacter_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_MouseLookAction;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_InteractAction;
 	static const UECodeGen_Private::FInterfacePropertyParams NewProp_TargetInteractable;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_PlayerInventory;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
@@ -442,6 +449,7 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacte
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_MouseLookAction = { "MouseLookAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, MouseLookAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MouseLookAction_MetaData), NewProp_MouseLookAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_InteractAction = { "InteractAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, InteractAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InteractAction_MetaData), NewProp_InteractAction_MetaData) };
 const UECodeGen_Private::FInterfacePropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_TargetInteractable = { "TargetInteractable", nullptr, (EPropertyFlags)0x0024080000020001, UECodeGen_Private::EPropertyGenFlags::Interface, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, TargetInteractable), Z_Construct_UClass_UInteractionInterface_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TargetInteractable_MetaData), NewProp_TargetInteractable_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_PlayerInventory = { "PlayerInventory", nullptr, (EPropertyFlags)0x00200800000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, PlayerInventory), Z_Construct_UClass_UInventoryComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PlayerInventory_MetaData), NewProp_PlayerInventory_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AAlphaCharacter_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_CameraBoom,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_FollowCamera,
@@ -452,6 +460,7 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AAlphaCha
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_MouseLookAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_InteractAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_TargetInteractable,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_PlayerInventory,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AAlphaCharacter_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_AAlphaCharacter_Statics::DependentSingletons[])() = {
@@ -493,10 +502,10 @@ struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Sou
 		{ FInteractionData::StaticStruct, Z_Construct_UScriptStruct_FInteractionData_Statics::NewStructOps, TEXT("InteractionData"), &Z_Registration_Info_UScriptStruct_FInteractionData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FInteractionData), 1915170320U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AAlphaCharacter, AAlphaCharacter::StaticClass, TEXT("AAlphaCharacter"), &Z_Registration_Info_UClass_AAlphaCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AAlphaCharacter), 1763169652U) },
+		{ Z_Construct_UClass_AAlphaCharacter, AAlphaCharacter::StaticClass, TEXT("AAlphaCharacter"), &Z_Registration_Info_UClass_AAlphaCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AAlphaCharacter), 278337319U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_4061848860(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_1072917699(TEXT("/Script/Alpha"),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ClassInfo),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ScriptStructInfo),
 	nullptr, 0);
