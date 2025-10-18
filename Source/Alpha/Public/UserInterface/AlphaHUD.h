@@ -26,7 +26,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UInteractionWidget> InteractionWidgetClass;
 
-	bool bIsMainMenuVisible;
+	bool bIsMenuVisible;
 
 	//==========================================================================
 	//FUNCTIONS
@@ -36,6 +36,7 @@ public:
 
 	void DisplayMenu();
 	void HideMenu();
+	void ToggleMenu();
 
 	void ShowInteractionWidget() const;
 	void HideInteractionWidget() const;

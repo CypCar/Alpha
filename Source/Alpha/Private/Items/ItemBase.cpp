@@ -5,9 +5,15 @@
 //#include "Alpha/AlphaCharacter.h"
 #include "Components/InventoryComponent.h"
 
-UItemBase::UItemBase()
+UItemBase::UItemBase() : bIsCopy(false), bIsPickup(false)
 {
 
+}
+
+void UItemBase::ResetItemFlags()
+{
+	bIsCopy = false;
+	bIsPickup = false;
 }
 
 UItemBase* UItemBase::CreateItemCopy() const
@@ -22,6 +28,7 @@ UItemBase* UItemBase::CreateItemCopy() const
 	ItemCopy->NumericData = this->NumericData;
 	ItemCopy->AssetData = this->AssetData;
 	ItemCopy->Quantity = this->Quantity;
+	ItemCopy->bIsCopy = true;
 
 	return ItemCopy;
 }

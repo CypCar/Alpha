@@ -13,6 +13,7 @@ class UCameraComponent;
 class UInputAction;
 struct FInputActionValue;
 class AAlphaHUD;
+class UInventoryComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -83,6 +84,9 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE bool IsInteracting() const { return GetWorldTimerManager().IsTimerActive(TimerHandle_Interaction); };
+	FORCEINLINE UInventoryComponent* GetInventory() const { return PlayerInventory; };
+
+	void UpdateInteractionWidget() const;
 
 protected:
 
@@ -116,6 +120,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Character | Interaction")
 	TScriptInterface<IInteractionInterface> TargetInteractable;
 
+	UPROPERTY(VisibleAnywhere, Category = "Character | Inventory")
+	UInventoryComponent* PlayerInventory;
+
 	float InteractionCheckFrequency;
 
 	float InteractionCheckDistance;
@@ -127,6 +134,13 @@ protected:
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
+	/** Initialize input action bindings */
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+
+	void ToggleMenu();
 
 	void PerformInteractionCheck();
 	void FoundInteractable(AActor* NewInteractable);
@@ -136,8 +150,7 @@ protected:
 	void Interact();
 
 
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
+
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -145,7 +158,6 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	/** Initialize input action bindings */
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 };
 

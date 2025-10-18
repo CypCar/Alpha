@@ -1,7 +1,9 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
-
+// game
 #include "AlphaCharacter.h"
+#include "UserInterface/AlphaHUD.h"
+#include "Components/InventoryComponent.h"
+
+// engine
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -12,8 +14,10 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Alpha.h"
+
 #include "DrawDebugHelpers.h"
-#include "UserInterface/AlphaHUD.h"
+
+
 
 AAlphaCharacter::AAlphaCharacter()
 {
@@ -43,6 +47,11 @@ AAlphaCharacter::AAlphaCharacter()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f;
 	CameraBoom->bUsePawnControlRotation = true;
+
+	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
+	PlayerInventory->SetSlotsCapacity(20);
+	PlayerInventory->SetWeightCapacity(50.0f);
+
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -84,8 +93,11 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	{
 		UE_LOG(LogAlpha, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AAlphaCharacter::BeginInteract);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AAlphaCharacter::EndInteract);
+
+	PlayerInputComponent->BindAction("ToggleMenu", IE_Pressed, this, &AAlphaCharacter::ToggleMenu);
 }
 
 void AAlphaCharacter::Move(const FInputActionValue& Value)
@@ -292,4 +304,15 @@ void AAlphaCharacter::Interact()
 	}
 }
 
+void AAlphaCharacter::UpdateInteractionWidget() const
+{
+	if (IsValid(TargetInteractable.GetObject()))
+	{
+		HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
+	}
+}
 
+void AAlphaCharacter::ToggleMenu()
+{
+	HUD->ToggleMenu();
+}
