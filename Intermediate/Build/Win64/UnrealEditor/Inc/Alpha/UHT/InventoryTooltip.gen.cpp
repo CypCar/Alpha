@@ -94,11 +94,6 @@ struct Z_Construct_UClass_UInventoryTooltip_Statics
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/UserInterface/Inventory/InventoryTooltip.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MaxStackSizeText_MetaData[] = {
-		{ "BindWidget", "" },
-		{ "EditInline", "true" },
-		{ "ModuleRelativePath", "Public/UserInterface/Inventory/InventoryTooltip.h" },
-	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_StackWeight_MetaData[] = {
 		{ "BindWidget", "" },
 		{ "EditInline", "true" },
@@ -112,7 +107,6 @@ struct Z_Construct_UClass_UInventoryTooltip_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_UsageText;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_ItemDescription;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_MaxStackSize;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_MaxStackSizeText;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_StackWeight;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
@@ -128,7 +122,6 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UInventoryTool
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_UsageText = { "UsageText", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UInventoryTooltip, UsageText), Z_Construct_UClass_UTextBlock_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_UsageText_MetaData), NewProp_UsageText_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_ItemDescription = { "ItemDescription", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UInventoryTooltip, ItemDescription), Z_Construct_UClass_UTextBlock_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemDescription_MetaData), NewProp_ItemDescription_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_MaxStackSize = { "MaxStackSize", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UInventoryTooltip, MaxStackSize), Z_Construct_UClass_UTextBlock_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MaxStackSize_MetaData), NewProp_MaxStackSize_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_MaxStackSizeText = { "MaxStackSizeText", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UInventoryTooltip, MaxStackSizeText), Z_Construct_UClass_UTextBlock_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MaxStackSizeText_MetaData), NewProp_MaxStackSizeText_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_StackWeight = { "StackWeight", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UInventoryTooltip, StackWeight), Z_Construct_UClass_UTextBlock_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_StackWeight_MetaData), NewProp_StackWeight_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UInventoryTooltip_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_ItemName,
@@ -138,7 +131,6 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UInventor
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_UsageText,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_ItemDescription,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_MaxStackSize,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_MaxStackSizeText,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UInventoryTooltip_Statics::NewProp_StackWeight,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_UInventoryTooltip_Statics::PropPointers) < 2048);
@@ -179,10 +171,10 @@ UInventoryTooltip::~UInventoryTooltip() {}
 struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_Inventory_InventoryTooltip_h__Script_Alpha_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UInventoryTooltip, UInventoryTooltip::StaticClass, TEXT("UInventoryTooltip"), &Z_Registration_Info_UClass_UInventoryTooltip, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UInventoryTooltip), 4039317848U) },
+		{ Z_Construct_UClass_UInventoryTooltip, UInventoryTooltip::StaticClass, TEXT("UInventoryTooltip"), &Z_Registration_Info_UClass_UInventoryTooltip, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UInventoryTooltip), 2596513552U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_Inventory_InventoryTooltip_h__Script_Alpha_3248956520(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_Inventory_InventoryTooltip_h__Script_Alpha_1474811820(TEXT("/Script/Alpha"),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_Inventory_InventoryTooltip_h__Script_Alpha_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_Inventory_InventoryTooltip_h__Script_Alpha_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

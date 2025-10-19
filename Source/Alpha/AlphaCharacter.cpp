@@ -2,6 +2,7 @@
 #include "AlphaCharacter.h"
 #include "UserInterface/AlphaHUD.h"
 #include "Components/InventoryComponent.h"
+#include <World/Pickup.h>
 
 // engine
 #include "Engine/LocalPlayer.h"
@@ -16,6 +17,7 @@
 #include "Alpha.h"
 
 #include "DrawDebugHelpers.h"
+
 
 
 
@@ -315,4 +317,28 @@ void AAlphaCharacter::UpdateInteractionWidget() const
 void AAlphaCharacter::ToggleMenu()
 {
 	HUD->ToggleMenu();
+}
+
+void AAlphaCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
+{
+	if (PlayerInventory->FindMatchingItem(ItemToDrop))
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.bNoFail = true;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		const FVector SpawnLocation{ GetActorLocation() + (GetActorForwardVector() * 50.0f)};
+		const FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+
+		const int32 RemovedQuantity = PlayerInventory->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
+
+		APickup* Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), SpawnTransform, SpawnParams);
+
+		Pickup->InitializeDrop(ItemToDrop, RemovedQuantity);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Item to drop was somehow null"));
+	}
 }

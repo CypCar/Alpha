@@ -14,6 +14,7 @@ class UInputAction;
 struct FInputActionValue;
 class AAlphaHUD;
 class UInventoryComponent;
+class UItemBase;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -87,6 +88,8 @@ public:
 	FORCEINLINE UInventoryComponent* GetInventory() const { return PlayerInventory; };
 
 	void UpdateInteractionWidget() const;
+
+	void DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop);
 
 protected:
 
