@@ -25,7 +25,7 @@ public:
 	//==========================================================================
 	APickup();
 
-	void InitializePickup(const TSubclassOf<UItemBase> BaseClass, const int32 InQuantity);
+	void InitializePickup(const int32 InQuantity);
 
 	void InitializeDrop(UItemBase* ItemToDrop, const int32 InQuantity);
 

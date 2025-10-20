@@ -135,8 +135,99 @@ FItemAddResult UInventoryComponent::HandleNonStackableItems(UItemBase* InputItem
 		InputItem->TextData.Name));
 }
 
-int32 UInventoryComponent::HandleStackableItems(UItemBase*, int32 RequestedAddAmount)
+int32 UInventoryComponent::HandleStackableItems(UItemBase* ItemIn, int32 RequestedAddAmount)
 {
+	
+	if (RequestedAddAmount <= 0 || FMath::IsNearlyZero(ItemIn->GetItemStackWeight()))
+	{
+		return 0;
+	}
+
+	int32 AmountToDistribute = RequestedAddAmount;
+	
+
+	// check if the input item already exists in the inventory and is not a full stack
+	UItemBase* ExistingItemStack = FindNextPartialStack(ItemIn);
+
+		//distribute item stack over existing stacks
+	while (ExistingItemStack)
+	{
+		//calculate how many of the exisiting item would be needed to make the nest full stack
+		const int32 AmountToMakeFullStack = CalculateNumberForFullStack(ExistingItemStack, AmountToDistribute);
+		//calculate how many of the AmountToMakeFullStack can actually be carried based on weight capacity
+		const int32 WeightLimitAddAmount = CalculateWeightAddAmount(ExistingItemStack, AmountToMakeFullStack);
+
+		// as long as the remaining amount of the item does not overflow weight capacity
+		if (WeightLimitAddAmount > 0)
+		{
+			//adjust the exisiting items stack quantity and inventory total weight
+			ExistingItemStack->SetQuantity(ExistingItemStack->Quantity + WeightLimitAddAmount);
+			InventoryTotalWeight += (ExistingItemStack->GetItemSingleWeight() * WeightLimitAddAmount);
+
+			//adjust the count to be distributed
+			AmountToDistribute -= WeightLimitAddAmount;
+
+			ItemIn->SetQuantity(AmountToDistribute);
+
+			// TODO: Refine this logic since going over weight capacity should not ever be possible
+			//if max weight capacity is reached no need to run the loop again
+			if (InventoryTotalWeight + ExistingItemStack->GetItemSingleWeight() > InventoryWeightCapacity)
+			{
+				OnInventoryUpdated.Broadcast();
+				return RequestedAddAmount - AmountToDistribute;
+			}
+		}
+		else if (WeightLimitAddAmount <= 0)
+		{
+			if (AmountToDistribute != RequestedAddAmount)
+			{
+				//this block will be reached if distributing an item across multiple stacks
+				//and the weight limit is hit during that process
+				OnInventoryUpdated.Broadcast();
+				return RequestedAddAmount - AmountToDistribute;
+			}
+			//reached if there is a partial stack but none of it can be added at all
+			return 0;
+		}
+
+		if (AmountToDistribute <= 0)
+		{
+			// all of the input was distributed across existing stacks
+			OnInventoryUpdated.Broadcast();
+			return RequestedAddAmount;
+		}
+		//check if there is still another valid partial stack of the input intem
+		ExistingItemStack = FindNextPartialStack(ItemIn);
+	}
+
+	//no more partial stacks found, check if a new stack can be added
+	if (InventoryContents.Num() + 1 <= InventorySlotsCapacity)
+	{
+
+		//attempt to add as many from the remaning item quantity that can fit inventory weight capacity
+		const int32 WeightLimitAddAmount = CalculateWeightAddAmount(ItemIn, AmountToDistribute);
+
+		if (WeightLimitAddAmount > 0)
+		{
+			//if there is still more item to distribute but weight limit has been reached
+			if (WeightLimitAddAmount < AmountToDistribute)
+			{
+				//adjust the input item and add a new stack with as many as can be held
+				AmountToDistribute -= WeightLimitAddAmount;
+				ItemIn->SetQuantity(AmountToDistribute);
+
+				//create a copy since only a partial stack is being added
+				AddNewItem(ItemIn->CreateItemCopy(), WeightLimitAddAmount);
+				return RequestedAddAmount - AmountToDistribute;
+			}
+			//otherwise the full remainder of the stack can be added
+			AddNewItem(ItemIn, AmountToDistribute);
+			return RequestedAddAmount;
+		}
+		//reached if there is free item slots but no remaining weight capacity
+		return RequestedAddAmount - AmountToDistribute;
+	}
+	// can only be reached if there is no existing stack and no extra capacity slots
 	return 0;
 }
 
@@ -205,7 +296,7 @@ void UInventoryComponent::AddNewItem(UItemBase* Item, const int32 AmountToAdd)
 	NewItem->SetQuantity(AmountToAdd);
 
 	InventoryContents.Add(NewItem);
-	InventoryTotalWeight += NewItem->GetItemStackWeight() * AmountToAdd;
+	InventoryTotalWeight += NewItem->GetItemSingleWeight() * AmountToAdd;
 	OnInventoryUpdated.Broadcast();
 }
 
