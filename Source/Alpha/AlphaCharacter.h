@@ -15,6 +15,8 @@ struct FInputActionValue;
 class AAlphaHUD;
 class UInventoryComponent;
 class UItemBase;
+class UTimelineComponent;
+class UInputMappingContext;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -56,6 +58,7 @@ public:
 	//==========================================================================
 	//PROPERTIES & VARIABELS
 	//==========================================================================
+	bool bAiming;
 
 	//==========================================================================
 	//FUNCTIONS
@@ -91,6 +94,8 @@ public:
 
 	void DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop);
 
+
+
 protected:
 
 	//==========================================================================
@@ -100,25 +105,32 @@ protected:
 	UPROPERTY()
 	AAlphaHUD* HUD;
 
-	/** Jump Input Action */
+	// INPUT MAPPING
+	//==========================================================================
+	//UPROPERTY(EditAnywhere, Category = "Input")
+	//UInputMappingContext* DefaultMappingContext;
+
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* JumpAction;
 
-	/** Move Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MoveAction;
 
-	/** Look Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* LookAction;
 
-	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MouseLookAction;
 
-	//Interact Input Action
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* AimAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* StopAimingAction;
+	//==========================================================================
 
 	UPROPERTY(VisibleAnywhere, Category = "Character | Interaction")
 	TScriptInterface<IInteractionInterface> TargetInteractable;
@@ -126,13 +138,22 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Character | Inventory")
 	UInventoryComponent* PlayerInventory;
 
+	// interaction properties
 	float InteractionCheckFrequency;
-
 	float InteractionCheckDistance;
-
 	FTimerHandle TimerHandle_Interaction;
-
 	FInteractionData InteractionData;
+
+	// timeline properties used for camera aiming transition
+	UPROPERTY(VisibleAnywhere, Category = "Character | Camera")
+	FVector DefaultCameraLocation;
+	UPROPERTY(VisibleAnywhere, Category = "Character | Camera")
+	FVector AimingCameraLocation;
+
+	TObjectPtr<UTimelineComponent>AimingCameraTimeline;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character | Aim Timeline")
+	UCurveFloat* AimingCameraCurve;
 
 	//==========================================================================
 	//FUNCTIONS
@@ -145,6 +166,15 @@ protected:
 
 	void ToggleMenu();
 
+	void Aim();
+	void StopAiming();
+
+	UFUNCTION()
+	void UpdateCameraTimeline(const float TimelineValue) const;
+
+	UFUNCTION()
+	void CameraTimelineEnd();
+
 	void PerformInteractionCheck();
 	void FoundInteractable(AActor* NewInteractable);
 	void NoInteractableFound();
@@ -152,13 +182,8 @@ protected:
 	void EndInteract();
 	void Interact();
 
-
-
-
-	/** Called for movement input */
+	/** Called for input */
 	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
 

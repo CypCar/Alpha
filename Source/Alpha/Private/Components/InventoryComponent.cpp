@@ -296,7 +296,7 @@ void UInventoryComponent::AddNewItem(UItemBase* Item, const int32 AmountToAdd)
 	NewItem->SetQuantity(AmountToAdd);
 
 	InventoryContents.Add(NewItem);
-	InventoryTotalWeight += NewItem->GetItemSingleWeight() * AmountToAdd;
+	InventoryTotalWeight += NewItem->GetItemStackWeight();
 	OnInventoryUpdated.Broadcast();
 }
 

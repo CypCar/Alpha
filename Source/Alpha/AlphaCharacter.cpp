@@ -2,7 +2,8 @@
 #include "AlphaCharacter.h"
 #include "UserInterface/AlphaHUD.h"
 #include "Components/InventoryComponent.h"
-#include <World/Pickup.h>
+#include "World/Pickup.h"
+#include "Alpha/AlphaPlayerController.h"
 
 // engine
 #include "Engine/LocalPlayer.h"
@@ -17,7 +18,7 @@
 #include "Alpha.h"
 
 #include "DrawDebugHelpers.h"
-
+#include "Components/TimelineComponent.h"
 
 
 
@@ -47,7 +48,7 @@ AAlphaCharacter::AAlphaCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f;
+	CameraBoom->TargetArmLength = 300.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
@@ -60,9 +61,17 @@ AAlphaCharacter::AAlphaCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	AimingCameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("AimingCameraTimeline"));
+	DefaultCameraLocation = FVector{ 0.0f, 0.0f, 65.0f };
+	AimingCameraLocation = FVector{ 175.0f, 50.0f, 55.0f };
+	CameraBoom->SocketOffset = DefaultCameraLocation;
+
 	InteractionCheckFrequency = 0.1;
 	InteractionCheckDistance = 225.0f;
-	BaseEyeHeight = 74.0f;
+
+	// capsule default dimensions = 32.0f, 88.0f
+	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
+	BaseEyeHeight = 76.0f;
 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -72,7 +81,8 @@ AAlphaCharacter::AAlphaCharacter()
 void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) 
+	{
 		
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
@@ -85,11 +95,8 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
 
-		/*// Begin Interact
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::BeginInteract);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
 
-		// End Interact
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AAlphaCharacter::EndInteract);*/
 	}
 	else
 	{
@@ -100,6 +107,9 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AAlphaCharacter::EndInteract);
 
 	PlayerInputComponent->BindAction("ToggleMenu", IE_Pressed, this, &AAlphaCharacter::ToggleMenu);
+
+	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AAlphaCharacter::Aim);
+	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AAlphaCharacter::StopAiming);
 }
 
 void AAlphaCharacter::Move(const FInputActionValue& Value)
@@ -167,6 +177,17 @@ void AAlphaCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	HUD = Cast<AAlphaHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+
+	FOnTimelineFloat AimLerpAlphaValue;
+	FOnTimelineEvent TimelineFinishedEvent;
+	AimLerpAlphaValue.BindUFunction(this, FName("UpdateCameraTimeline"));
+	TimelineFinishedEvent.BindUFunction(this, FName("CameraTimelineEnd"));
+
+	if (AimingCameraTimeline && AimingCameraCurve)
+	{
+		AimingCameraTimeline->AddInterpFloat(AimingCameraCurve, AimLerpAlphaValue);
+		AimingCameraTimeline->SetTimelineFinishedFunc(TimelineFinishedEvent);
+	}
 }
 
 void AAlphaCharacter::Tick(float DeltaSeconds)
@@ -184,9 +205,20 @@ void AAlphaCharacter::PerformInteractionCheck()
 {
 	InteractionData.LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
 
-	FVector TraceStart{GetPawnViewLocation()};
-	FVector TraceEnd{ TraceStart + (GetViewRotation().Vector() * InteractionCheckDistance) };
+	FVector TraceStart{ FVector::ZeroVector };
 
+	if (!bAiming)
+	{
+		InteractionCheckDistance = 200.0f;
+		TraceStart = GetPawnViewLocation();
+	}
+	else
+	{
+		InteractionCheckDistance = 250.0f;
+		TraceStart = FollowCamera->GetComponentLocation();
+	}
+
+	FVector TraceEnd{ TraceStart + (GetViewRotation().Vector() * InteractionCheckDistance) };
 
 	float LookDirection = FVector::DotProduct(GetActorForwardVector(), GetViewRotation().Vector()); 
 
@@ -317,6 +349,54 @@ void AAlphaCharacter::UpdateInteractionWidget() const
 void AAlphaCharacter::ToggleMenu()
 {
 	HUD->ToggleMenu();
+	if (HUD->bIsMenuVisible)
+	{
+		StopAiming();
+	}
+}
+
+void AAlphaCharacter::Aim()
+{
+	if (!HUD->bIsMenuVisible)
+	{
+		bAiming = true;
+		bUseControllerRotationYaw = true;
+		GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+
+		if (AimingCameraTimeline) 
+			AimingCameraTimeline->PlayFromStart();
+	}
+}
+
+void AAlphaCharacter::StopAiming()
+{
+	if (bAiming)
+	{
+		bAiming = false;
+		bUseControllerRotationYaw = false;
+		HUD->HideCrosshair();
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+
+		if (AimingCameraTimeline)
+			AimingCameraTimeline->Reverse();
+	}
+}
+
+void AAlphaCharacter::UpdateCameraTimeline(const float TimelineValue) const
+{
+	const FVector CameraLocation = FMath::Lerp(DefaultCameraLocation, AimingCameraLocation, TimelineValue);
+	CameraBoom->SocketOffset = CameraLocation;
+}
+
+void AAlphaCharacter::CameraTimelineEnd()
+{
+	if (AimingCameraTimeline)
+	{
+		if (AimingCameraTimeline->GetPlaybackPosition() != 0.0f)
+		{
+			HUD->ShowCrosshair();
+		}
+	}
 }
 
 void AAlphaCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
