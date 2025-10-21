@@ -6,6 +6,7 @@
 
 #include "UObject/GeneratedCppIncludes.h"
 #include "World/Pickup.h"
+#include "Engine/DataTable.h"
 #include "Interfaces/InteractionInterface.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
@@ -19,8 +20,8 @@ ALPHA_API UClass* Z_Construct_UClass_UInteractionInterface_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UItemBase_NoRegister();
 ALPHA_API UScriptStruct* Z_Construct_UScriptStruct_FInteractableData();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
-ENGINE_API UClass* Z_Construct_UClass_UDataTable_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
+ENGINE_API UScriptStruct* Z_Construct_UScriptStruct_FDataTableRowHandle();
 UPackage* Z_Construct_UPackage__Script_Alpha();
 // ********** End Cross Module References **********************************************************
 
@@ -75,14 +76,6 @@ struct Z_Construct_UClass_APickup_Statics
 		{ "ToolTip", "PROPERTIES & VARIABELS" },
 #endif
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ItemDataTable_MetaData[] = {
-		{ "Category", "Pickup | Item Initialization" },
-		{ "ModuleRelativePath", "Public/World/Pickup.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DesiredItemID_MetaData[] = {
-		{ "Category", "Pickup | Item Initialization" },
-		{ "ModuleRelativePath", "Public/World/Pickup.h" },
-	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ItemReference_MetaData[] = {
 		{ "Category", "Pickup | Item Reference" },
 		{ "ModuleRelativePath", "Public/World/Pickup.h" },
@@ -95,13 +88,16 @@ struct Z_Construct_UClass_APickup_Statics
 		{ "Category", "Pickup | Interaction" },
 		{ "ModuleRelativePath", "Public/World/Pickup.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ItemRowHandle_MetaData[] = {
+		{ "Category", "Pickup | Item Initialization" },
+		{ "ModuleRelativePath", "Public/World/Pickup.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_PickupMesh;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_ItemDataTable;
-	static const UECodeGen_Private::FNamePropertyParams NewProp_DesiredItemID;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_ItemReference;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_ItemQuantity;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_InstanceInteractableData;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_ItemRowHandle;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static const UECodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
@@ -111,18 +107,16 @@ struct Z_Construct_UClass_APickup_Statics
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APickup_Statics::NewProp_PickupMesh = { "PickupMesh", nullptr, (EPropertyFlags)0x00200800000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, PickupMesh), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PickupMesh_MetaData), NewProp_PickupMesh_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APickup_Statics::NewProp_ItemDataTable = { "ItemDataTable", nullptr, (EPropertyFlags)0x0020080000000801, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, ItemDataTable), Z_Construct_UClass_UDataTable_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemDataTable_MetaData), NewProp_ItemDataTable_MetaData) };
-const UECodeGen_Private::FNamePropertyParams Z_Construct_UClass_APickup_Statics::NewProp_DesiredItemID = { "DesiredItemID", nullptr, (EPropertyFlags)0x0020080000000801, UECodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, DesiredItemID), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DesiredItemID_MetaData), NewProp_DesiredItemID_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APickup_Statics::NewProp_ItemReference = { "ItemReference", nullptr, (EPropertyFlags)0x0020080000020001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, ItemReference), Z_Construct_UClass_UItemBase_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemReference_MetaData), NewProp_ItemReference_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_APickup_Statics::NewProp_ItemQuantity = { "ItemQuantity", nullptr, (EPropertyFlags)0x0020080000000801, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, ItemQuantity), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemQuantity_MetaData), NewProp_ItemQuantity_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_APickup_Statics::NewProp_InstanceInteractableData = { "InstanceInteractableData", nullptr, (EPropertyFlags)0x0020080000020801, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, InstanceInteractableData), Z_Construct_UScriptStruct_FInteractableData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InstanceInteractableData_MetaData), NewProp_InstanceInteractableData_MetaData) }; // 171235710
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_APickup_Statics::NewProp_ItemRowHandle = { "ItemRowHandle", nullptr, (EPropertyFlags)0x0020080000000801, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(APickup, ItemRowHandle), Z_Construct_UScriptStruct_FDataTableRowHandle, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ItemRowHandle_MetaData), NewProp_ItemRowHandle_MetaData) }; // 4101738896
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_APickup_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_PickupMesh,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_ItemDataTable,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_DesiredItemID,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_ItemReference,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_ItemQuantity,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_InstanceInteractableData,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APickup_Statics::NewProp_ItemRowHandle,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_APickup_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_APickup_Statics::DependentSingletons[])() = {
@@ -164,10 +158,10 @@ APickup::~APickup() {}
 struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h__Script_Alpha_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_APickup, APickup::StaticClass, TEXT("APickup"), &Z_Registration_Info_UClass_APickup, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(APickup), 1990243112U) },
+		{ Z_Construct_UClass_APickup, APickup::StaticClass, TEXT("APickup"), &Z_Registration_Info_UClass_APickup, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(APickup), 4141918629U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h__Script_Alpha_3390070722(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h__Script_Alpha_389548023(TEXT("/Script/Alpha"),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h__Script_Alpha_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h__Script_Alpha_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

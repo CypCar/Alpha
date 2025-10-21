@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 // ********** Begin Class AAlphaPlayerController ***************************************************
 ALPHA_API UClass* Z_Construct_UClass_AAlphaPlayerController_NoRegister();
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_19_INCLASS_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_20_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAAlphaPlayerController(); \
 	friend struct Z_Construct_UClass_AAlphaPlayerController_Statics; \
@@ -30,7 +30,7 @@ public: \
 	DECLARE_SERIALIZER(AAlphaPlayerController)
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_19_ENHANCED_CONSTRUCTORS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_20_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AAlphaPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	/** Deleted move- and copy-constructors, should never be used */ \
@@ -42,12 +42,12 @@ public: \
 	NO_API virtual ~AAlphaPlayerController();
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_16_PROLOG
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_19_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_17_PROLOG
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_20_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_19_INCLASS_NO_PURE_DECLS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_19_ENHANCED_CONSTRUCTORS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_20_INCLASS_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaPlayerController_h_20_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

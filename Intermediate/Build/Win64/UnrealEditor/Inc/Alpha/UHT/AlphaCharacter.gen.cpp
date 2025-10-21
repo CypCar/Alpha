@@ -18,9 +18,11 @@ ALPHA_API UClass* Z_Construct_UClass_AAlphaHUD_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UInteractionInterface_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UInventoryComponent_NoRegister();
 ALPHA_API UScriptStruct* Z_Construct_UScriptStruct_FInteractionData();
+COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_ACharacter();
 ENGINE_API UClass* Z_Construct_UClass_UCameraComponent_NoRegister();
+ENGINE_API UClass* Z_Construct_UClass_UCurveFloat_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_USpringArmComponent_NoRegister();
 ENHANCEDINPUT_API UClass* Z_Construct_UClass_UInputAction_NoRegister();
 UPackage* Z_Construct_UPackage__Script_Alpha();
@@ -87,6 +89,35 @@ UScriptStruct* Z_Construct_UScriptStruct_FInteractionData()
 	return Z_Registration_Info_UScriptStruct_FInteractionData.InnerSingleton;
 }
 // ********** End ScriptStruct FInteractionData ****************************************************
+
+// ********** Begin Class AAlphaCharacter Function CameraTimelineEnd *******************************
+struct Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AAlphaCharacter, nullptr, "CameraTimelineEnd", nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00080401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd_Statics::Function_MetaDataParams), Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(AAlphaCharacter::execCameraTimelineEnd)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->CameraTimelineEnd();
+	P_NATIVE_END;
+}
+// ********** End Class AAlphaCharacter Function CameraTimelineEnd *********************************
 
 // ********** Begin Class AAlphaCharacter Function DoJumpEnd ***************************************
 struct Z_Construct_UFunction_AAlphaCharacter_DoJumpEnd_Statics
@@ -268,15 +299,62 @@ DEFINE_FUNCTION(AAlphaCharacter::execDoMove)
 }
 // ********** End Class AAlphaCharacter Function DoMove ********************************************
 
+// ********** Begin Class AAlphaCharacter Function UpdateCameraTimeline ****************************
+struct Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics
+{
+	struct AlphaCharacter_eventUpdateCameraTimeline_Parms
+	{
+		float TimelineValue;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TimelineValue_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_TimelineValue;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::NewProp_TimelineValue = { "TimelineValue", nullptr, (EPropertyFlags)0x0010000000000082, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AlphaCharacter_eventUpdateCameraTimeline_Parms, TimelineValue), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TimelineValue_MetaData), NewProp_TimelineValue_MetaData) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::NewProp_TimelineValue,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AAlphaCharacter, nullptr, "UpdateCameraTimeline", Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::PropPointers), sizeof(Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::AlphaCharacter_eventUpdateCameraTimeline_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x40080401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::Function_MetaDataParams), Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::AlphaCharacter_eventUpdateCameraTimeline_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(AAlphaCharacter::execUpdateCameraTimeline)
+{
+	P_GET_PROPERTY(FFloatProperty,Z_Param_TimelineValue);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->UpdateCameraTimeline(Z_Param_TimelineValue);
+	P_NATIVE_END;
+}
+// ********** End Class AAlphaCharacter Function UpdateCameraTimeline ******************************
+
 // ********** Begin Class AAlphaCharacter **********************************************************
 void AAlphaCharacter::StaticRegisterNativesAAlphaCharacter()
 {
 	UClass* Class = AAlphaCharacter::StaticClass();
 	static const FNameNativePtrPair Funcs[] = {
+		{ "CameraTimelineEnd", &AAlphaCharacter::execCameraTimelineEnd },
 		{ "DoJumpEnd", &AAlphaCharacter::execDoJumpEnd },
 		{ "DoJumpStart", &AAlphaCharacter::execDoJumpStart },
 		{ "DoLook", &AAlphaCharacter::execDoLook },
 		{ "DoMove", &AAlphaCharacter::execDoMove },
+		{ "UpdateCameraTimeline", &AAlphaCharacter::execUpdateCameraTimeline },
 	};
 	FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 }
@@ -359,60 +437,65 @@ struct Z_Construct_UClass_AAlphaCharacter_Statics
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_JumpAction_MetaData[] = {
 		{ "Category", "Input" },
 #if !UE_BUILD_SHIPPING
-		{ "Comment", "/** Jump Input Action */" },
+		{ "Comment", "// INPUT MAPPING\n//==========================================================================\n//UPROPERTY(EditAnywhere, Category = \"Input\")\n//UInputMappingContext* DefaultMappingContext;\n" },
 #endif
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
 #if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Jump Input Action" },
+		{ "ToolTip", "INPUT MAPPING\n\nUPROPERTY(EditAnywhere, Category = \"Input\")\nUInputMappingContext* DefaultMappingContext;" },
 #endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MoveAction_MetaData[] = {
 		{ "Category", "Input" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "/** Move Input Action */" },
-#endif
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Move Input Action" },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_LookAction_MetaData[] = {
 		{ "Category", "Input" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "/** Look Input Action */" },
-#endif
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Look Input Action" },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MouseLookAction_MetaData[] = {
 		{ "Category", "Input" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "/** Mouse Look Input Action */" },
-#endif
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Mouse Look Input Action" },
-#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_InteractAction_MetaData[] = {
 		{ "Category", "Input" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//Interact Input Action\n" },
-#endif
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Interact Input Action" },
-#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_AimAction_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_StopAimingAction_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TargetInteractable_MetaData[] = {
 		{ "Category", "Character | Interaction" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "//==========================================================================\n" },
+#endif
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_PlayerInventory_MetaData[] = {
 		{ "Category", "Character | Inventory" },
 		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultCameraLocation_MetaData[] = {
+		{ "Category", "Character | Camera" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "// timeline properties used for camera aiming transition\n" },
+#endif
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "timeline properties used for camera aiming transition" },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_AimingCameraLocation_MetaData[] = {
+		{ "Category", "Character | Camera" },
+		{ "ModuleRelativePath", "AlphaCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_AimingCameraCurve_MetaData[] = {
+		{ "Category", "Character | Aim Timeline" },
 		{ "ModuleRelativePath", "AlphaCharacter.h" },
 	};
 #endif // WITH_METADATA
@@ -424,15 +507,22 @@ struct Z_Construct_UClass_AAlphaCharacter_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_LookAction;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_MouseLookAction;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_InteractAction;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_AimAction;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_StopAimingAction;
 	static const UECodeGen_Private::FInterfacePropertyParams NewProp_TargetInteractable;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_PlayerInventory;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_DefaultCameraLocation;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_AimingCameraLocation;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_AimingCameraCurve;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_AAlphaCharacter_CameraTimelineEnd, "CameraTimelineEnd" }, // 2758231957
 		{ &Z_Construct_UFunction_AAlphaCharacter_DoJumpEnd, "DoJumpEnd" }, // 3844083971
 		{ &Z_Construct_UFunction_AAlphaCharacter_DoJumpStart, "DoJumpStart" }, // 3929822921
 		{ &Z_Construct_UFunction_AAlphaCharacter_DoLook, "DoLook" }, // 1720762060
 		{ &Z_Construct_UFunction_AAlphaCharacter_DoMove, "DoMove" }, // 3208036243
+		{ &Z_Construct_UFunction_AAlphaCharacter_UpdateCameraTimeline, "UpdateCameraTimeline" }, // 2770752098
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -448,8 +538,13 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacte
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_LookAction = { "LookAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, LookAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LookAction_MetaData), NewProp_LookAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_MouseLookAction = { "MouseLookAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, MouseLookAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MouseLookAction_MetaData), NewProp_MouseLookAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_InteractAction = { "InteractAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, InteractAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InteractAction_MetaData), NewProp_InteractAction_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_AimAction = { "AimAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, AimAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_AimAction_MetaData), NewProp_AimAction_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_StopAimingAction = { "StopAimingAction", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, StopAimingAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_StopAimingAction_MetaData), NewProp_StopAimingAction_MetaData) };
 const UECodeGen_Private::FInterfacePropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_TargetInteractable = { "TargetInteractable", nullptr, (EPropertyFlags)0x0024080000020001, UECodeGen_Private::EPropertyGenFlags::Interface, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, TargetInteractable), Z_Construct_UClass_UInteractionInterface_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TargetInteractable_MetaData), NewProp_TargetInteractable_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_PlayerInventory = { "PlayerInventory", nullptr, (EPropertyFlags)0x00200800000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, PlayerInventory), Z_Construct_UClass_UInventoryComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PlayerInventory_MetaData), NewProp_PlayerInventory_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_DefaultCameraLocation = { "DefaultCameraLocation", nullptr, (EPropertyFlags)0x0020080000020001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, DefaultCameraLocation), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultCameraLocation_MetaData), NewProp_DefaultCameraLocation_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_AimingCameraLocation = { "AimingCameraLocation", nullptr, (EPropertyFlags)0x0020080000020001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, AimingCameraLocation), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_AimingCameraLocation_MetaData), NewProp_AimingCameraLocation_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_AimingCameraCurve = { "AimingCameraCurve", nullptr, (EPropertyFlags)0x0020080000010001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaCharacter, AimingCameraCurve), Z_Construct_UClass_UCurveFloat_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_AimingCameraCurve_MetaData), NewProp_AimingCameraCurve_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AAlphaCharacter_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_CameraBoom,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_FollowCamera,
@@ -459,8 +554,13 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AAlphaCha
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_LookAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_MouseLookAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_InteractAction,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_AimAction,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_StopAimingAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_TargetInteractable,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_PlayerInventory,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_DefaultCameraLocation,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_AimingCameraLocation,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaCharacter_Statics::NewProp_AimingCameraCurve,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AAlphaCharacter_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_AAlphaCharacter_Statics::DependentSingletons[])() = {
@@ -502,10 +602,10 @@ struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Sou
 		{ FInteractionData::StaticStruct, Z_Construct_UScriptStruct_FInteractionData_Statics::NewStructOps, TEXT("InteractionData"), &Z_Registration_Info_UScriptStruct_FInteractionData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FInteractionData), 1915170320U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AAlphaCharacter, AAlphaCharacter::StaticClass, TEXT("AAlphaCharacter"), &Z_Registration_Info_UClass_AAlphaCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AAlphaCharacter), 278337319U) },
+		{ Z_Construct_UClass_AAlphaCharacter, AAlphaCharacter::StaticClass, TEXT("AAlphaCharacter"), &Z_Registration_Info_UClass_AAlphaCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AAlphaCharacter), 996727623U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_1072917699(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_2185627506(TEXT("/Script/Alpha"),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ClassInfo),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_AlphaCharacter_h__Script_Alpha_Statics::ScriptStructInfo),
 	nullptr, 0);
