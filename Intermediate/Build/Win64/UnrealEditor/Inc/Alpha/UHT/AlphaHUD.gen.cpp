@@ -15,6 +15,7 @@ void EmptyLinkFunctionForGeneratedCodeAlphaHUD() {}
 ALPHA_API UClass* Z_Construct_UClass_AAlphaHUD();
 ALPHA_API UClass* Z_Construct_UClass_AAlphaHUD_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UInteractionWidget_NoRegister();
+ALPHA_API UClass* Z_Construct_UClass_ULootWindowWidget_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UMainMenu_NoRegister();
 COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 ENGINE_API UClass* Z_Construct_UClass_AHUD();
@@ -82,6 +83,10 @@ struct Z_Construct_UClass_AAlphaHUD_Statics
 		{ "Category", "Widgets" },
 		{ "ModuleRelativePath", "Public/UserInterface/AlphaHUD.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_LootWidgetClass_MetaData[] = {
+		{ "Category", "Widgets" },
+		{ "ModuleRelativePath", "Public/UserInterface/AlphaHUD.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MainMenuWidget_MetaData[] = {
 #if !UE_BUILD_SHIPPING
 		{ "Comment", "//==========================================================================\n//PROPERTIES & VARIABELS\n//==========================================================================\n" },
@@ -100,13 +105,24 @@ struct Z_Construct_UClass_AAlphaHUD_Statics
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/UserInterface/AlphaHUD.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_LootWidget_MetaData[] = {
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "Public/UserInterface/AlphaHUD.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_LootDisplaySeconds_MetaData[] = {
+		{ "Category", "UI" },
+		{ "ModuleRelativePath", "Public/UserInterface/AlphaHUD.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FClassPropertyParams NewProp_MainMenuClass;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_InteractionWidgetClass;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_CrosshairWidgetClass;
+	static const UECodeGen_Private::FClassPropertyParams NewProp_LootWidgetClass;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_MainMenuWidget;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_InteractionWidget;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_CrosshairWidget;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_LootWidget;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_LootDisplaySeconds;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -117,16 +133,22 @@ struct Z_Construct_UClass_AAlphaHUD_Statics
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_MainMenuClass = { "MainMenuClass", nullptr, (EPropertyFlags)0x0014000000010001, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, MainMenuClass), Z_Construct_UClass_UClass, Z_Construct_UClass_UMainMenu_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MainMenuClass_MetaData), NewProp_MainMenuClass_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_InteractionWidgetClass = { "InteractionWidgetClass", nullptr, (EPropertyFlags)0x0014000000010001, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, InteractionWidgetClass), Z_Construct_UClass_UClass, Z_Construct_UClass_UInteractionWidget_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InteractionWidgetClass_MetaData), NewProp_InteractionWidgetClass_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_CrosshairWidgetClass = { "CrosshairWidgetClass", nullptr, (EPropertyFlags)0x0014000000010001, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, CrosshairWidgetClass), Z_Construct_UClass_UClass, Z_Construct_UClass_UUserWidget_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CrosshairWidgetClass_MetaData), NewProp_CrosshairWidgetClass_MetaData) };
+const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_LootWidgetClass = { "LootWidgetClass", nullptr, (EPropertyFlags)0x0014000000010001, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, LootWidgetClass), Z_Construct_UClass_UClass, Z_Construct_UClass_ULootWindowWidget_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LootWidgetClass_MetaData), NewProp_LootWidgetClass_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_MainMenuWidget = { "MainMenuWidget", nullptr, (EPropertyFlags)0x0020080000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, MainMenuWidget), Z_Construct_UClass_UMainMenu_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MainMenuWidget_MetaData), NewProp_MainMenuWidget_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_InteractionWidget = { "InteractionWidget", nullptr, (EPropertyFlags)0x0020080000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, InteractionWidget), Z_Construct_UClass_UInteractionWidget_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InteractionWidget_MetaData), NewProp_InteractionWidget_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_CrosshairWidget = { "CrosshairWidget", nullptr, (EPropertyFlags)0x0020080000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, CrosshairWidget), Z_Construct_UClass_UUserWidget_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CrosshairWidget_MetaData), NewProp_CrosshairWidget_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_LootWidget = { "LootWidget", nullptr, (EPropertyFlags)0x0020080000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, LootWidget), Z_Construct_UClass_ULootWindowWidget_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LootWidget_MetaData), NewProp_LootWidget_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AAlphaHUD_Statics::NewProp_LootDisplaySeconds = { "LootDisplaySeconds", nullptr, (EPropertyFlags)0x0020080000010001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AAlphaHUD, LootDisplaySeconds), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LootDisplaySeconds_MetaData), NewProp_LootDisplaySeconds_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AAlphaHUD_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_MainMenuClass,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_InteractionWidgetClass,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_CrosshairWidgetClass,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_LootWidgetClass,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_MainMenuWidget,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_InteractionWidget,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_CrosshairWidget,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_LootWidget,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AAlphaHUD_Statics::NewProp_LootDisplaySeconds,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AAlphaHUD_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_AAlphaHUD_Statics::DependentSingletons[])() = {
@@ -165,10 +187,10 @@ AAlphaHUD::~AAlphaHUD() {}
 struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h__Script_Alpha_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AAlphaHUD, AAlphaHUD::StaticClass, TEXT("AAlphaHUD"), &Z_Registration_Info_UClass_AAlphaHUD, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AAlphaHUD), 4144505331U) },
+		{ Z_Construct_UClass_AAlphaHUD, AAlphaHUD::StaticClass, TEXT("AAlphaHUD"), &Z_Registration_Info_UClass_AAlphaHUD, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AAlphaHUD), 1477186410U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h__Script_Alpha_1633881674(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h__Script_Alpha_392628588(TEXT("/Script/Alpha"),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h__Script_Alpha_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h__Script_Alpha_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

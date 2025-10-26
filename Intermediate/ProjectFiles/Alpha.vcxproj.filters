@@ -14,6 +14,7 @@
     <None Include="..\..\.gitattributes" />
     <None Include="..\..\.gitignore" />
     <None Include="..\..\.vsconfig" />
+    <None Include="..\..\Alpha.sln.DotSettings.user" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -104,6 +105,12 @@
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\InteractionWidget.cpp">
       <Filter>Source\Alpha\Private\UserInterface\Interaction</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\LootRowWidget.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Interaction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\LootWindowWidget.cpp">
+      <Filter>Source\Alpha\Private\UserInterface\Interaction</Filter>
+    </ClCompile>
     <Filter Include="Source\Alpha\Private\UserInterface\Inventory">
       <UniqueIdentifier>{E78BE5BC-6F10-3F9B-A629-8DD5F6F96C12}</UniqueIdentifier>
     </Filter>
@@ -126,6 +133,9 @@
       <UniqueIdentifier>{0A39D262-06FF-3C17-A232-B7A55A441A8A}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Alpha\Private\World\InterfaceTestActor.cpp">
+      <Filter>Source\Alpha\Private\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\World\LootContainer.cpp">
       <Filter>Source\Alpha\Private\World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\World\Pickup.cpp">
@@ -179,6 +189,12 @@
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\InteractionWidget.h">
       <Filter>Source\Alpha\Public\UserInterface\Interaction</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\LootRowWidget.h">
+      <Filter>Source\Alpha\Public\UserInterface\Interaction</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\LootWindowWidget.h">
+      <Filter>Source\Alpha\Public\UserInterface\Interaction</Filter>
+    </ClInclude>
     <Filter Include="Source\Alpha\Public\UserInterface\Inventory">
       <UniqueIdentifier>{706F74CC-3D9A-3DC1-922E-E3B0C9142A9A}</UniqueIdentifier>
     </Filter>
@@ -201,6 +217,9 @@
       <UniqueIdentifier>{29999A70-0EAC-36B6-817F-2E6CC660655E}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\Alpha\Public\World\InterfaceTestActor.h">
+      <Filter>Source\Alpha\Public\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\World\LootContainer.h">
       <Filter>Source\Alpha\Public\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Alpha\Public\World\Pickup.h">

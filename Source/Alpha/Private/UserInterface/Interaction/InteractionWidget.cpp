@@ -1,7 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "UserInterface/Interaction/InteractionWidget.h"
+
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Interfaces/InteractionInterface.h"
@@ -24,6 +23,9 @@ void UInteractionWidget::NativeConstruct()
 
 void UInteractionWidget::UpdateWidget(const FInteractableData* InteractableData) const
 {
+	FText ActionToDisplay = InteractableData->Action;
+	FText NameToDisplay = InteractableData->Name;
+
 	switch (InteractableData->InteractableType)
 	{
 	case EInteractableType::Pickup: 
@@ -50,7 +52,10 @@ void UInteractionWidget::UpdateWidget(const FInteractableData* InteractableData)
 	case EInteractableType::Toggle: 
 		break;
 
-	case EInteractableType::Container: 
+	case EInteractableType::Container:
+		KeyPressText->SetText(FText::FromString("Press"));
+		InteractionProgressBar->SetVisibility(ESlateVisibility::Collapsed);
+		QuantityText->SetVisibility(ESlateVisibility::Collapsed);
 		break;
 
 	default: ;

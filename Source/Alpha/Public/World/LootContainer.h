@@ -39,7 +39,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Container | Components")
 	UStaticMeshComponent* ContainerMesh;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, Category = "Container | Item Reference")
 	UItemBase* ItemReference;
 	
 	UPROPERTY(EditAnywhere, Category = "Container | Behavior")

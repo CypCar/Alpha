@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 // ********** Begin Class APickup ******************************************************************
 ALPHA_API UClass* Z_Construct_UClass_APickup_NoRegister();
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_16_INCLASS_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_14_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAPickup(); \
 	friend struct Z_Construct_UClass_APickup_Statics; \
@@ -31,7 +31,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<APickup*>(this); }
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_16_ENHANCED_CONSTRUCTORS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_14_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	APickup(APickup&&) = delete; \
 	APickup(const APickup&) = delete; \
@@ -41,12 +41,12 @@ public: \
 	NO_API virtual ~APickup();
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_13_PROLOG
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_16_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_11_PROLOG
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_14_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_16_INCLASS_NO_PURE_DECLS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_16_ENHANCED_CONSTRUCTORS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_14_INCLASS_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_Pickup_h_14_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 // ********** Begin Class AAlphaHUD ****************************************************************
 ALPHA_API UClass* Z_Construct_UClass_AAlphaHUD_NoRegister();
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_16_INCLASS_NO_PURE_DECLS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_19_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAAlphaHUD(); \
 	friend struct Z_Construct_UClass_AAlphaHUD_Statics; \
@@ -30,7 +30,7 @@ public: \
 	DECLARE_SERIALIZER(AAlphaHUD)
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_16_ENHANCED_CONSTRUCTORS \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_19_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	AAlphaHUD(AAlphaHUD&&) = delete; \
 	AAlphaHUD(const AAlphaHUD&) = delete; \
@@ -40,12 +40,12 @@ public: \
 	NO_API virtual ~AAlphaHUD();
 
 
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_13_PROLOG
-#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_16_GENERATED_BODY \
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_16_PROLOG
+#define FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_19_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_16_INCLASS_NO_PURE_DECLS \
-	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_16_ENHANCED_CONSTRUCTORS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_19_INCLASS_NO_PURE_DECLS \
+	FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_UserInterface_AlphaHUD_h_19_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

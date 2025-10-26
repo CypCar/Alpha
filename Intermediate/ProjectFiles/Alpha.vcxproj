@@ -255,6 +255,7 @@
     <None Include="..\..\.gitattributes"/>
     <None Include="..\..\.gitignore"/>
     <None Include="..\..\.vsconfig"/>
+    <None Include="..\..\Alpha.sln.DotSettings.user"/>
     <None Include="..\..\Config\DefaultEditor.ini"/>
     <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini"/>
     <None Include="..\..\Config\DefaultEngine.ini"/>
@@ -298,6 +299,12 @@
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\InteractionWidget.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\LootRowWidget.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Interaction\LootWindowWidget.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\UserInterface\Inventory\DragItemVisual.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -316,6 +323,9 @@
     <ClCompile Include="..\..\Source\Alpha\Private\World\InterfaceTestActor.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\World\LootContainer.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Alpha\Private\World\Pickup.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -327,12 +337,15 @@
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\AlphaHUD.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\MainMenu.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\InteractionWidget.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\LootRowWidget.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Interaction\LootWindowWidget.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\DragItemVisual.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryItemSlot.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryPanel.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\InventoryTooltip.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\UserInterface\Inventory\ItemDragDropOperation.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\World\InterfaceTestActor.h"/>
+    <ClInclude Include="..\..\Source\Alpha\Public\World\LootContainer.h"/>
     <ClInclude Include="..\..\Source\Alpha\Public\World\Pickup.h"/>
   </ItemGroup>
   <PropertyGroup>

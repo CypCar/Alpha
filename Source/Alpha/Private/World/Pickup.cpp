@@ -131,19 +131,19 @@ void APickup::TakePickup(const AAlphaCharacter* Taker)
 }
 
 #if WITH_EDITOR
-void APickup::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-{
-	Super::PostEditChangeProperty(PropertyChangedEvent);
-
-	const FName ChangedPropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-
-	if (ChangedPropertyName == GET_MEMBER_NAME_CHECKED(FDataTableRowHandle, RowName))
-	{
-		if (!ItemRowHandle.IsNull())
-		{
-			const FItemData* ItemData = ItemRowHandle.GetRow<FItemData>(ItemRowHandle.RowName.ToString());
-			PickupMesh->SetStaticMesh(ItemData->AssetData.Mesh);
-		}
-	}
-}
-#endif
+      void APickup::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+      {
+      	Super::PostEditChangeProperty(PropertyChangedEvent);
+      
+      	const FName ChangedPropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
+      
+      	if (ChangedPropertyName == GET_MEMBER_NAME_CHECKED(FDataTableRowHandle, RowName))
+      	{
+      		if (!ItemRowHandle.IsNull())
+      		{
+      			const FItemData* ItemData = ItemRowHandle.GetRow<FItemData>(ItemRowHandle.RowName.ToString());
+      			PickupMesh->SetStaticMesh(ItemData->AssetData.Mesh);
+      		}
+      	}
+      }
+      #endif

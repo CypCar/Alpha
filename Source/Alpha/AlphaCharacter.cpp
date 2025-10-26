@@ -3,7 +3,6 @@
 #include "UserInterface/AlphaHUD.h"
 #include "Components/InventoryComponent.h"
 #include "World/Pickup.h"
-#include "Alpha/AlphaPlayerController.h"
 
 // engine
 #include "Engine/LocalPlayer.h"
