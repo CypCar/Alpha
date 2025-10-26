@@ -2,13 +2,16 @@
 
 #pragma once
 
+#include "Interfaces/InteractionInterface.h"  
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "AlphaHUD.generated.h"
 
 struct FInteractableData;
+struct FAddedItemInfo;
 class UMainMenu;
 class UInteractionWidget;
+class ULootWindowWidget;  
 
 UCLASS()
 class ALPHA_API AAlphaHUD : public AHUD
@@ -29,6 +32,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> CrosshairWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<ULootWindowWidget> LootWidgetClass;
+
 	bool bIsMenuVisible;
 
 	//==========================================================================
@@ -48,12 +54,14 @@ public:
 	void HideInteractionWidget() const;
 	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
 
+	void EnqueueLoot(const FInteractableData& InteractableData);
+
+
 
 protected:
 	//==========================================================================
 	//PROPERTIES & VARIABELS
 	//==========================================================================
-
 	UPROPERTY()
 	UMainMenu* MainMenuWidget;
 
@@ -63,9 +71,22 @@ protected:
 	UPROPERTY()
 	UUserWidget* CrosshairWidget;
 
+	UPROPERTY()
+	ULootWindowWidget* LootWidget;
+
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	float LootDisplaySeconds = 5.f;
+	
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
 
 	virtual void BeginPlay() override;
+
+private:
+	
+	TArray<FInteractableData> LootQueue;
+	bool bLootVisible = false;
+
+	FTimerHandle LootTimer;
 };

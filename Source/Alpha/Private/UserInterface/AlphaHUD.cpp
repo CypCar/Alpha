@@ -4,6 +4,9 @@
 #include "UserInterface/AlphaHUD.h"
 #include "UserInterface/MainMenu.h"
 #include "UserInterface/Interaction/InteractionWidget.h"
+#include "UserInterface/Interaction/LootWindowWidget.h"
+#include "TimerManager.h"
+
 
 AAlphaHUD::AAlphaHUD()
 {
@@ -32,6 +35,13 @@ void AAlphaHUD::BeginPlay()
 		CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
 		CrosshairWidget->AddToViewport();
 		CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	if (LootWidgetClass)
+	{
+		LootWidget = CreateWidget<ULootWindowWidget>(GetWorld(), LootWidgetClass);
+		LootWidget->AddToViewport();
+		LootWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
@@ -115,6 +125,14 @@ void AAlphaHUD::UpdateInteractionWidget(const FInteractableData* InteractableDat
 		}
 
 		InteractionWidget->UpdateWidget(InteractableData);
+	}
+}
+
+void AAlphaHUD::EnqueueLoot(const FInteractableData& Data)
+{
+	if (LootWidget)
+	{
+		LootWidget->PushLoot(Data);        // <== NOWE
 	}
 }
 

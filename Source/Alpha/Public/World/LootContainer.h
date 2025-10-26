@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Interfaces/InteractionInterface.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Pickup.generated.h"
+#include "Interfaces/InteractionInterface.h"
+#include "LootContainer.generated.h"
 
 class UItemBase;
 class UDataTable;
 
 UCLASS()
-class ALPHA_API APickup : public AActor, public IInteractionInterface
+class ALPHA_API ALootContainer : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	//==========================================================================
 	//PROPERTIES & VARIABELS
 	//==========================================================================
@@ -21,46 +21,61 @@ public:
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
-	APickup();
+	ALootContainer();
 
 	void InitializePickup(const int32 InQuantity);
-
-	void InitializeDrop(UItemBase* ItemToDrop, const int32 InQuantity);
-
-	FORCEINLINE UItemBase* GetItemData() { return ItemReference; };
-
+	
+	// IInteractionInterface
 	virtual void BeginFocus() override;
 	virtual void EndFocus() override;
-
+	
+	// Expose current interactable data like APickup
+	FORCEINLINE UItemBase* GetItemData() { return ItemReference; };
 
 protected:
 	//==========================================================================
 	//PROPERTIES & VARIABELS
 	//==========================================================================
-	UPROPERTY(VisibleAnywhere, Category = "Pickup | Components")
-	UStaticMeshComponent* PickupMesh;
+	UPROPERTY(VisibleAnywhere, Category = "Container | Components")
+	UStaticMeshComponent* ContainerMesh;
 
-	UPROPERTY(VisibleAnywhere, Category = "Pickup | Item Reference")
+	UPROPERTY(VisibleAnywhere, Category = "Container | Item Reference")
 	UItemBase* ItemReference;
-
-	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
-	int32 ItemQuantity;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Pickup | Interaction")
+	
+	UPROPERTY(EditAnywhere, Category = "Container | Behavior")
+	bool bOneTimeLoot = true;
+    
+	UPROPERTY(EditAnywhere, Category = "Container | Behavior")
+	bool bDestroyOnEmpty = false;
+	
+	UPROPERTY(VisibleInstanceOnly, Category = "Container | State")
+	bool bOpened = false;
+    
+	UPROPERTY(VisibleInstanceOnly, Category = "Container | Interaction")
 	FInteractableData InstanceInteractableData;
 
-	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
-	FDataTableRowHandle ItemRowHandle;
+	UPROPERTY(EditInstanceOnly, Category = "Container | Item Initialization")
+	int32 ItemQuantity;
 
+	UPROPERTY(EditInstanceOnly, Category = "Container | Item Initialization")
+	FDataTableRowHandle ItemRowHandle;
+	
+	UPROPERTY(EditInstanceOnly, Category = "Container | UI")
+	FText ContainerDisplayName;
+	
+
+	
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
 	virtual void BeginPlay() override;
-
+	
 	virtual void Interact(AAlphaCharacter* PlayerCharacter) override;
-
+	
 	void UpdateInteractableData();
-	void TakePickup(const AAlphaCharacter* Taker);
+	void TakeItems(AAlphaCharacter* Taker);
+	bool IsEmpty() const;
+	void MakeNonInteractableButBlocking();
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
