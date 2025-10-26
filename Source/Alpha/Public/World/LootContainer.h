@@ -7,6 +7,7 @@
 
 class UItemBase;
 class UDataTable;
+class Ummittest;
 
 UCLASS()
 class ALPHA_API ALootContainer : public AActor, public IInteractionInterface
