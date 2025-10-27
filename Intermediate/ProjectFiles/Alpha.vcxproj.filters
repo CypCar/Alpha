@@ -104,6 +104,9 @@
     <ClCompile Include="..\..\Source\Alpha\Private\World\InterfaceTestActor.cpp">
       <Filter>Source\Alpha\Private\World</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\Private\World\Pickup.cpp">
+      <Filter>Source\Alpha\Private\World</Filter>
+    </ClCompile>
     <Filter Include="Source\Alpha\Public">
       <UniqueIdentifier>{3573188E-76DE-30EB-BED4-216A3CC062D5}</UniqueIdentifier>
     </Filter>
@@ -150,6 +153,9 @@
       <UniqueIdentifier>{29999A70-0EAC-36B6-817F-2E6CC660655E}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\Alpha\Public\World\InterfaceTestActor.h">
+      <Filter>Source\Alpha\Public\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\Public\World\Pickup.h">
       <Filter>Source\Alpha\Public\World</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,3 +1,5 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
 #include "Interfaces/InteractionInterface.h"
@@ -23,7 +25,7 @@ public:
 	//==========================================================================
 	APickup();
 
-	void InitializePickup(const int32 InQuantity);
+	void InitializePickup(const TSubclassOf<UItemBase> BaseClass, const int32 InQuantity);
 
 	void InitializeDrop(UItemBase* ItemToDrop, const int32 InQuantity);
 
@@ -40,6 +42,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Pickup | Components")
 	UStaticMeshComponent* PickupMesh;
 
+	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
+	UDataTable* ItemDataTable;
+
+	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
+	FName DesiredItemID;
+
 	UPROPERTY(VisibleAnywhere, Category = "Pickup | Item Reference")
 	UItemBase* ItemReference;
 
@@ -48,9 +56,6 @@ protected:
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Pickup | Interaction")
 	FInteractableData InstanceInteractableData;
-
-	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
-	FDataTableRowHandle ItemRowHandle;
 
 	//==========================================================================
 	//FUNCTIONS
