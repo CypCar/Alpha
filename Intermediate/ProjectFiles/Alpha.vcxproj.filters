@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Alpha.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Alpha.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\AlphaEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.vsconfig" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Alpha">
+      <UniqueIdentifier>{A53EE667-EC9B-3185-9689-A861D0D3A5BA}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Alpha\Alpha.Build.cs">
+      <Filter>Source\Alpha</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Alpha\Alpha.cpp">
+      <Filter>Source\Alpha</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Alpha\Alpha.h">
+      <Filter>Source\Alpha</Filter>
+    </ClInclude>
+    <Filter Include="Source\Alpha\Private">
+      <UniqueIdentifier>{C3C2F8E8-1ABE-3970-A93A-36D435FFF442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Private\Items">
+      <UniqueIdentifier>{96404614-9263-3618-B6ED-3E1EFA6799A4}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Alpha\Private\Items\ItemBase.cpp">
+      <Filter>Source\Alpha\Private\Items</Filter>
+    </ClCompile>
+    <Filter Include="Source\Alpha\Public">
+      <UniqueIdentifier>{3573188E-76DE-30EB-BED4-216A3CC062D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Public\Items">
+      <UniqueIdentifier>{8DCE9597-8D5C-3DCF-92F0-EFB73F49200A}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\Alpha\Public\Items\ItemBase.h">
+      <Filter>Source\Alpha\Public\Items</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\Alpha\Public\Data">
+      <UniqueIdentifier>{a5295b13-5811-434b-9a8a-1f7dfb561173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Public\Framework">
+      <UniqueIdentifier>{50560a6d-8928-4ad9-9569-0d57a8b6f7d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Public\Player">
+      <UniqueIdentifier>{9b49be86-2b3a-4c28-b420-0c830d5fcb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Private\Framework">
+      <UniqueIdentifier>{c754cf3e-93fc-4b23-8bc1-09b793f2d82d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Alpha\Private\Player">
+      <UniqueIdentifier>{6599568f-3bbd-4253-b3ba-c5da4842f1bf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\Alpha\ItemDataStructs.h">
+      <Filter>Source\Alpha\Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\AlphaGameMode.h">
+      <Filter>Source\Alpha\Public\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\AlphaPlayerController.h">
+      <Filter>Source\Alpha\Public\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Alpha\AlphaCharacter.h">
+      <Filter>Source\Alpha\Public\Player</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\Alpha\AlphaGameMode.cpp">
+      <Filter>Source\Alpha\Private\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\AlphaCharacter.cpp">
+      <Filter>Source\Alpha\Private\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Alpha\AlphaPlayerController.cpp">
+      <Filter>Source\Alpha\Private\Player</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

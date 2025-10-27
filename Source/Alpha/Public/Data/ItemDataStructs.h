@@ -9,7 +9,7 @@ enum class EItemQuality : uint8
 {
 	Shoddy UMETA(DisplayName = "Shoddy"),
 	Common UMETA(DisplayName = "Common"),
-	Quality UMETA(DisplayName = "Quality"),
+	Qulaity UMETA(DisplayName = "Quality"),
 	Masterwork UMETA(DisplayName = "Masterwork"),
 	Grandmaster UMETA(DisplayName = "Grandmaster")
 };
@@ -74,7 +74,7 @@ struct FItemNumericData
 	UPROPERTY(EditAnywhere)
 	int32 MaxStackSize;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	bool bIsStackable;
 };
 

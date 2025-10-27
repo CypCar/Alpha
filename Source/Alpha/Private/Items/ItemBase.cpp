@@ -2,17 +2,12 @@
 
 
 #include "Items/ItemBase.h"
-#include "Components/InventoryComponent.h"
+#include "Alpha/AlphaCharacter.h"
 
-UItemBase::UItemBase() : bIsCopy(false), bIsPickup(false)
+
+UItemBase::UItemBase()
 {
 
-}
-
-void UItemBase::ResetItemFlags()
-{
-	bIsCopy = false;
-	bIsPickup = false;
 }
 
 UItemBase* UItemBase::CreateItemCopy() const
@@ -28,28 +23,22 @@ UItemBase* UItemBase::CreateItemCopy() const
 	ItemCopy->AssetData = this->AssetData;
 	ItemCopy->Quantity = this->Quantity;
 
-	ItemCopy->bIsCopy = true;
-
 	return ItemCopy;
 }
 
 void UItemBase::SetQuantity(const int32 NewQuantity)
 {
-	if (NewQuantity != this->Quantity)
+	if (NewQuantity != Quantity)
 	{
-		Quantity = FMath::Clamp(NewQuantity, 0, this->NumericData.bIsStackable ? this->NumericData.MaxStackSize : 1);
+		Quantity = FMath::Clamp(NewQuantity, 0, NumericData.bIsStackable ? NumericData.MaxStackSize : 1);
 
-		if (this->OwningInventory)
+		/*if (OwningInventory)
 		{
-			if (this->Quantity <= 0)
+			if (Quantity <= 0)
 			{
-				this->OwningInventory->RemoveSingleInstanceOfItem(this);
+				OwningInventory->RemoveItem(this);
 			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("ItemBase OwningInventory was null (item may be a pickup)."));
-		}
+		}*/
 	}
 }
 

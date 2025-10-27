@@ -7,53 +7,48 @@
 #include "Alpha/AlphaCharacter.h"
 #include "ItemBase.generated.h"
 
-class UInventoryComponent;
-
+/**
+ * 
+ */
 UCLASS()
 class ALPHA_API UItemBase : public UObject
 {
 	GENERATED_BODY()
 	
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	UPROPERTY()
-	UInventoryComponent* OwningInventory;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	//Properties & Variables
+
+	//UPROPERTY()
+	//UInventoryComponent* OwningInventory;
+
+	UPROPERTY(VisibleAnywhere, Category = "Item Data", meta = (UIMin=1, UIMax=100))
 	int32 Quantity;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FName ID;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	EItemType ItemType;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	EItemQuality ItemQuality;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemStatistics ItemStatistics;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemTextData TextData;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemNumericData NumericData;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemAssetData AssetData;
 
-	bool bIsCopy;
-	bool bIsPickup;
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
+	//Functions
 
 	UItemBase();
-
-	void ResetItemFlags();
 
 	UFUNCTION(Category = "Item")
 	UItemBase* CreateItemCopy() const;
@@ -76,6 +71,6 @@ public:
 protected:
 	bool operator==(const FName& OtherID) const
 	{
-		return this->ID == OtherID;
+		return ID == OtherID;
 	}
 };
