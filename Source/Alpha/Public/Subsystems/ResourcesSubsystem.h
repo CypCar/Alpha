@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "GameplayTagContainer.h"
-//#include "SaveSubsystem.h"
+#include "SaveSubsystem.h"
 #include "ResourcesSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FResourceChangeEvent, FGameplayTag, Resource, int32, NewQuantity);
 
 UCLASS()
-class ALPHA_API UResourcesSubsystem : public UWorldSubsystem //, public ISaveableInterface
+class ALPHA_API UResourcesSubsystem : public UWorldSubsystem , public ISaveableInterface
 {
 	GENERATED_BODY()
 	
