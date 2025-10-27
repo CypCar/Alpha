@@ -17,6 +17,7 @@ class UInventoryComponent;
 class UItemBase;
 class UTimelineComponent;
 class UInputMappingContext;
+class UStatsComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -59,7 +60,10 @@ public:
 	//PROPERTIES & VARIABELS
 	//==========================================================================
 	bool bAiming;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UStatsComponent* StatsComponent;
+	
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
@@ -186,6 +190,8 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
-
+	// Input functions
+	void StartSprint();
+	void StopSprint();
 };
 

@@ -3,6 +3,7 @@
 #include "UserInterface/AlphaHUD.h"
 #include "Components/InventoryComponent.h"
 #include "World/Pickup.h"
+#include "Components/StatsComponent.h"
 
 // engine
 #include "Engine/LocalPlayer.h"
@@ -72,7 +73,8 @@ AAlphaCharacter::AAlphaCharacter()
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 	BaseEyeHeight = 76.0f;
 
-
+	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -171,6 +173,22 @@ void AAlphaCharacter::DoJumpEnd()
 	StopJumping();
 }
 
+void AAlphaCharacter::StartSprint()
+{
+	if (StatsComponent)
+	{
+		StatsComponent->StartSprinting();
+	}
+}
+
+void AAlphaCharacter::StopSprint()
+{
+	if (StatsComponent)
+	{
+		StatsComponent->StopSprinting();
+	}
+}
+
 void AAlphaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -187,6 +205,13 @@ void AAlphaCharacter::BeginPlay()
 		AimingCameraTimeline->AddInterpFloat(AimingCameraCurve, AimLerpAlphaValue);
 		AimingCameraTimeline->SetTimelineFinishedFunc(TimelineFinishedEvent);
 	}
+
+	/*if (StatsComponent)
+	{
+		StatsComponent->OnDeath.AddDynamic(this, &AlphaCharacter::HandleDeath);
+		StatsComponent->OnHealthChanged.AddDynamic(this, &APlayerCharacter::HandleHealthChanged);
+	}*/
+	
 }
 
 void AAlphaCharacter::Tick(float DeltaSeconds)
