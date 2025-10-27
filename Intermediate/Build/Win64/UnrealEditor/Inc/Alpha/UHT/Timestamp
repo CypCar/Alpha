@@ -1,8 +1,11 @@
-C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\Items\ItemBase.h
-C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\World\InterfaceTestActor.h
-C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\Interfaces\InteractionInterface.h
 C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\Data\ItemDataStructs.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\Interfaces\InteractionInterface.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\UserInterface\AlphaHUD.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\Items\ItemBase.h
 C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\UserInterface\Interaction\InteractionWidget.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\World\InterfaceTestActor.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\UserInterface\Inventory\InventoryPanel.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\Public\UserInterface\MainMenu.h
 C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\AlphaCharacter.h
-C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\AlphaGameMode.h
 C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\AlphaPlayerController.h
+C:\Users\antek\Documents\Unreal Projects\Alpha\Source\Alpha\AlphaGameMode.h

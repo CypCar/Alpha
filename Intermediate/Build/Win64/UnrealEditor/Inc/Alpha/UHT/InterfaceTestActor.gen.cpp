@@ -6,6 +6,7 @@
 
 #include "UObject/GeneratedCppIncludes.h"
 #include "World/InterfaceTestActor.h"
+#include "Interfaces/InteractionInterface.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
@@ -15,6 +16,7 @@ void EmptyLinkFunctionForGeneratedCodeInterfaceTestActor() {}
 ALPHA_API UClass* Z_Construct_UClass_AInterfaceTestActor();
 ALPHA_API UClass* Z_Construct_UClass_AInterfaceTestActor_NoRegister();
 ALPHA_API UClass* Z_Construct_UClass_UInteractionInterface_NoRegister();
+ALPHA_API UScriptStruct* Z_Construct_UScriptStruct_FInteractableData();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
 UPackage* Z_Construct_UPackage__Script_Alpha();
@@ -65,8 +67,13 @@ struct Z_Construct_UClass_AInterfaceTestActor_Statics
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/World/InterfaceTestActor.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_InstanceInteractableData_MetaData[] = {
+		{ "Category", "Test Actor" },
+		{ "ModuleRelativePath", "Public/World/InterfaceTestActor.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Mesh;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_InstanceInteractableData;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static const UECodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
@@ -76,8 +83,10 @@ struct Z_Construct_UClass_AInterfaceTestActor_Statics
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AInterfaceTestActor_Statics::NewProp_Mesh = { "Mesh", nullptr, (EPropertyFlags)0x0020080000080009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AInterfaceTestActor, Mesh), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Mesh_MetaData), NewProp_Mesh_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_AInterfaceTestActor_Statics::NewProp_InstanceInteractableData = { "InstanceInteractableData", nullptr, (EPropertyFlags)0x0020080000000801, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AInterfaceTestActor, InstanceInteractableData), Z_Construct_UScriptStruct_FInteractableData, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InstanceInteractableData_MetaData), NewProp_InstanceInteractableData_MetaData) }; // 171235710
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AInterfaceTestActor_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AInterfaceTestActor_Statics::NewProp_Mesh,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AInterfaceTestActor_Statics::NewProp_InstanceInteractableData,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AInterfaceTestActor_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_AInterfaceTestActor_Statics::DependentSingletons[])() = {
@@ -119,10 +128,10 @@ AInterfaceTestActor::~AInterfaceTestActor() {}
 struct Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h__Script_Alpha_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AInterfaceTestActor, AInterfaceTestActor::StaticClass, TEXT("AInterfaceTestActor"), &Z_Registration_Info_UClass_AInterfaceTestActor, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AInterfaceTestActor), 1184874819U) },
+		{ Z_Construct_UClass_AInterfaceTestActor, AInterfaceTestActor::StaticClass, TEXT("AInterfaceTestActor"), &Z_Registration_Info_UClass_AInterfaceTestActor, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AInterfaceTestActor), 1677286551U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h__Script_Alpha_2983756206(TEXT("/Script/Alpha"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h__Script_Alpha_1995388113(TEXT("/Script/Alpha"),
 	Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h__Script_Alpha_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_antek_Documents_Unreal_Projects_Alpha_Source_Alpha_Public_World_InterfaceTestActor_h__Script_Alpha_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

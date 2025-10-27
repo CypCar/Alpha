@@ -12,6 +12,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
 struct FInputActionValue;
+class AAlphaHUD;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -88,6 +89,9 @@ protected:
 	//==========================================================================
 	//PROPERTIES & VARIABELS
 	//==========================================================================
+
+	UPROPERTY()
+	AAlphaHUD* HUD;
 
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")

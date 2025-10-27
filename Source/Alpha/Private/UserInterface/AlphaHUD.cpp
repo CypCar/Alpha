@@ -4,9 +4,6 @@
 #include "UserInterface/AlphaHUD.h"
 #include "UserInterface/MainMenu.h"
 #include "UserInterface/Interaction/InteractionWidget.h"
-#include "UserInterface/Interaction/LootWindowWidget.h"
-#include "TimerManager.h"
-
 
 AAlphaHUD::AAlphaHUD()
 {
@@ -29,27 +26,13 @@ void AAlphaHUD::BeginPlay()
 		InteractionWidget->AddToViewport(-1);
 		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
-
-	if (CrosshairWidgetClass)
-	{
-		CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
-		CrosshairWidget->AddToViewport();
-		CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
-
-	if (LootWidgetClass)
-	{
-		LootWidget = CreateWidget<ULootWindowWidget>(GetWorld(), LootWidgetClass);
-		LootWidget->AddToViewport();
-		LootWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
 }
 
 void AAlphaHUD::DisplayMenu()
 {
 	if (MainMenuWidget)
 	{
-		bIsMenuVisible = true;
+		bIsMainMenuVisible = true;
 		MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
@@ -58,43 +41,8 @@ void AAlphaHUD::HideMenu()
 {
 	if (MainMenuWidget)
 	{
-		bIsMenuVisible = false;
+		bIsMainMenuVisible = false;
 		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
-}
-
-void AAlphaHUD::ToggleMenu()
-{
-	if (bIsMenuVisible)
-	{
-		HideMenu();
-
-		const FInputModeGameOnly InputMode;
-		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(false);
-	}
-	else
-	{
-		DisplayMenu();
-		const FInputModeGameAndUI InputMode;
-		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(true);
-	}
-}
-
-void AAlphaHUD::ShowCrosshair()
-{
-	if (CrosshairWidget)
-	{
-		CrosshairWidget->SetVisibility(ESlateVisibility::Visible);
-	}
-}
-
-void AAlphaHUD::HideCrosshair()
-{
-	if (CrosshairWidget)
-	{
-		CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
@@ -103,6 +51,7 @@ void AAlphaHUD::ShowInteractionWidget() const
 	if (InteractionWidget)
 	{
 		InteractionWidget->SetVisibility(ESlateVisibility::Visible);
+
 	}
 }
 
@@ -125,14 +74,6 @@ void AAlphaHUD::UpdateInteractionWidget(const FInteractableData* InteractableDat
 		}
 
 		InteractionWidget->UpdateWidget(InteractableData);
-	}
-}
-
-void AAlphaHUD::EnqueueLoot(const FInteractableData& Data)
-{
-	if (LootWidget)
-	{
-		LootWidget->PushLoot(Data);        // <== NOWE
 	}
 }
 
