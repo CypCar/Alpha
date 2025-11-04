@@ -13,21 +13,24 @@ class ALPHA_API AInterfaceTestActor : public AActor, public  IInteractionInterfa
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AInterfaceTestActor();
 
 protected:
-
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY(EditAnywhere, Category = "Test Actor")
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditInstanceOnly, Category = "Test Actor")
 	FInteractableData InstanceInteractableData;
-
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginFocus() override;

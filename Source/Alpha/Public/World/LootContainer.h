@@ -30,7 +30,7 @@ public:
 	virtual void EndFocus() override;
 	
 	// Expose current interactable data like APickup
-	FORCEINLINE UItemBase* GetItemData() { return ItemReference; };
+	FORCEINLINE UItemBase* GetItemData() const { return ItemReference; };
 
 protected:
 	//==========================================================================
@@ -62,8 +62,6 @@ protected:
 	
 	UPROPERTY(EditInstanceOnly, Category = "Container | UI")
 	FText ContainerDisplayName;
-	
-
 	
 	//==========================================================================
 	//FUNCTIONS

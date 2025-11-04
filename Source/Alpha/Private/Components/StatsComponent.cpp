@@ -11,8 +11,8 @@ UStatsComponent::UStatsComponent()
     MaxHealth = 100.0f;
     CurrentHealth = MaxHealth;
     bCanRegenerateHealth = false;
-    HealthRegenRate = 5.0f;
-    HealthRegenDelay = 5.0f;
+    HealthRegenRate = 2.0f;
+    HealthRegenDelay = 3.0f;
     bIsDead = false;
     LastDamageTime = 0.0f;
 
@@ -21,7 +21,7 @@ UStatsComponent::UStatsComponent()
     CurrentStamina = MaxStamina;
     StaminaRegenRate = 20.0f;
     StaminaDrainRate = 25.0f;
-    StaminaRegenDelay = 2.0f;
+    StaminaRegenDelay = 1.0f;
     bIsSprinting = false;
     bIsExhausted = false;
     

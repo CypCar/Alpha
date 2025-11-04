@@ -16,11 +16,25 @@ class ALPHA_API UMainMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY()
 	AAlphaCharacter* PlayerCharacter;
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
+
 
 protected:
-
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;

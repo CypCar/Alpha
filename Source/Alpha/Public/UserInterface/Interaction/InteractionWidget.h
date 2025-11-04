@@ -19,12 +19,21 @@ class ALPHA_API UInteractionWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY(VisibleAnywhere, Category = "Interaction Widget | Player Reference")
 	AAlphaCharacter* PlayerCharacter;
-
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	void UpdateWidget(const FInteractableData* InteractableData) const;
 
 protected:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = "Interaction Widget | Interactable Data")
 	UTextBlock* NameText;
 	
@@ -45,7 +54,10 @@ protected:
 
 	UFUNCTION(Category = "Interaction Widget | Interactable Data")
 	float UpdateInteractionProgress();
-
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 };

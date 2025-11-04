@@ -15,6 +15,9 @@ class ALPHA_API UInventoryTooltip : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UInventoryItemSlot* InventorySlotBeingHovered;
 
 	UPROPERTY(VisibleAnywhere)
@@ -40,6 +43,10 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* StackWeight;
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 
 protected:
 	virtual void NativeConstruct() override;

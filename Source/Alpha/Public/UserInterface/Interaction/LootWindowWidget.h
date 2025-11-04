@@ -13,9 +13,10 @@ class ALPHA_API ULootWindowWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	// Dodaj nowy wpis na górę listy
-	void PushLoot(const FInteractableData& Data);
-
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
+	
 	// Ile wpisów ma być widocznych jednocześnie (starsze usuwamy z dołu)
 	UPROPERTY(EditDefaultsOnly, Category="Loot")
 	int32 MaxVisibleEntries = 5;
@@ -27,13 +28,27 @@ public:
 	// Klasa pojedynczego wiersza
 	UPROPERTY(EditDefaultsOnly, Category="Loot")
 	TSubclassOf<ULootRowWidget> RowClass;
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
+	
+	// Dodaj nowy wpis na górę listy
+	void PushLoot(const FInteractableData& Data);
 
 protected:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
+	UPROPERTY(meta=(BindWidget)) UVerticalBox* LootListBox = nullptr;
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	virtual void NativeConstruct() override;
 
-	UPROPERTY(meta=(BindWidget)) UVerticalBox* LootListBox = nullptr;
-
 private:
+	
 	void ScheduleRemoval(ULootRowWidget* Row);
 
 	// trzymamy timery per-wiersz żeby móc je bezpiecznie anulować

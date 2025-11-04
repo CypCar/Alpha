@@ -23,6 +23,9 @@ public:
 	FORCEINLINE UItemBase* GetItemReference() const { return ItemReference; };
 
 protected:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Slot")
 	TSubclassOf<UDragItemVisual> DragItemVisualClass;
 
@@ -40,7 +43,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Inventory Slot", meta = (BindWidget))
 	UTextBlock* ItemQuantity;
-
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;

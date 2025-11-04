@@ -13,6 +13,13 @@ class ALPHA_API UStatsWidget : public UUserWidget
     GENERATED_BODY()
 
 public:
+    //==========================================================================
+    //PROPERTIES & VARIABELS
+    //==========================================================================
+
+    //==========================================================================
+    //FUNCTIONS
+    //==========================================================================
     UFUNCTION(BlueprintCallable, Category = "Stats")
     void InitializeWidget(UStatsComponent* StatsComp);
 
@@ -32,9 +39,9 @@ public:
     void ShowDamageText(float DamageAmount);
 
 protected:
-    virtual void NativeConstruct() override;
-    virtual void NativeDestruct() override;
-
+    //==========================================================================
+    //PROPERTIES & VARIABELS
+    //==========================================================================
     // Bindowanie widgetów
     UPROPERTY(meta = (BindWidget))
     UProgressBar* HealthBar;
@@ -76,14 +83,26 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thresholds")
     float LowStaminaThreshold;
+    
+    //==========================================================================
+    //FUNCTIONS
+    //==========================================================================
+    virtual void NativeConstruct() override;
+    virtual void NativeDestruct() override;
 
 private:
+    //==========================================================================
+    //PROPERTIES & VARIABELS
+    //==========================================================================
     UPROPERTY()
     UStatsComponent* StatsComponent;
 
     // Timer dla efektów wizualnych
     FTimerHandle StatusTextTimer;
-
+    
+    //==========================================================================
+    //FUNCTIONS
+    //==========================================================================
     void ClearStatusText();
     void UpdateBarColors();
     void UpdateHealthDisplay();

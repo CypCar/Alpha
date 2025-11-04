@@ -19,26 +19,32 @@ class ALPHA_API UInventoryPanel : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION()
-	void RefreshInventory();
-
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY(meta=(BindWidget))
-	UWrapBox* InventoryWrapBox;
-
+    UWrapBox* InventoryWrapBox;
+    
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* WeightInfo;
-
+    
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* CapacityInfo;
-
+    
 	UPROPERTY()
 	AAlphaCharacter* PlayerCharacter;
-
+    
 	UPROPERTY()
 	UInventoryComponent* InventoryReference;
-
+    
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UInventoryItemSlot> InventorySlotClass;
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
+	UFUNCTION()
+	void RefreshInventory();
 
 protected:
 	void SetInfoText() const;

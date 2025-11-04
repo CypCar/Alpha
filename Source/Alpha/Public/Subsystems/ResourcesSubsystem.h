@@ -16,6 +16,15 @@ class ALPHA_API UResourcesSubsystem : public UWorldSubsystem , public ISaveableI
 	GENERATED_BODY()
 	
 public:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
+	UPROPERTY(BlueprintAssignable)
+	FResourceChangeEvent OnResourceChange;
+	
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	//void DoPostLoad() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -29,8 +38,7 @@ public:
 
 	void ResetState();
 
-	UPROPERTY(BlueprintAssignable)
-	FResourceChangeEvent OnResourceChange;
+
 
 private:
 	UPROPERTY(SaveGame)

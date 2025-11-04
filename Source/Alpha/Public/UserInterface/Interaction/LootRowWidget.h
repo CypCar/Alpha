@@ -11,12 +11,20 @@ class ALPHA_API ULootRowWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+	//==========================================================================
+	//FUNCTIONS
+	//==========================================================================
 	void Setup(const FInteractableData& Data);
 
 protected:
+	//==========================================================================
+	//PROPERTIES & VARIABELS
+	//==========================================================================
 	UPROPERTY(meta=(BindWidget))
 	UTextBlock* NameText;
 	
 	UPROPERTY(meta=(BindWidget))
 	UTextBlock* QuantityText;
 };
+
+
