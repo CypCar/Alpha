@@ -9,6 +9,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, NewHealth,
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStaminaChanged, float, NewStamina, float, Delta);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AActor*, KilledActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStaminaExhausted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTaken, float, DamageAmount);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ALPHA_API UStatsComponent : public UActorComponent
@@ -38,6 +39,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (EditCondition = "bCanRegenerateHealth"))
     float HealthRegenDelay;
 
+    FTimerHandle HealthRegenTimer;
+    float LastDamageTime;
+
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
     bool bIsDead;
 
@@ -64,11 +68,7 @@ protected:
     bool bIsExhausted;
 
     // Timery
-    FTimerHandle HealthRegenTimer;
     FTimerHandle StaminaRegenTimer;
-    FTimerHandle StaminaDelayTimer;
-
-    // Zmienne wewnętrzne
     float LastStaminaUseTime;
 
 public:
@@ -116,6 +116,9 @@ public:
     UFUNCTION(BlueprintPure, Category = "Stamina")
     bool HasStamina(float RequiredAmount = 0.0f) const;
 
+    UFUNCTION(BlueprintPure, Category = "Stamina")
+    bool IsExhausted() const { return bIsExhausted; }
+
     // === GETTERY ===
     UFUNCTION(BlueprintPure, Category = "Health")
     FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
@@ -142,7 +145,10 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "Events")
     FOnStaminaExhausted OnStaminaExhausted;
 
-protected:
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnDamageTaken OnDamageTaken;
+
+private:
     // Funkcje wewnętrzne
     void HandleDeath();
     void StartHealthRegeneration();

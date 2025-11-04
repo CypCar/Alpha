@@ -8,6 +8,7 @@
 #include "Interfaces/InteractionInterface.h"
 #include "AlphaCharacter.generated.h"
 
+class UStatsWidget;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
@@ -63,6 +64,12 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStatsComponent* StatsComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UStatsWidget> StatsWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UStatsWidget* StatsWidget;
 	
 	//==========================================================================
 	//FUNCTIONS
@@ -98,7 +105,15 @@ public:
 
 	void DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop);
 
+	// Funkcje do tworzenia i zarządzania UI
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void CreateStatsWidget();
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowStatsWidget();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void HideStatsWidget();
 
 protected:
 
@@ -193,5 +208,8 @@ protected:
 	// Input functions
 	void StartSprint();
 	void StopSprint();
+
+private:
+	APlayerController* PlayerControllerRef;
 };
 

@@ -4,6 +4,7 @@
 #include "Components/InventoryComponent.h"
 #include "World/Pickup.h"
 #include "Components/StatsComponent.h"
+#include "UserInterface/HUD/StatsWidget.h"
 
 // engine
 #include "Engine/LocalPlayer.h"
@@ -19,6 +20,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "Components/TimelineComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -211,7 +213,12 @@ void AAlphaCharacter::BeginPlay()
 		StatsComponent->OnDeath.AddDynamic(this, &AlphaCharacter::HandleDeath);
 		StatsComponent->OnHealthChanged.AddDynamic(this, &APlayerCharacter::HandleHealthChanged);
 	}*/
+
+	// Pobranie referencji do PlayerController
+	PlayerControllerRef = UGameplayStatics::GetPlayerController(this, 0);
 	
+	// Utworzenie widgetu statystyk
+	CreateStatsWidget();
 }
 
 void AAlphaCharacter::Tick(float DeltaSeconds)
@@ -444,5 +451,34 @@ void AAlphaCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Item to drop was somehow null"));
+	}
+}
+
+void AAlphaCharacter::CreateStatsWidget()
+{
+	if (StatsWidgetClass && PlayerControllerRef)
+	{
+		StatsWidget = CreateWidget<UStatsWidget>(PlayerControllerRef, StatsWidgetClass);
+		if (StatsWidget && StatsComponent)
+		{
+			StatsWidget->InitializeWidget(StatsComponent);
+			StatsWidget->AddToViewport();
+		}
+	}
+}
+
+void AAlphaCharacter::ShowStatsWidget()
+{
+	if (StatsWidget)
+	{
+		StatsWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+void AAlphaCharacter::HideStatsWidget()
+{
+	if (StatsWidget)
+	{
+		StatsWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
