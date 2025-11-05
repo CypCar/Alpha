@@ -1,10 +1,14 @@
 #pragma once
+//game
+#include "UserInterface/AlphaHUD.h" 
+#include "AlphaPlayerController.h" 
+#include "Interfaces/InteractionInterface.h"
+#include "Components/StatsComponent.h"
+#include "UserInterface/HUD/StatsWidget.h"
 
+//engine
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "UserInterface/AlphaHUD.h" // Add this
-#include "AlphaPlayerController.h" // Add this
-#include "Interfaces/InteractionInterface.h"
 #include "AlphaCharacter.generated.h"
 
 class USpringArmComponent;
@@ -21,10 +25,6 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-/**
- *  A simple player-controllable third person character
- *  Implements a controllable orbiting camera
- */
 UCLASS(abstract)
 class AAlphaCharacter : public ACharacter
 {
@@ -36,15 +36,25 @@ public:
 	//==========================================================================
 	bool bAiming;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UStatsComponent* StatsComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UStatsWidget> StatsWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UStatsWidget* StatsWidget;
+	
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
 	AAlphaCharacter();
-
+	
+	//UNREAL DEFAULTS UP ==========================================================
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	
-	//UNREAL DEFAULTS UP ==========================================================
+	
 	
 	FORCEINLINE bool IsInteracting() const { return GetWorldTimerManager().IsTimerActive(TH_TimedInteraction); };
 	
@@ -57,6 +67,30 @@ public:
 
 	void ExitContainerRadius() const;
 
+	//UI Management
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void CreateStatsWidget();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowStatsWidget();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void HideStatsWidget();
+
+	// Debug Functions
+	UFUNCTION(BlueprintCallable, Category = "Debug")
+	void DebugTakeDamage(float DamageAmount);
+
+	UFUNCTION(BlueprintCallable, Category = "Debug")
+	void DebugConsumeStamina(float StaminaAmount);
+
+	// Sprint Management
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void StartSprinting();
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void StopSprinting();
+
 protected:
 
 	//==========================================================================
@@ -65,29 +99,26 @@ protected:
 	
 	// default/built-in UE game template properties
 	//---------------------------------------------------------
-	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-
-	/** Jump Input Action */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
 	UInputAction* JumpAction;
-
-	/** Move Input Action */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
 	UInputAction* MoveAction;
-
-	/** Look Input Action */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
 	UInputAction* LookAction;
-
-	/** Mouse Look Input Action */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
 	UInputAction* MouseLookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
+	UInputAction* SprintAction;
 	
 	// Alpha miscellaneous game properties
 	//---------------------------------------------------------
@@ -211,6 +242,14 @@ protected:
 	void EndInteract();
 	void Interact();
 	
-	
+private:
+	UFUNCTION()
+	void HandleDeath(AActor* DeadActor);
+
+	UFUNCTION()
+	void HandleHealthChanged(float NewHealth, float Delta);
+
+	UFUNCTION()
+	void HandleStaminaChanged(float NewStamina, float Delta);
 };
 

@@ -79,6 +79,9 @@ AAlphaCharacter::AAlphaCharacter() :
 	// capsule default dimensions = 34.0f, 88.0f
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 	BaseEyeHeight = 76.0f;
+	
+	//Create Stats Component
+	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
 }
 
 void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -148,6 +151,18 @@ void AAlphaCharacter::BeginPlay()
 	// initialize defaults for interaction system queries
 	InteractionCollisionQueryParams.bTraceComplex = false;
 	InteractionObjectQueryParams.AddObjectTypesToQuery(ECC_GameTraceChannel1);
+
+	// Stats Widget
+	CreateStatsWidget();
+
+	// Adding events from StatsComponent
+	if (StatsComponent)
+	{
+		StatsComponent->OnDeath.AddDynamic(this, &AAlphaCharacter::HandleDeath);
+		StatsComponent->OnHealthChanged.AddDynamic(this, &AAlphaCharacter::HandleHealthChanged);
+		StatsComponent->OnStaminaChanged.AddDynamic(this, &AAlphaCharacter::HandleStaminaChanged);
+		StatsComponent->OnStaminaExhausted.AddDynamic(this, &AAlphaCharacter::StopSprinting);
+	}
 }
 
 void AAlphaCharacter::Tick(float DeltaSeconds)
@@ -482,3 +497,108 @@ void AAlphaCharacter::DoJumpEnd()
 	StopJumping();
 }
 
+void AAlphaCharacter::CreateStatsWidget()
+{
+    if (StatsWidgetClass && MainPlayerController)
+    {
+        StatsWidget = CreateWidget<UStatsWidget>(MainPlayerController, StatsWidgetClass);
+        if (StatsWidget && StatsComponent)
+        {
+            StatsWidget->InitializeWidget(StatsComponent);
+            StatsWidget->AddToViewport();
+            
+            // Na początku ukryj widget, możesz go pokazać później
+            // StatsWidget->SetVisibility(ESlateVisibility::Visible);
+        }
+    }
+}
+
+void AAlphaCharacter::ShowStatsWidget()
+{
+    if (StatsWidget)
+    {
+        StatsWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+}
+
+void AAlphaCharacter::HideStatsWidget()
+{
+    if (StatsWidget)
+    {
+        StatsWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+}
+
+void AAlphaCharacter::DebugTakeDamage(float DamageAmount)
+{
+    if (StatsComponent)
+    {
+        StatsComponent->TakeDamage(DamageAmount);
+    }
+}
+
+void AAlphaCharacter::DebugConsumeStamina(float StaminaAmount)
+{
+    if (StatsComponent)
+    {
+        StatsComponent->ConsumeStamina(StaminaAmount);
+    }
+}
+
+void AAlphaCharacter::StartSprinting()
+{
+    if (StatsComponent && StatsComponent->CanSprint())
+    {
+        StatsComponent->StartSprinting();
+        
+        // Zmiana prędkości ruchu dla sprintu
+        UCharacterMovementComponent* MovementComp = GetCharacterMovement();
+        if (MovementComp)
+        {
+            MovementComp->MaxWalkSpeed = 600.0f; // Przykładowa prędkość sprintu
+        }
+    }
+}
+
+void AAlphaCharacter::StopSprinting()
+{
+    if (StatsComponent)
+    {
+        StatsComponent->StopSprinting();
+        
+        // Przywrócenie normalnej prędkości ruchu
+        UCharacterMovementComponent* MovementComp = GetCharacterMovement();
+        if (MovementComp)
+        {
+            MovementComp->MaxWalkSpeed = 300.0f; // Przykładowa normalna prędkość
+        }
+    }
+}
+
+void AAlphaCharacter::HandleDeath(AActor* DeadActor)
+{
+    // Implementacja logiki śmierci postaci
+    UE_LOG(LogTemp, Warning, TEXT("Character died!"));
+    
+    // Przykładowe akcje po śmierci:
+    // - Wyłączenie inputu
+    if (MainPlayerController)
+    {
+        DisableInput(MainPlayerController);
+    }
+    
+    // - Odtworzenie animacji śmierci
+    // - Wywołanie game over itp.
+}
+
+void AAlphaCharacter::HandleHealthChanged(float NewHealth, float Delta)
+{
+    // Możesz dodać dodatkową logikę tutaj, np. efekty wizualne
+    UE_LOG(LogTemp, Log, TEXT("Health changed: %.1f (Delta: %.1f)"), NewHealth, Delta);
+}
+
+void AAlphaCharacter::HandleStaminaChanged(float NewStamina, float Delta)
+{
+    // Możesz dodać dodatkową logikę tutaj
+    UE_LOG(LogTemp, Log, TEXT("Stamina changed: %.1f (Delta: %.1f)"), NewStamina, Delta);
+}
