@@ -193,28 +193,20 @@ protected:
 
 	// default/built-in UE game template functions
 	//---------------------------------------------------------
-	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-	/** Called for movement input */
+	
 	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-
-	/** Handles move inputs from either controls or UI interfaces */
+	
 	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
 	virtual void DoMove(float Right, float Forward);
-
-	/** Handles look inputs from either controls or UI interfaces */
+	
 	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
 	virtual void DoLook(float Yaw, float Pitch);
-
-	/** Handles jump pressed inputs from either controls or UI interfaces */
+	
 	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
 	virtual void DoJumpStart();
-
-	/** Handles jump pressed inputs from either controls or UI interfaces */
+	
 	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
 	virtual void DoJumpEnd();
 

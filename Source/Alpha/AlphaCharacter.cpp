@@ -62,10 +62,7 @@ AAlphaCharacter::AAlphaCharacter() :
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-
-	// CSTutorial game construction code
+	// Aplha game construction code
 	//-----------------------------------------------------------------------------------
 	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
 	PlayerInventory->SetSlotsCapacity(20);
@@ -102,7 +99,7 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Looking (Controller right thumbstick only)
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
 
-		// CSTutorial game input bindings
+		// Alpha game input bindings
 		//-----------------------------------------------------------------------------------
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AAlphaCharacter::BeginInteract);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AAlphaCharacter::EndInteract);
@@ -111,6 +108,8 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AAlphaCharacter::StopAiming);
 
 		EnhancedInputComponent->BindAction(ToggleMenuAction, ETriggerEvent::Started, this, &AAlphaCharacter::ToggleMenu);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AAlphaCharacter::StartSprinting);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAlphaCharacter::StopSprinting);
 	}
 	else
 	{
@@ -176,6 +175,12 @@ void AAlphaCharacter::Tick(float DeltaSeconds)
 			GetWorldTimerManager().GetTimerElapsed(TH_TimedInteraction) /
 			InteractionTarget->InteractableData.InteractionDuration;
 		HUD->GetInteractionWidget()->InteractionProgressBar->SetPercent(FMath::Clamp(InteractProgress, 0.0f, 1.0f));
+	}
+
+	// Automatyczne zatrzymanie sprintu gdy skończy się stamina
+	if (StatsComponent && StatsComponent->bIsSprinting && !StatsComponent->CanSprint())
+	{
+		StopSprinting();
 	}
 }
 
@@ -373,6 +378,12 @@ void AAlphaCharacter::Aim()
 {
 	if (!HUD->HasAnyMenuOpen())
 	{
+		// Zatrzymaj sprint podczas celowania
+		if (StatsComponent && StatsComponent->bIsSprinting)
+		{
+			StopSprinting();
+		}
+		
 		bAiming = true;
 		bUseControllerRotationYaw = true;
 		GetCharacterMovement()->MaxWalkSpeed = 200.0f;
@@ -547,10 +558,10 @@ void AAlphaCharacter::DebugConsumeStamina(float StaminaAmount)
 
 void AAlphaCharacter::StartSprinting()
 {
-    if (StatsComponent && StatsComponent->CanSprint())
+    if (StatsComponent && StatsComponent->CanSprint() && !bAiming)
     {
         StatsComponent->StartSprinting();
-        
+    	
         // Zmiana prędkości ruchu dla sprintu
         UCharacterMovementComponent* MovementComp = GetCharacterMovement();
         if (MovementComp)
@@ -565,12 +576,12 @@ void AAlphaCharacter::StopSprinting()
     if (StatsComponent)
     {
         StatsComponent->StopSprinting();
-        
+    	
         // Przywrócenie normalnej prędkości ruchu
         UCharacterMovementComponent* MovementComp = GetCharacterMovement();
         if (MovementComp)
         {
-            MovementComp->MaxWalkSpeed = 300.0f; // Przykładowa normalna prędkość
+            MovementComp->MaxWalkSpeed = 500.0f; // Przykładowa normalna prędkość
         }
     }
 }

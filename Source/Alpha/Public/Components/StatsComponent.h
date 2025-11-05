@@ -88,6 +88,9 @@ public:
     UFUNCTION(BlueprintPure, Category = "Stamina")
     bool IsExhausted() const { return bIsExhausted; }
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
+    bool bIsSprinting;
+
     // === GETTERY ===
     UFUNCTION(BlueprintPure, Category = "Health")
     FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
@@ -142,9 +145,6 @@ protected:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
     float StaminaRegenDelay;
-    
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
-    bool bIsSprinting;
     
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
     bool bIsExhausted;
