@@ -1,24 +1,22 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "World/Pickup.h"
-#include "Items/ItemBase.h"
 #include "Components/InventoryComponent.h"
+#include "Items/ItemBase.h"
 
-// Sets default values
 APickup::APickup()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupMesh"));
+	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>("PickupMesh");
 	PickupMesh->SetSimulatePhysics(true);
 	SetRootComponent(PickupMesh);
 
+	PickupMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
 }
 
 void APickup::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	InitializePickup(ItemQuantity);
 }
 
@@ -46,25 +44,19 @@ void APickup::InitializePickup(const int32 InQuantity)
 	}
 }
 
-void APickup::InitializeDrop(UItemBase* ItemToDrop, const int32 InQuantity)
+void APickup::InitializeDrop(const TObjectPtr<UItemBase>& ItemToDrop)
 {
-	ItemReference = ItemToDrop;
-	InQuantity <= 0 ? ItemReference->SetQuantity(1) : ItemReference->SetQuantity(InQuantity);
-	ItemReference->NumericData.Weight = ItemToDrop->GetItemSingleWeight();
-	
-	ItemReference->OwningInventory = nullptr;
-	PickupMesh->SetStaticMesh(ItemToDrop->AssetData.Mesh);
-
+	ItemReference = UItemBase::CreateItemCopy(ItemToDrop, this);
+	PickupMesh->SetStaticMesh(ItemReference->AssetData.Mesh);
 	UpdateInteractableData();
 }
 
 void APickup::UpdateInteractableData()
 {
-	InstanceInteractableData.InteractableType = EInteractableType::Pickup;
-	InstanceInteractableData.Action = ItemReference->TextData.InteractionText;
-	InstanceInteractableData.Name = ItemReference->TextData.Name;
-	InstanceInteractableData.Quantity = ItemReference->Quantity;
-	InteractableData = InstanceInteractableData;
+	InteractableData.InteractableType = EInteractableType::Pickup;
+	InteractableData.Action = ItemReference->TextData.InteractionText;
+	InteractableData.Name = ItemReference->TextData.Name;
+	InteractableData.Quantity = ItemReference->Quantity;
 }
 
 void APickup::BeginFocus()
@@ -105,14 +97,14 @@ void APickup::TakePickup(const AAlphaCharacter* Taker)
 				{
 				case EItemAddResult::IAR_NoItemAdded:
 					break;
-
 				case EItemAddResult::IAR_PartialAmountItemAdded:
 					UpdateInteractableData();
 					Taker->UpdateInteractionWidget();
 					break;
-
 				case EItemAddResult::IAR_AllItemsAdded:
 					Destroy();
+					break;
+				default:
 					break;
 				}
 
@@ -125,25 +117,25 @@ void APickup::TakePickup(const AAlphaCharacter* Taker)
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Pickp internal item reference was somehow null!"));
+			UE_LOG(LogTemp, Warning, TEXT("Pickup internal item reference was somehow null!"));
 		}
 	}
 }
 
 #if WITH_EDITOR
-      void APickup::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-      {
-      	Super::PostEditChangeProperty(PropertyChangedEvent);
-      
-      	const FName ChangedPropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-      
-      	if (ChangedPropertyName == GET_MEMBER_NAME_CHECKED(FDataTableRowHandle, RowName))
-      	{
-      		if (!ItemRowHandle.IsNull())
-      		{
-      			const FItemData* ItemData = ItemRowHandle.GetRow<FItemData>(ItemRowHandle.RowName.ToString());
-      			PickupMesh->SetStaticMesh(ItemData->AssetData.Mesh);
-      		}
-      	}
-      }
-      #endif
+void APickup::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	const FName ChangedPropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
+
+	if (ChangedPropertyName == GET_MEMBER_NAME_CHECKED(FDataTableRowHandle, RowName))
+	{
+		if (!ItemRowHandle.IsNull())
+		{
+			const FItemData* ItemData = ItemRowHandle.GetRow<FItemData>(ItemRowHandle.RowName.ToString());
+			PickupMesh->SetStaticMesh(ItemData->AssetData.Mesh);
+		}
+	}
+}
+#endif

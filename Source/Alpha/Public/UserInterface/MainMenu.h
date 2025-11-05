@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,35 +5,26 @@
 #include "MainMenu.generated.h"
 
 class AAlphaCharacter;
-/**
- * 
- */
+class UInventoryPanel;
+class UContainerInterface;
+
 UCLASS()
 class ALPHA_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
 	UPROPERTY()
-	AAlphaCharacter* PlayerCharacter;
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
+	TObjectPtr<AAlphaCharacter> PlayerCharacter;
 
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UInventoryPanel> PlayerInventory;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UContainerInterface> ContainerInterface;
 
 protected:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	virtual void NativeOnInitialized() override;
-	virtual void NativeConstruct() override;
-	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	void NativeOnInitialized() override;
+	void NativeConstruct() override;
+	bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

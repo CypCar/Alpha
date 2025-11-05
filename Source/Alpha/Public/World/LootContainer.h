@@ -5,77 +5,74 @@
 #include "Interfaces/InteractionInterface.h"
 #include "LootContainer.generated.h"
 
-class UItemBase;
+class UInventoryComponent;
 class UDataTable;
+class USphereComponent;
 
 UCLASS()
-class ALPHA_API ALootContainer : public AActor, public IInteractionInterface
+class ALPHA_API AContainer : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
+	//#############################################################################
+	// PROPERTIES & VARIABLES
+	//#############################################################################
+	UPROPERTY(EditInstanceOnly)
+	TObjectPtr<UInventoryComponent> ContainerInventory;
 
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	ALootContainer();
-
-	void InitializePickup(const int32 InQuantity);
+	//#############################################################################
+	// FUNCTIONS
+	//#############################################################################
+	AContainer();
 	
-	// IInteractionInterface
 	virtual void BeginFocus() override;
 	virtual void EndFocus() override;
-	
-	// Expose current interactable data like APickup
-	FORCEINLINE UItemBase* GetItemData() const { return ItemReference; };
+	virtual void Interact(AAlphaCharacter* PlayerCharacter) override;
 
 protected:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	UPROPERTY(VisibleAnywhere, Category = "Container | Components")
-	UStaticMeshComponent* ContainerMesh;
+	//#############################################################################
+	// PROPERTIES & VARIABLES
+	//#############################################################################
+	UPROPERTY(EditInstanceOnly, Category = "Container | Mesh")
+	TObjectPtr<UStaticMeshComponent> ContainerMesh;
 
-	UPROPERTY()
-	UItemBase* ItemReference;
-	
-	UPROPERTY(EditAnywhere, Category = "Container | Behavior")
-	bool bOneTimeLoot = true;
-    
-	UPROPERTY(EditAnywhere, Category = "Container | Behavior")
-	bool bDestroyOnEmpty = false;
-	
-	UPROPERTY(VisibleInstanceOnly, Category = "Container | State")
-	bool bOpened = false;
-    
-	UPROPERTY(VisibleInstanceOnly, Category = "Container | Interaction")
+	UPROPERTY(EditInstanceOnly, Category = "Container | Initialization")
 	FInteractableData InstanceInteractableData;
 
-	UPROPERTY(EditInstanceOnly, Category = "Container | Item Initialization")
-	int32 ItemQuantity;
+	UPROPERTY(EditInstanceOnly, Category = "Container | Initialization")
+	int32 AmountOfInventorySlots;
 
-	UPROPERTY(EditInstanceOnly, Category = "Container | Item Initialization")
-	FDataTableRowHandle ItemRowHandle;
+	UPROPERTY(EditInstanceOnly, Category = "Container | Initialization")
+	float MaxWeightCapacity;
+
+	UPROPERTY()
+	TObjectPtr<AAlphaCharacter> PlayerCharacterReference;
+
+	UPROPERTY()
+	TObjectPtr<USphereComponent> ContainerExitSphere;
+
+	UPROPERTY(EditInstanceOnly, Category = "Container | Initialization")
+	float ContainerExitRadius;
+
+	// Reminder:
+	UPROPERTY(EditInstanceOnly, Category = "Container | Loot Initialization")
+	TArray<TObjectPtr<UDataTable>> LootTables;
 	
-	UPROPERTY(EditInstanceOnly, Category = "Container | UI")
-	FText ContainerDisplayName;
+	UPROPERTY(EditInstanceOnly, Category = "Container | Loot Initialization")
+	FIntPoint RandomNumberRange;
 	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
+	UPROPERTY(EditInstanceOnly, Category = "Container | Loot Initialization")
+	bool bInitWithRandomContents;
+
+	//#############################################################################
+	// FUNCTIONS
+	//#############################################################################
 	virtual void BeginPlay() override;
-	
-	virtual void Interact(AAlphaCharacter* PlayerCharacter) override;
-	
-	void UpdateInteractableData();
-	void TakeItems(AAlphaCharacter* Taker);
-	bool IsEmpty() const;
-	void MakeNonInteractableButBlocking();
 
-#if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-#endif
+	UFUNCTION()
+	void OnContainerRadiusExit(UPrimitiveComponent* OverlappedComponent,
+	                           AActor* OtherActor,
+	                           UPrimitiveComponent* OtherComp,
+	                           int32 OtherBodyIndex);
 };

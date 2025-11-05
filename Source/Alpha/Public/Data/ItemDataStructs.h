@@ -29,7 +29,7 @@ enum class EItemType : uint8
 USTRUCT()
 struct FItemStatistics
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
 	float ArmorRating;
@@ -42,13 +42,12 @@ struct FItemStatistics
 
 	UPROPERTY(EditAnywhere)
 	float SellValue;
-
 };
 
 USTRUCT()
 struct FItemTextData
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
 	FText Name;
@@ -66,7 +65,7 @@ struct FItemTextData
 USTRUCT()
 struct FItemNumericData
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
 	float Weight;
@@ -81,19 +80,19 @@ struct FItemNumericData
 USTRUCT()
 struct FItemAssetData
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	UTexture2D* Icon;
+	TObjectPtr<UTexture2D> Icon;
 
 	UPROPERTY(EditAnywhere)
-	UStaticMesh* Mesh;
+	TObjectPtr<UStaticMesh> Mesh;
 };
 
 USTRUCT()
 struct FItemData : public FTableRowBase
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FName ID;

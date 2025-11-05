@@ -1,74 +1,43 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "UserInterface/AlphaHUD.h"
 #include "UserInterface/MainMenu.h"
 #include "UserInterface/Interaction/InteractionWidget.h"
-#include "UserInterface/Interaction/LootWindowWidget.h"
-#include "TimerManager.h"
+#include "UserInterface/Inventory/ContainerInterface.h"
 
-
-AAlphaHUD::AAlphaHUD()
+AAlphaHUD::AAlphaHUD() :
+	bMainMenuOpen(false),
+	bContainerInterfaceOpen(false),
+	bInteractionWidgetVisible(false)
 {
 }
 
 void AAlphaHUD::BeginPlay()
 {
 	Super::BeginPlay();
+	CreateGameWidgets();
+}
 
-	if (MainMenuClass)
-	{
-		MainMenuWidget = CreateWidget<UMainMenu>(GetWorld(), MainMenuClass);
-		MainMenuWidget->AddToViewport(5);
-		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
-
-	if (InteractionWidgetClass)
-	{
-		InteractionWidget = CreateWidget<UInteractionWidget>(GetWorld(), InteractionWidgetClass);
-		InteractionWidget->AddToViewport(-1);
-		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
-
-	if (CrosshairWidgetClass)
-	{
-		CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
-		CrosshairWidget->AddToViewport();
-		CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
-
-	if (LootWidgetClass)
-	{
-		LootWidget = CreateWidget<ULootWindowWidget>(GetWorld(), LootWidgetClass);
-		LootWidget->AddToViewport();
-		LootWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
+bool AAlphaHUD::HasAnyMenuOpen() const
+{
+	return bMainMenuOpen || bContainerInterfaceOpen;
 }
 
 void AAlphaHUD::DisplayMenu()
 {
-	if (MainMenuWidget)
-	{
-		bIsMenuVisible = true;
-		MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
-	}
+	bMainMenuOpen = true;
+	MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AAlphaHUD::HideMenu()
 {
-	if (MainMenuWidget)
-	{
-		bIsMenuVisible = false;
-		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	bMainMenuOpen = false;
+	MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void AAlphaHUD::ToggleMenu()
 {
-	if (bIsMenuVisible)
+	if (bMainMenuOpen)
 	{
 		HideMenu();
-
 		const FInputModeGameOnly InputMode;
 		GetOwningPlayerController()->SetInputMode(InputMode);
 		GetOwningPlayerController()->SetShowMouseCursor(false);
@@ -82,58 +51,126 @@ void AAlphaHUD::ToggleMenu()
 	}
 }
 
-void AAlphaHUD::ShowCrosshair()
+void AAlphaHUD::ShowCrosshair() const
 {
-	if (CrosshairWidget)
-	{
-		CrosshairWidget->SetVisibility(ESlateVisibility::Visible);
-	}
+	CrosshairWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
-void AAlphaHUD::HideCrosshair()
+void AAlphaHUD::HideCrosshair() const
 {
-	if (CrosshairWidget)
-	{
-		CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void AAlphaHUD::ShowInteractionWidget() const
+void AAlphaHUD::ShowInteractionWidget()
 {
-	if (InteractionWidget)
-	{
-		InteractionWidget->SetVisibility(ESlateVisibility::Visible);
-	}
+	bInteractionWidgetVisible = true;
+	InteractionWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
-void AAlphaHUD::HideInteractionWidget() const
+void AAlphaHUD::HideInteractionWidget()
 {
-	if (InteractionWidget)
-	{
-		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
-
-	}
+	bInteractionWidgetVisible = false;
+	InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void AAlphaHUD::UpdateInteractionWidget(const FInteractableData* InteractableData) const
 {
-	if (InteractionWidget)
+	if (InteractionWidget->GetVisibility() == ESlateVisibility::Collapsed)
 	{
-		if (InteractionWidget->GetVisibility() == ESlateVisibility::Collapsed)
-		{
-			InteractionWidget->SetVisibility(ESlateVisibility::Visible);
-		}
-
-		InteractionWidget->UpdateWidget(InteractableData);
+		InteractionWidget->SetVisibility(ESlateVisibility::Visible);
 	}
+
+	InteractionWidget->UpdateWidget(InteractableData);
 }
 
-void AAlphaHUD::EnqueueLoot(const FInteractableData& Data)
+void AAlphaHUD::SetTargetContainer(AContainer* TargetContainer)
 {
-	if (LootWidget)
+	if (MainMenuWidget->ContainerInterface->TargetContainer != TargetContainer)
 	{
-		LootWidget->PushLoot(Data);        // <== NOWE
+		MainMenuWidget->ContainerInterface->LinkContainerInterface(TargetContainer);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, L"%s: ContainerInterface is already linked to this container.", *FString(__FUNCTION__));
+	}
+
+	if (!bMainMenuOpen)
+	{
+		ToggleMenu();
+	}
+	
+	ShowContainerInterface(true);
+}
+
+void AAlphaHUD::ClearTargetContainer()
+{
+	HideContainerInterface(true);
+	MainMenuWidget->ContainerInterface->ClearTargetContainer();
+}
+
+void AAlphaHUD::ShowContainerInterface(const bool bModifyInputMode)
+{
+	bContainerInterfaceOpen = true;
+	MainMenuWidget->ContainerInterface->SetVisibility(ESlateVisibility::Visible);
+	HideInteractionWidget();
+
+	if (bModifyInputMode)
+	{
+		const FInputModeGameAndUI InputMode;
+		GetOwningPlayerController()->SetInputMode(InputMode);
+		GetOwningPlayerController()->SetShowMouseCursor(true);
+	}
+}
+
+void AAlphaHUD::HideContainerInterface(const bool bModifyInputMode)
+{
+	bContainerInterfaceOpen = false;
+	MainMenuWidget->ContainerInterface->SetVisibility(ESlateVisibility::Collapsed);
+
+	if (bModifyInputMode)
+	{
+		const FInputModeGameOnly InputMode;
+		GetOwningPlayerController()->SetInputMode(InputMode);
+		GetOwningPlayerController()->SetShowMouseCursor(false);
 	}
 }
 
 
+void AAlphaHUD::CreateGameWidgets()
+{
+	if (IsValid(MainMenuClass))
+	{
+		MainMenuWidget = CreateWidget<UMainMenu>(GetWorld(), MainMenuClass);
+		MainMenuWidget->AddToViewport(5);
+		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+		MainMenuWidget->ContainerInterface->CloseContainerInterface.BindUObject(this, &AAlphaHUD::HideContainerInterface);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, L"%s: MainMenuWidgetClass was null!", *FString(__FUNCTION__));
+	}
+
+	if (IsValid(InteractionWidgetClass))
+	{
+		InteractionWidget = CreateWidget<UInteractionWidget>(GetWorld(), InteractionWidgetClass);
+		// interaction widget doesn't need to be above menus
+		InteractionWidget->AddToViewport(0);
+		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, L"%s: InteractionWidgetClass was null!", *FString(__FUNCTION__));
+	}
+
+	if (IsValid(CrosshairWidgetClass))
+	{
+		CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
+		// crosshair is conditional and always in center of screen, so it won't conflict with interaction widget
+		CrosshairWidget->AddToViewport(0);
+		CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, L"%s: CrosshairWidgetClass was null!", *FString(__FUNCTION__));
+	}
+}

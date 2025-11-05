@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -21,16 +19,15 @@ enum class EInteractableType : uint8
 USTRUCT()
 struct FInteractableData
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
-	FInteractableData() : 
+	FInteractableData() :
 		InteractableType(EInteractableType::Pickup),
 		Name(FText::GetEmpty()),
 		Action(FText::GetEmpty()),
 		Quantity(0),
 		InteractionDuration(0.0f)
 	{
-
 	};
 
 	UPROPERTY(EditInstanceOnly)
@@ -42,10 +39,12 @@ struct FInteractableData
 	UPROPERTY(EditInstanceOnly)
 	FText Action;
 
-	UPROPERTY(EditInstanceOnly)//used only for pickups
+	// used only for pickups
+	UPROPERTY(EditInstanceOnly)
 	int8 Quantity;
 
-	UPROPERTY(EditInstanceOnly)//used for things like doors, valves that require an interaction timer
+	// used for things like valves, doors, etc. that require an interaction timer
+	UPROPERTY(EditInstanceOnly)
 	float InteractionDuration;
 };
 
@@ -56,9 +55,6 @@ class UInteractionInterface : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class ALPHA_API IInteractionInterface
 {
 	GENERATED_BODY()

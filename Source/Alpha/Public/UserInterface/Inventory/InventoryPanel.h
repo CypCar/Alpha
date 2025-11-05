@@ -1,54 +1,57 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
-#include "Components/WrapBox.h"
-#include "Components/TextBlock.h"
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "InventoryPanel.generated.h"
 
-class AAlphaCharacter;
-class UInventoryComponent;
 class UInventoryItemSlot;
+class UInventoryComponent;
+class UInventorySubmenu;
+class AAlphaCharacter;
+class UWrapBox;
+class UGridPanel;
+class UTextBlock;
 
 UCLASS()
 class ALPHA_API UInventoryPanel : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
+	bool bIsLinkedToInventory;
+
 	UPROPERTY(meta=(BindWidget))
-    UWrapBox* InventoryWrapBox;
-    
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* WeightInfo;
-    
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* CapacityInfo;
-    
+	TObjectPtr<UWrapBox> InventoryWrapBox;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UTextBlock> InventoryLabel;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UTextBlock> WeightInfo;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UTextBlock> CapacityInfo;
+
 	UPROPERTY()
-	AAlphaCharacter* PlayerCharacter;
-    
+	TObjectPtr<UInventoryComponent> InventoryReference;
+
 	UPROPERTY()
-	UInventoryComponent* InventoryReference;
-    
+	TObjectPtr<UInventorySubmenu> SubMenu;
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UInventoryItemSlot> InventorySlotClass;
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UInventorySubmenu> InventorySubMenuClass;
+
 	UFUNCTION()
 	void RefreshInventory();
+
+	void LinkToInventory(UInventoryComponent* InputInventory, AAlphaCharacter* InputCharacter = nullptr);
+	void UnlinkFromInventory();
 
 protected:
 	void SetInfoText() const;
 	virtual void NativeOnInitialized() override;
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
-
 };

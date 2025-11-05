@@ -1,17 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
-#include "Interfaces/InteractionInterface.h"  
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "AlphaHUD.generated.h"
 
-struct FInteractableData;
-struct FAddedItemInfo;
 class UMainMenu;
 class UInteractionWidget;
-class ULootWindowWidget;  
+class UAmountWidget;
+class AContainer;
+class UContainerInterface;
+class AAlphaCharacter;
+struct FInteractableData;
 
 UCLASS()
 class ALPHA_API AAlphaHUD : public AHUD
@@ -19,9 +18,41 @@ class ALPHA_API AAlphaHUD : public AHUD
 	GENERATED_BODY()
 
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
+	//======================================================================================
+	// PROPERTIES & VARIABLES
+	//======================================================================================
+	bool bMainMenuOpen;
+	bool bContainerInterfaceOpen;
+	bool bInteractionWidgetVisible;
+
+	//======================================================================================
+	// FUNCTIONS
+	//======================================================================================
+	AAlphaHUD();
+
+	bool HasAnyMenuOpen() const;
+
+	void DisplayMenu();
+	void HideMenu();
+	void ToggleMenu();
+
+	void ShowCrosshair() const;
+	void HideCrosshair() const;
+
+	void ShowInteractionWidget();
+	void HideInteractionWidget();
+	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
+	TObjectPtr<UInteractionWidget> GetInteractionWidget() { return InteractionWidget; }
+
+	void SetTargetContainer(AContainer* TargetContainer);
+	void ClearTargetContainer();
+	void ShowContainerInterface(const bool bModifyInputMode = false);
+	void HideContainerInterface(const bool bModifyInputMode = false);
+
+protected:
+	//======================================================================================
+	// PROPERTIES & VARIABLES
+	//======================================================================================
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UMainMenu> MainMenuClass;
 
@@ -32,58 +63,21 @@ public:
 	TSubclassOf<UUserWidget> CrosshairWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-	TSubclassOf<ULootWindowWidget> LootWidgetClass;
-
-	bool bIsMenuVisible;
-
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	AAlphaHUD();
-
-	void DisplayMenu();
-	void HideMenu();
-	void ToggleMenu();
-
-	void ShowCrosshair();
-	void HideCrosshair();
-
-	void ShowInteractionWidget() const;
-	void HideInteractionWidget() const;
-	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
-
-	void EnqueueLoot(const FInteractableData& InteractableData);
-
-
-
-protected:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	UPROPERTY()
-	UMainMenu* MainMenuWidget;
+	TSubclassOf<UContainerInterface> ContainerInterfaceClass;
 
 	UPROPERTY()
-	UInteractionWidget* InteractionWidget;
+	TObjectPtr<UMainMenu> MainMenuWidget;
 
 	UPROPERTY()
-	UUserWidget* CrosshairWidget;
+	TObjectPtr<UInteractionWidget> InteractionWidget;
 
 	UPROPERTY()
-	ULootWindowWidget* LootWidget;
+	TObjectPtr<UUserWidget> CrosshairWidget;
 
-	UPROPERTY(EditDefaultsOnly, Category="UI")
-	float LootDisplaySeconds = 5.f;
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
+	//======================================================================================
+	// FUNCTIONS
+	//======================================================================================
 	virtual void BeginPlay() override;
 
-private:
-	
-	TArray<FInteractableData> LootQueue;
-	bool bLootVisible = false;
-
-	FTimerHandle LootTimer;
+	void CreateGameWidgets();
 };

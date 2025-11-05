@@ -1,34 +1,38 @@
 // game
 #include "AlphaCharacter.h"
 #include "UserInterface/AlphaHUD.h"
+#include "UserInterface/Interaction/InteractionWidget.h"
 #include "Components/InventoryComponent.h"
+#include "AlphaPlayerController.h"
+#include "Interfaces/InteractionInterface.h"
+#include "World/LootContainer.h"
 #include "World/Pickup.h"
-#include "Components/StatsComponent.h"
-#include "UserInterface/HUD/StatsWidget.h"
 
 // engine
-#include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/TimelineComponent.h"
+#include "Components/ProgressBar.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "InputActionValue.h"
-#include "Alpha.h"
-
-#include "DrawDebugHelpers.h"
-#include "Components/TimelineComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 
 
-AAlphaCharacter::AAlphaCharacter()
+DEFINE_LOG_CATEGORY(LogTemplateCharacter);
+
+AAlphaCharacter::AAlphaCharacter() :
+	InteractionCheckFrequency(0.1f),
+	AimingInteractionDistance(0.0f),
+	DefaultInteractionDistance(125.0f)
 {
+	// default/built-in UE game template construction code
+	//-----------------------------------------------------------------------------------
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -53,72 +57,375 @@ AAlphaCharacter::AAlphaCharacter()
 	CameraBoom->TargetArmLength = 300.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
-	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
-	PlayerInventory->SetSlotsCapacity(20);
-	PlayerInventory->SetWeightCapacity(50.0f);
-
-
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	AimingCameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("AimingCameraTimeline"));
-	DefaultCameraLocation = FVector{ 0.0f, 0.0f, 65.0f };
-	AimingCameraLocation = FVector{ 175.0f, 50.0f, 55.0f };
-	CameraBoom->SocketOffset = DefaultCameraLocation;
-
-	InteractionCheckFrequency = 0.1;
-	InteractionCheckDistance = 225.0f;
-
-	// capsule default dimensions = 32.0f, 88.0f
-	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
-	BaseEyeHeight = 76.0f;
-
-	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
-	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	// CSTutorial game construction code
+	//-----------------------------------------------------------------------------------
+	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
+	PlayerInventory->SetSlotsCapacity(20);
+	PlayerInventory->SetWeightCapacity(50.0f);
+
+	AimingCameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("AimingCameraTimeline"));
+	DefaultCameraLocation = FVector{0.0f, 0.0f, 65.0f};
+	AimingCameraLocation = FVector{175.0f, 50.0f, 55.0f};
+	CameraBoom->SocketOffset = DefaultCameraLocation;
+
+	// capsule default dimensions = 34.0f, 88.0f
+	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
+	BaseEyeHeight = 76.0f;
 }
 
 void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) 
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		
+		// default/built-in UE game template input bindings
+		//-----------------------------------------------------------------------------------
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		// Moving
+		// Moving (also binds to controller left thumbstick)
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Move);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
 
-		// Looking
+		// Looking (Controller right thumbstick only)
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
 
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAlphaCharacter::Look);
+		// CSTutorial game input bindings
+		//-----------------------------------------------------------------------------------
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AAlphaCharacter::BeginInteract);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AAlphaCharacter::EndInteract);
 
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AAlphaCharacter::Aim);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AAlphaCharacter::StopAiming);
+
+		EnhancedInputComponent->BindAction(ToggleMenuAction, ETriggerEvent::Started, this, &AAlphaCharacter::ToggleMenu);
 	}
 	else
 	{
-		UE_LOG(LogAlpha, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component!"), *GetNameSafe(this));
+	}
+}
+
+void AAlphaCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	MainPlayerController = Cast<AAlphaPlayerController>(GetController());
+	HUD = Cast<AAlphaHUD>(MainPlayerController->GetHUD());
+
+	FOnTimelineFloat AimLerpAlphaValue;
+	FOnTimelineEvent TimelineFinishedEvent;
+	AimLerpAlphaValue.BindUFunction(this, FName("UpdateCameraTimeline"));
+	TimelineFinishedEvent.BindUFunction(this, FName("CameraTimelineEnd"));
+
+	if (AimingCameraTimeline && AimingCameraCurve)
+	{
+		AimingCameraTimeline->AddInterpFloat(AimingCameraCurve, AimLerpAlphaValue);
+		AimingCameraTimeline->SetTimelineFinishedFunc(TimelineFinishedEvent);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AimingCameraTimeline or AimingCameraCurve were null! Aiming functionality will not work until corrected."));
 	}
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AAlphaCharacter::BeginInteract);
-	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AAlphaCharacter::EndInteract);
+	// start looping timer for interactable checking
+	GetWorldTimerManager().SetTimer(
+		TH_InteractionCheck,
+		this,
+		&AAlphaCharacter::PerformInteractionCheck,
+		InteractionCheckFrequency,
+		true);
 
-	PlayerInputComponent->BindAction("ToggleMenu", IE_Pressed, this, &AAlphaCharacter::ToggleMenu);
+	// initialize defaults for interaction system queries
+	InteractionCollisionQueryParams.bTraceComplex = false;
+	InteractionObjectQueryParams.AddObjectTypesToQuery(ECC_GameTraceChannel1);
+}
 
-	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AAlphaCharacter::Aim);
-	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AAlphaCharacter::StopAiming);
+void AAlphaCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+	if (GetWorldTimerManager().IsTimerActive(TH_TimedInteraction))
+	{
+		// percentage of completion = timer value / interaction duration
+		const float InteractProgress =
+			GetWorldTimerManager().GetTimerElapsed(TH_TimedInteraction) /
+			InteractionTarget->InteractableData.InteractionDuration;
+		HUD->GetInteractionWidget()->InteractionProgressBar->SetPercent(FMath::Clamp(InteractProgress, 0.0f, 1.0f));
+	}
+}
+
+void AAlphaCharacter::PerformInteractionCheck()
+{
+	// Use dot product to only allow the line trace to happen if view is pointed
+	// in the 180 degree arc in front of the character
+	if (FVector::DotProduct(GetActorForwardVector(), GetViewRotation().Vector()) > 0)
+	{
+		const FVector TraceStart{FollowCamera->GetComponentLocation() + GetViewRotation().Vector() * CameraBoom->TargetArmLength};
+		const float InteractionCheckDistance = bAiming ? AimingInteractionDistance : DefaultInteractionDistance;
+		const FVector TraceEnd{TraceStart + GetViewRotation().Vector() * InteractionCheckDistance};
+
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f, 0, 2.0f);
+
+		// draw debug sphere at the same location and size as the sweep sphere
+		DrawDebugSphere(GetWorld(),TraceEnd,.0f,8, FColor::Blue,false,5.0f);
+
+		// create an array to store all sweep hit results
+		if (GetWorld()->SweepMultiByObjectType(OutHits,
+		                                       TraceStart,
+		                                       TraceEnd,
+		                                       FQuat::Identity,
+		                                       InteractionObjectQueryParams,
+		                                       FCollisionShape::MakeSphere(50.0f),
+		                                       InteractionCollisionQueryParams))
+		{
+			FHitResult ClosestHit;
+			ClosestHit.Distance = FLT_MAX;
+			// find the closest hit by iterating through all hits and checking for the lowest distance value
+			for (const FHitResult& Hit : OutHits)
+			{
+				if (Hit.Distance < ClosestHit.Distance)
+				{
+					ClosestHit = Hit;
+				}
+			}
+
+			// check for interactable interface
+			if (ClosestHit.GetActor()->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
+			{
+				// check if the new interactable is different from the previous one
+				if (ClosestHit.GetActor() != InteractionTarget.GetObject())
+				{
+					// end focus on the previous interactable
+					if (IsValid(InteractionTarget.GetObject()))
+					{
+						InteractionTarget->EndFocus();
+					}
+
+					// process new interactable
+					FoundInteractable(ClosestHit.GetActor());
+					return;
+				}
+
+				// in case we opened a container, the interaction widget was hidden
+				// if looking at the same container, and the container interface has been closed
+				// show the interaction widget again
+				if (!HUD->bContainerInterfaceOpen && !HUD->bInteractionWidgetVisible)
+				{
+					HUD->ShowInteractionWidget();
+				}
+
+				return;
+			}
+		}
+	}
+
+	NoInteractableFound();
+}
+
+void AAlphaCharacter::FoundInteractable(AActor* NewInteractable)
+{
+	InteractionTarget = NewInteractable;
+
+	InteractionTarget->BeginFocus();
+
+	// send the new InteractionTarget data to the InteractionWidget
+	HUD->UpdateInteractionWidget(&InteractionTarget->InteractableData);
+}
+
+void AAlphaCharacter::NoInteractableFound()
+{
+	// clear timer for any ongoing timed interaction
+	GetWorldTimerManager().ClearTimer(TH_TimedInteraction);
+
+	// call end focus on current interaction target
+	if (IsValid(InteractionTarget.GetObject()))
+	{
+		InteractionTarget->EndInteract();
+		InteractionTarget->EndFocus();
+		InteractionTarget = nullptr;
+	}
+
+	HUD->GetInteractionWidget()->InteractionProgressBar->SetPercent(0.0f);
+	HUD->HideInteractionWidget();
+}
+
+void AAlphaCharacter::BeginInteract()
+{
+	if (IsValid(InteractionTarget.GetObject()))
+	{
+		InteractionTarget->BeginInteract();
+
+		// if there no time requirement on the interaction, simply call Interact
+		if (FMath::IsNearlyZero(InteractionTarget->InteractableData.InteractionDuration, 0.1f))
+		{
+			Interact();
+		}
+		else
+		{
+			// otherwise, start the timed interaction timer
+			// after the duration of InteractionDuration has elapsed, Interact is called
+			GetWorldTimerManager().SetTimer(TH_TimedInteraction,
+			                                this,
+			                                &AAlphaCharacter::Interact,
+			                                InteractionTarget->InteractableData.InteractionDuration,
+			                                false);
+		}
+	}
+}
+
+void AAlphaCharacter::EndInteract()
+{
+	// clear timer in case the interact button was released prior to reaching the timed interaction duration
+	GetWorldTimerManager().ClearTimer(TH_TimedInteraction);
+
+	if (IsValid(InteractionTarget.GetObject()))
+	{
+		InteractionTarget->EndInteract();
+		// can reset progress bar percent here if needed, or possibly could use this as a feature
+	}
+}
+
+void AAlphaCharacter::Interact()
+{
+	// clear timer in case the interaction had a time requirement
+	GetWorldTimerManager().ClearTimer(TH_TimedInteraction);
+
+	if (IsValid(InteractionTarget.GetObject()))
+	{
+		// special actions that need to occur for each interactable type
+		switch (InteractionTarget->InteractableData.InteractableType)
+		{
+		case EInteractableType::Pickup:
+			{
+			}
+			break;
+		case EInteractableType::NonPlayerCharacter:
+			{
+			}
+			break;
+		case EInteractableType::Device:
+			{
+			}
+			break;
+		case EInteractableType::Toggle:
+			{
+			}
+			break;
+		case EInteractableType::Container:
+			{
+				// link the container inventory to the container interface
+				HUD->SetTargetContainer(Cast<AContainer>(InteractionTarget.GetObject()));
+			}
+			break;
+		default:
+			{
+			}
+		}
+
+		InteractionTarget->Interact(this);
+	}
+}
+
+void AAlphaCharacter::UpdateInteractionWidget() const
+{
+	if (IsValid(InteractionTarget.GetObject()))
+	{
+		HUD->UpdateInteractionWidget(&InteractionTarget->InteractableData);
+	}
+}
+
+void AAlphaCharacter::ToggleMenu()
+{
+	HUD->ToggleMenu();
+
+	if (HUD->bMainMenuOpen)
+	{
+		StopAiming();
+	}
+}
+
+void AAlphaCharacter::Aim()
+{
+	if (!HUD->HasAnyMenuOpen())
+	{
+		bAiming = true;
+		bUseControllerRotationYaw = true;
+		GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+
+		if (AimingCameraTimeline)
+		{
+			AimingCameraTimeline->PlayFromStart();
+		}
+	}
+}
+
+void AAlphaCharacter::StopAiming()
+{
+	if (bAiming)
+	{
+		bAiming = false;
+		bUseControllerRotationYaw = false;
+		HUD->HideCrosshair();
+		GetCharacterMovement()->MaxWalkSpeed = 500.f;
+
+		if (AimingCameraTimeline)
+		{
+			AimingCameraTimeline->Reverse();
+		}
+	}
+}
+
+void AAlphaCharacter::UpdateCameraTimeline(const float TimelineValue) const
+{
+	const FVector CameraLocation = FMath::Lerp(DefaultCameraLocation, AimingCameraLocation, TimelineValue);
+	CameraBoom->SocketOffset = CameraLocation;
+}
+
+void AAlphaCharacter::CameraTimelineEnd() const
+{
+	if (AimingCameraTimeline)
+	{
+		if (AimingCameraTimeline->GetPlaybackPosition() != 0.0f)
+		{
+			HUD->ShowCrosshair();
+		}
+	}
+}
+
+void AAlphaCharacter::DropItem(UItemBase* ItemToDrop)
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.bNoFail = true;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	const FVector SpawnLocation{GetActorLocation() + GetActorForwardVector() * 50.0f};
+	const FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+
+	APickup* Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), SpawnTransform, SpawnParams);
+	Pickup->InitializeDrop(ItemToDrop);
+	PlayerInventory->HandleRemoveItem(ItemToDrop);
+}
+
+void AAlphaCharacter::ExitContainerRadius() const
+{
+	HUD->ClearTargetContainer();
 }
 
 void AAlphaCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	// route the input
 	DoMove(MovementVector.X, MovementVector.Y);
@@ -127,13 +434,13 @@ void AAlphaCharacter::Move(const FInputActionValue& Value)
 void AAlphaCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	// route the input
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
 }
 
-void AAlphaCharacter::DoMove(float Right, float Forward)
+void AAlphaCharacter::DoMove(const float Right, const float Forward)
 {
 	if (GetController() != nullptr)
 	{
@@ -175,310 +482,3 @@ void AAlphaCharacter::DoJumpEnd()
 	StopJumping();
 }
 
-void AAlphaCharacter::StartSprint()
-{
-	if (StatsComponent)
-	{
-		StatsComponent->StartSprinting();
-	}
-}
-
-void AAlphaCharacter::StopSprint()
-{
-	if (StatsComponent)
-	{
-		StatsComponent->StopSprinting();
-	}
-}
-
-void AAlphaCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	HUD = Cast<AAlphaHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-
-	FOnTimelineFloat AimLerpAlphaValue;
-	FOnTimelineEvent TimelineFinishedEvent;
-	AimLerpAlphaValue.BindUFunction(this, FName("UpdateCameraTimeline"));
-	TimelineFinishedEvent.BindUFunction(this, FName("CameraTimelineEnd"));
-
-	if (AimingCameraTimeline && AimingCameraCurve)
-	{
-		AimingCameraTimeline->AddInterpFloat(AimingCameraCurve, AimLerpAlphaValue);
-		AimingCameraTimeline->SetTimelineFinishedFunc(TimelineFinishedEvent);
-	}
-
-	/*if (StatsComponent)
-	{
-		StatsComponent->OnDeath.AddDynamic(this, &AlphaCharacter::HandleDeath);
-		StatsComponent->OnHealthChanged.AddDynamic(this, &APlayerCharacter::HandleHealthChanged);
-	}*/
-
-	// Pobranie referencji do PlayerController
-	PlayerControllerRef = UGameplayStatics::GetPlayerController(this, 0);
-	
-	// Utworzenie widgetu statystyk
-	CreateStatsWidget();
-}
-
-void AAlphaCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	if (GetWorld()->TimeSince(InteractionData.LastInteractionCheckTime) > InteractionCheckFrequency)
-	{
-		PerformInteractionCheck();
-	}	
-
-}
-
-void AAlphaCharacter::PerformInteractionCheck()
-{
-	InteractionData.LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
-
-	FVector TraceStart{ FVector::ZeroVector };
-
-	if (!bAiming)
-	{
-		InteractionCheckDistance = 200.0f;
-		TraceStart = GetPawnViewLocation();
-	}
-	else
-	{
-		InteractionCheckDistance = 250.0f;
-		TraceStart = FollowCamera->GetComponentLocation();
-	}
-
-	FVector TraceEnd{ TraceStart + (GetViewRotation().Vector() * InteractionCheckDistance) };
-
-	float LookDirection = FVector::DotProduct(GetActorForwardVector(), GetViewRotation().Vector()); 
-
-	if (LookDirection > 0)
-	{	
-		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f, 0, 2.0f);
-
-		FCollisionQueryParams QueryParams;
-		QueryParams.AddIgnoredActor(this);
-		FHitResult TraceHit;
-
-	
-		if (GetWorld()->LineTraceSingleByChannel(TraceHit, TraceStart, TraceEnd, ECC_Visibility, QueryParams))
-		{
-			if (TraceHit.GetActor()->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
-			{
-
-				if (TraceHit.GetActor() != InteractionData.CurrentInteractable)
-				{
-					FoundInteractable(TraceHit.GetActor());
-					return;
-				}
-
-				if (TraceHit.GetActor() == InteractionData.CurrentInteractable)
-				{
-					return;
-				}
-			}
-		}
-	}
-
-	NoInteractableFound();
-}
-
-void AAlphaCharacter::FoundInteractable(AActor* NewInteractable)
-{
-	if (IsInteracting())
-	{
-		EndInteract();
-	}
-
-	if (InteractionData.CurrentInteractable)
-	{
-		TargetInteractable = InteractionData.CurrentInteractable;
-		TargetInteractable->EndFocus();
-	}
-
-	InteractionData.CurrentInteractable = NewInteractable;
-	TargetInteractable = NewInteractable;
-
-	HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
-
-	TargetInteractable->BeginFocus();
-}
-
-void AAlphaCharacter::NoInteractableFound()
-{
-	if (IsInteracting())
-	{
-		GetWorldTimerManager().ClearTimer(TimerHandle_Interaction);
-	}
-
-	if (InteractionData.CurrentInteractable)
-	{
-		if (IsValid(TargetInteractable.GetObject()))
-		{
-			TargetInteractable->EndFocus();
-		}
-
-		HUD->HideInteractionWidget();
-
-		InteractionData.CurrentInteractable = nullptr;
-		TargetInteractable = nullptr;
-	}
-}
-
-void AAlphaCharacter::BeginInteract()
-{
-	//Verify nothing has changed with interactable state since beginning interaction
-	PerformInteractionCheck();
-
-	if (InteractionData.CurrentInteractable)
-	{
-		if (IsValid(TargetInteractable.GetObject()))
-		{
-			TargetInteractable->BeginInteract();
-
-			if (FMath::IsNearlyZero(TargetInteractable->InteractableData.InteractionDuration, 0.1f))
-			{
-				Interact();
-			}
-			else
-			{
-				GetWorldTimerManager().SetTimer(TimerHandle_Interaction, this, &AAlphaCharacter::Interact, TargetInteractable->InteractableData.InteractionDuration, false);
-			}
-		}
-	}
-}
-
-void AAlphaCharacter::EndInteract()
-{
-	GetWorldTimerManager().ClearTimer(TimerHandle_Interaction);
-
-	if (IsValid(TargetInteractable.GetObject()))
-	{
-		TargetInteractable->EndInteract();
-	}
-}
-
-void AAlphaCharacter::Interact()
-{
-	GetWorldTimerManager().ClearTimer(TimerHandle_Interaction);
-
-	if (IsValid(TargetInteractable.GetObject()))
-	{
-		TargetInteractable->Interact(this);
-	}
-}
-
-void AAlphaCharacter::UpdateInteractionWidget() const
-{
-	if (IsValid(TargetInteractable.GetObject()))
-	{
-		HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
-	}
-}
-
-void AAlphaCharacter::ToggleMenu()
-{
-	HUD->ToggleMenu();
-	if (HUD->bIsMenuVisible)
-	{
-		StopAiming();
-	}
-}
-
-void AAlphaCharacter::Aim()
-{
-	if (!HUD->bIsMenuVisible)
-	{
-		bAiming = true;
-		bUseControllerRotationYaw = true;
-		GetCharacterMovement()->MaxWalkSpeed = 200.0f;
-
-		if (AimingCameraTimeline) 
-			AimingCameraTimeline->PlayFromStart();
-	}
-}
-
-void AAlphaCharacter::StopAiming()
-{
-	if (bAiming)
-	{
-		bAiming = false;
-		bUseControllerRotationYaw = false;
-		HUD->HideCrosshair();
-		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-
-		if (AimingCameraTimeline)
-			AimingCameraTimeline->Reverse();
-	}
-}
-
-void AAlphaCharacter::UpdateCameraTimeline(const float TimelineValue) const
-{
-	const FVector CameraLocation = FMath::Lerp(DefaultCameraLocation, AimingCameraLocation, TimelineValue);
-	CameraBoom->SocketOffset = CameraLocation;
-}
-
-void AAlphaCharacter::CameraTimelineEnd()
-{
-	if (AimingCameraTimeline)
-	{
-		if (AimingCameraTimeline->GetPlaybackPosition() != 0.0f)
-		{
-			HUD->ShowCrosshair();
-		}
-	}
-}
-
-void AAlphaCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
-{
-	if (PlayerInventory->FindMatchingItem(ItemToDrop))
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.bNoFail = true;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-		const FVector SpawnLocation{ GetActorLocation() + (GetActorForwardVector() * 50.0f)};
-		const FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
-
-		const int32 RemovedQuantity = PlayerInventory->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
-
-		APickup* Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), SpawnTransform, SpawnParams);
-
-		Pickup->InitializeDrop(ItemToDrop, RemovedQuantity);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Item to drop was somehow null"));
-	}
-}
-
-void AAlphaCharacter::CreateStatsWidget()
-{
-	if (StatsWidgetClass && PlayerControllerRef)
-	{
-		StatsWidget = CreateWidget<UStatsWidget>(PlayerControllerRef, StatsWidgetClass);
-		if (StatsWidget && StatsComponent)
-		{
-			StatsWidget->InitializeWidget(StatsComponent);
-			StatsWidget->AddToViewport();
-		}
-	}
-}
-
-void AAlphaCharacter::ShowStatsWidget()
-{
-	if (StatsWidget)
-	{
-		StatsWidget->SetVisibility(ESlateVisibility::Visible);
-	}
-}
-
-void AAlphaCharacter::HideStatsWidget()
-{
-	if (StatsWidget)
-	{
-		StatsWidget->SetVisibility(ESlateVisibility::Hidden);
-	}
-}

@@ -1,8 +1,8 @@
 #include "UserInterface/MainMenu.h"
 
+#include "UserInterface/Inventory/InventoryPanel.h"
+#include "UserInterface/Inventory/ItemDragDropOperation.h"
 #include "Alpha/AlphaCharacter.h"
-#include "Userinterface/Inventory/ItemDragDropOperation.h"
-#include "Items/ItemBase.h"
 
 void UMainMenu::NativeOnInitialized()
 {
@@ -14,6 +14,7 @@ void UMainMenu::NativeConstruct()
 	Super::NativeConstruct();
 
 	PlayerCharacter = Cast<AAlphaCharacter>(GetOwningPlayerPawn());
+	PlayerInventory->LinkToInventory(PlayerCharacter->GetInventory(), PlayerCharacter);
 }
 
 bool UMainMenu::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
@@ -22,7 +23,7 @@ bool UMainMenu::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& 
 
 	if (PlayerCharacter && ItemDragDrop->SourceItem)
 	{
-		PlayerCharacter->DropItem(ItemDragDrop->SourceItem, ItemDragDrop->SourceItem->Quantity);
+		PlayerCharacter->DropItem(ItemDragDrop->SourceItem);
 		return true;
 	}
 	return false;

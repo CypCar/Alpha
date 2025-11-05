@@ -1,9 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Data/ItemDataStructs.h"
+#include "Components/InventoryComponent.h"
 #include "Alpha/AlphaCharacter.h"
 #include "ItemBase.generated.h"
 
@@ -13,19 +12,16 @@ UCLASS()
 class ALPHA_API UItemBase : public UObject
 {
 	GENERATED_BODY()
-	
+
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	UPROPERTY()
-	UInventoryComponent* OwningInventory;
+	//======================================================================================
+	// PROPERTIES & VARIABLES
+	//======================================================================================
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	FName ID;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	int32 Quantity;
-
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FName ID;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	EItemType ItemType;
@@ -45,21 +41,19 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FItemAssetData AssetData;
 
-	bool bIsCopy;
-	bool bIsPickup;
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-
+	//======================================================================================
+	// FUNCTIONS
+	//======================================================================================
 	UItemBase();
 
-	void ResetItemFlags();
+	UFUNCTION(Category = "Item")
+	FORCEINLINE UInventoryComponent* GetOwningInventory() const { return Cast<UInventoryComponent>(GetOuter()); }
 
 	UFUNCTION(Category = "Item")
-	UItemBase* CreateItemCopy() const;
+	static UItemBase* CreateItemCopy(const UItemBase* ItemToCopy, UObject* NewOuter);
 
-	UFUNCTION (Category = "Item")
-	FORCEINLINE  float GetItemStackWeight() const { return NumericData.Weight * Quantity; };
+	UFUNCTION(Category = "Item")
+	FORCEINLINE float GetItemStackWeight() const { return Quantity * NumericData.Weight; };
 
 	UFUNCTION(Category = "Item")
 	FORCEINLINE float GetItemSingleWeight() const { return NumericData.Weight; };
@@ -71,7 +65,7 @@ public:
 	void SetQuantity(const int32 NewQuantity);
 
 	UFUNCTION(Category = "Item")
-	virtual void Use(AAlphaCharacter* Character);
+	virtual void Use(AAlphaCharacter* PlayerCharacter);
 
 protected:
 	bool operator==(const FName& OtherID) const
