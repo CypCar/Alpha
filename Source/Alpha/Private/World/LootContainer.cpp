@@ -145,24 +145,51 @@ void AContainer::PopulateContainerFromDefaults()
 {
 	if (!ContainerInventory)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("PopulateContainerFromDefaults: ContainerInventory is null!"));
 		return;
 	}
 
 	// Znajdź domyślną DataTable z pierwszego poprawnego wpisu
 	const UDataTable* DefaultTable = nullptr;
-	for (const FContainerItemEntry& Entry : DefaultItems)
+	for (int32 i = 0; i < DefaultItems.Num(); ++i)
 	{
+		const FContainerItemEntry& Entry = DefaultItems[i];
+
 		if (Entry.ItemRowHandle.DataTable && !Entry.ItemRowHandle.RowName.IsNone())
 		{
 			DefaultTable = Entry.ItemRowHandle.DataTable;
+			
+			UE_LOG(LogTemp, Log,
+				TEXT("PopulateContainerFromDefaults: Using DefaultTable from entry %d (%s)"),
+				i,
+				*Entry.ItemRowHandle.DataTable->GetName());
+
 			break;
 		}
 	}
 
-	for (const FContainerItemEntry& Entry : DefaultItems)
+	if (!DefaultTable)
 	{
+		UE_LOG(LogTemp, Warning,
+			TEXT("PopulateContainerFromDefaults: No valid DataTable found in DefaultItems! Nothing will be added."));
+	}
+
+	for (int32 i = 0; i < DefaultItems.Num(); ++i)
+	{
+		const FContainerItemEntry& Entry = DefaultItems[i];
+
+		UE_LOG(LogTemp, Log,
+			TEXT("PopulateContainerFromDefaults: Entry %d -> Qty=%d, RowName=%s, DataTable=%s"),
+			i,
+			Entry.Quantity,
+			*Entry.ItemRowHandle.RowName.ToString(),
+			Entry.ItemRowHandle.DataTable ? *Entry.ItemRowHandle.DataTable->GetName() : TEXT("nullptr"));
+
 		if (Entry.Quantity <= 0)
 		{
+			UE_LOG(LogTemp, Warning,
+				TEXT("PopulateContainerFromDefaults: Entry %d has non-positive Quantity (%d). Skipping."),
+				i, Entry.Quantity);
 			continue;
 		}
 
@@ -170,28 +197,68 @@ void AContainer::PopulateContainerFromDefaults()
 		FDataTableRowHandle RowHandle = Entry.ItemRowHandle;
 
 		// Jeśli DataTable nie jest ustawione w tym wpisie – spróbuj użyć domyślnej
-		if (!RowHandle.DataTable)
+		if (!RowHandle.DataTable && DefaultTable)
 		{
-			RowHandle.DataTable = DefaultTable;
+			RowHandle.DataTable = const_cast<UDataTable*>(DefaultTable);
+			
+			UE_LOG(LogTemp, Log,
+				TEXT("PopulateContainerFromDefaults: Entry %d had no DataTable, using DefaultTable '%s'."),
+				i,
+				*DefaultTable->GetName());
 		}
 
 		// Jeśli dalej nie ma DataTable albo brak RowName – odpuść
 		if (!RowHandle.DataTable || RowHandle.RowName.IsNone())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("PopulateContainerFromDefaults: Entry has invalid RowHandle (no DataTable or RowName). Skipping."));
+			UE_LOG(LogTemp, Warning,
+				TEXT("PopulateContainerFromDefaults: Entry %d has invalid RowHandle (DataTable=%s, RowName=%s). Skipping."),
+				i,
+				RowHandle.DataTable ? *RowHandle.DataTable->GetName() : TEXT("nullptr"),
+				*RowHandle.RowName.ToString());
 			continue;
 		}
 
 		FItemAddResult Result = AddItemFromRowHandle(RowHandle, Entry.Quantity);
 
+		UE_LOG(LogTemp, Log,
+			TEXT("PopulateContainerFromDefaults: AddItemFromRowHandle entry %d (RowName=%s, Qty=%d) -> Result=%d, AmountAdded=%d, Msg=%s"),
+			i,
+			*RowHandle.RowName.ToString(),
+			Entry.Quantity,
+			static_cast<int32>(Result.OperationResult),
+			Result.AmountAdded,
+			*Result.ResultMessage.ToString());
+
 		if (Result.OperationResult == EItemAddResult::IAR_NoItemAdded)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("AContainer::PopulateContainerFromDefaults: Failed to add item from row '%s': %s"),
+			UE_LOG(LogTemp, Warning,
+				TEXT("AContainer::PopulateContainerFromDefaults: Failed to add item from row '%s': %s"),
 				*RowHandle.RowName.ToString(),
 				*Result.ResultMessage.ToString());
 		}
 	}
+
+	// Na koniec wypisz faktyczną zawartość inventory kontenera
+	const TArray<UItemBase*> ItemsInInv = ContainerInventory->GetInventoryContents();
+	UE_LOG(LogTemp, Log,
+		TEXT("PopulateContainerFromDefaults: ContainerInventory has %d items after population."),
+		ItemsInInv.Num());
+
+	for (int32 idx = 0; idx < ItemsInInv.Num(); ++idx)
+	{
+		if (const UItemBase* Item = ItemsInInv[idx])
+		{
+			UE_LOG(LogTemp, Log,
+				TEXT("  Slot %d: %s x%d (ID=%s)"),
+				idx,
+				*Item->TextData.Name.ToString(),
+				Item->Quantity,
+				*Item->ID.ToString());
+		}
+	}
+
 }
+
 
 
 void AContainer::NotifyItemLooted(const FInteractableData& LootData)

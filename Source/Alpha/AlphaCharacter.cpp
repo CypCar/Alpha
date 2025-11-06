@@ -182,6 +182,26 @@ void AAlphaCharacter::Tick(float DeltaSeconds)
 	{
 		StopSprinting();
 	}
+	
+	if (HUD && HUD->bContainerInterfaceOpen) // bool jest publiczny u Ciebie
+	{
+		if (AContainer* OpenContainer = HUD->GetCurrentContainer())
+		{
+			const float DistSq = FVector::DistSquared(
+				GetActorLocation(),
+				OpenContainer->GetActorLocation()
+			);
+
+			const float MaxDistSq = FMath::Square(ContainerAutoCloseDistance);
+
+			// Za daleko? Zamykamy okno
+			if (DistSq > MaxDistSq)
+			{
+				HUD->HideContainerInterface(false);
+				UE_LOG(LogTemp, Log, TEXT("Auto-close container UI: player moved too far from %s"), *OpenContainer->GetName());
+			}
+		}
+	}
 }
 
 void AAlphaCharacter::PerformInteractionCheck()
@@ -194,7 +214,7 @@ void AAlphaCharacter::PerformInteractionCheck()
 		const float InteractionCheckDistance = bAiming ? AimingInteractionDistance : DefaultInteractionDistance;
 		const FVector TraceEnd{TraceStart + GetViewRotation().Vector() * InteractionCheckDistance};
 
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f, 0, 2.0f);
+		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f, 0, 2.0f);
 
 		// draw debug sphere at the same location and size as the sweep sphere
 		DrawDebugSphere(GetWorld(),TraceEnd,.0f,8, FColor::Blue,false,5.0f);
@@ -347,7 +367,18 @@ void AAlphaCharacter::Interact()
 				{
 					if (AContainer* Container = Cast<AContainer>(InteractionTarget.GetObject()))
 					{
-						HUD->ShowContainerInterface(Container);
+						// Jeśli okno kontenera jest już otwarte dla TEGO kontenera → zamknij
+						if (HUD->bContainerInterfaceOpen && HUD->GetCurrentContainer() == Container)
+						{
+							HUD->HideContainerInterface(false);
+							// Możesz tu nawet zrobić return, żeby nie wywoływać już Interact() na kontenerze:
+							// return;
+						}
+						else
+						{
+							// W przeciwnym razie – otwórz / przełącz na ten kontener
+							HUD->ShowContainerInterface(Container);
+						}
 					}
 				}
 			}

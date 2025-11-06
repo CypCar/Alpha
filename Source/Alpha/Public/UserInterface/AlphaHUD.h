@@ -63,6 +63,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="HUD|Container")
 	void ClearTargetContainer();
 
+	UFUNCTION(BlueprintPure, Category="HUD|Container")
+	AContainer* GetCurrentContainer() const;
+
 protected:
 	//======================================================================================
 	// PROPERTIES & VARIABLES

@@ -232,3 +232,12 @@ void AAlphaHUD::ClearTargetContainer()
 	HideContainerInterface();
 	UE_LOG(LogTemp, Log, TEXT("ClearTargetContainer: Called"));
 }
+
+AContainer* AAlphaHUD::GetCurrentContainer() const
+{
+	if (ContainerInterface)
+	{
+		return ContainerInterface->GetTargetContainer();
+	}
+	return nullptr;
+}

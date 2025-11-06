@@ -155,6 +155,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Interaction")
 	TScriptInterface<IInteractionInterface> InteractionTarget;
 
+	UPROPERTY(EditDefaultsOnly, Category="PlayerCharacter | Interaction")
+	float ContainerAutoCloseDistance = 300.f;
+
 	FCollisionQueryParams InteractionCollisionQueryParams;
 	FCollisionObjectQueryParams InteractionObjectQueryParams;
 	// array that will be reused for storing any detected interactables
