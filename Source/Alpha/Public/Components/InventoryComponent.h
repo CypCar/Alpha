@@ -80,6 +80,7 @@ public:
 	int32 ItemSlotCount;
 	UPROPERTY(EditInstanceOnly, Category="Inventory")
 	float MaxWeightCapacity;
+	
 
 	//======================================================================================
 	// FUNCTIONS

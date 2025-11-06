@@ -343,8 +343,13 @@ void AAlphaCharacter::Interact()
 			break;
 		case EInteractableType::Container:
 			{
-				// link the container inventory to the container interface
-				HUD->SetTargetContainer(Cast<AContainer>(InteractionTarget.GetObject()));
+				if (HUD)
+				{
+					if (AContainer* Container = Cast<AContainer>(InteractionTarget.GetObject()))
+					{
+						HUD->ShowContainerInterface(Container);
+					}
+				}
 			}
 			break;
 		default:
@@ -524,36 +529,9 @@ void AAlphaCharacter::CreateStatsWidget()
     }
 }
 
-void AAlphaCharacter::ShowStatsWidget()
+void AAlphaCharacter::NotifyLootPickedUp(const FInteractableData& LootData)
 {
-    if (StatsWidget)
-    {
-        StatsWidget->SetVisibility(ESlateVisibility::Visible);
-    }
-}
-
-void AAlphaCharacter::HideStatsWidget()
-{
-    if (StatsWidget)
-    {
-        StatsWidget->SetVisibility(ESlateVisibility::Hidden);
-    }
-}
-
-void AAlphaCharacter::DebugTakeDamage(float DamageAmount)
-{
-    if (StatsComponent)
-    {
-        StatsComponent->TakeDamage(DamageAmount);
-    }
-}
-
-void AAlphaCharacter::DebugConsumeStamina(float StaminaAmount)
-{
-    if (StatsComponent)
-    {
-        StatsComponent->ConsumeStamina(StaminaAmount);
-    }
+	OnLootPickedUp.Broadcast(LootData);
 }
 
 void AAlphaCharacter::StartSprinting()
@@ -613,3 +591,4 @@ void AAlphaCharacter::HandleStaminaChanged(float NewStamina, float Delta)
     // Możesz dodać dodatkową logikę tutaj
     UE_LOG(LogTemp, Log, TEXT("Stamina changed: %.1f (Delta: %.1f)"), NewStamina, Delta);
 }
+

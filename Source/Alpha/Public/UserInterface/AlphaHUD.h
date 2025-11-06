@@ -4,6 +4,7 @@
 #include "GameFramework/HUD.h"
 #include "AlphaHUD.generated.h"
 
+class ULootWindowWidget;
 class UMainMenu;
 class UInteractionWidget;
 class UAmountWidget;
@@ -25,6 +26,8 @@ public:
 	bool bContainerInterfaceOpen;
 	bool bInteractionWidgetVisible;
 
+
+	
 	//======================================================================================
 	// FUNCTIONS
 	//======================================================================================
@@ -44,10 +47,21 @@ public:
 	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
 	TObjectPtr<UInteractionWidget> GetInteractionWidget() { return InteractionWidget; }
 
+	
+	/** Pokaż interfejs kontenera */
+	UFUNCTION(BlueprintCallable, Category="HUD|Container")
+	void ShowContainerInterface(AContainer* TargetContainer = nullptr);
+
+	/** Ukryj interfejs kontenera */
+	UFUNCTION(BlueprintCallable, Category="HUD|Container")
+	void HideContainerInterface(bool bSuccess = true);
+
+	/** Ustaw target kontenera */
+	UFUNCTION(BlueprintCallable, Category="HUD|Container")
 	void SetTargetContainer(AContainer* TargetContainer);
+	
+	UFUNCTION(BlueprintCallable, Category="HUD|Container")
 	void ClearTargetContainer();
-	void ShowContainerInterface(const bool bModifyInputMode = false);
-	void HideContainerInterface(const bool bModifyInputMode = false);
 
 protected:
 	//======================================================================================
@@ -64,7 +78,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UContainerInterface> ContainerInterfaceClass;
-
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<ULootWindowWidget> LootWindowWidgetClass;
+	
 	UPROPERTY()
 	TObjectPtr<UMainMenu> MainMenuWidget;
 
@@ -74,10 +91,18 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UUserWidget> CrosshairWidget;
 
+	UPROPERTY()
+	TObjectPtr<ULootWindowWidget> LootWindowWidget;
+
 	//======================================================================================
 	// FUNCTIONS
 	//======================================================================================
 	virtual void BeginPlay() override;
-
 	void CreateGameWidgets();
+
+private:
+	UPROPERTY()
+	TObjectPtr<UContainerInterface> ContainerInterface = nullptr;
+	UPROPERTY()
+	bool bContainerInterfaceManuallyOpened = false;
 };

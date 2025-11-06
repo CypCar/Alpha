@@ -7,6 +7,7 @@
 
 class UDataTable;
 class UItemBase;
+class ULootWindowWidget;
 
 UCLASS()
 class ALPHA_API APickup : public AActor, public IInteractionInterface
@@ -63,4 +64,5 @@ protected:
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
+	
 };

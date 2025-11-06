@@ -19,9 +19,7 @@ void UMainMenu::NativeConstruct()
 
 bool UMainMenu::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
-	const UItemDragDropOperation* ItemDragDrop = Cast<UItemDragDropOperation>(InOperation);
-
-	if (PlayerCharacter && ItemDragDrop->SourceItem)
+	if (const UItemDragDropOperation* ItemDragDrop = Cast<UItemDragDropOperation>(InOperation); PlayerCharacter && ItemDragDrop->SourceItem)
 	{
 		PlayerCharacter->DropItem(ItemDragDrop->SourceItem);
 		return true;

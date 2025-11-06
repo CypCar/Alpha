@@ -1,6 +1,7 @@
 #include "World/Pickup.h"
 #include "Components/InventoryComponent.h"
 #include "Items/ItemBase.h"
+#include "AlphaCharacter.h"
 
 APickup::APickup()
 {
@@ -85,41 +86,56 @@ void APickup::Interact(AAlphaCharacter* PlayerCharacter)
 
 void APickup::TakePickup(const AAlphaCharacter* Taker)
 {
-	if (!IsPendingKillPending())
-	{
-		if (ItemReference)
-		{
-			if (UInventoryComponent* PlayerInventory = Taker->GetInventory())
-			{
-				const FItemAddResult AddResult = PlayerInventory->HandleAddItem(ItemReference);
+    if (!IsPendingKillPending())
+    {
+        if (ItemReference)
+        {
+            if (UInventoryComponent* PlayerInventory = Taker->GetInventory())
+            {
+                const FItemAddResult AddResult = PlayerInventory->HandleAddItem(ItemReference);
 
-				switch (AddResult.OperationResult)
-				{
-				case EItemAddResult::IAR_NoItemAdded:
-					break;
-				case EItemAddResult::IAR_PartialAmountItemAdded:
-					UpdateInteractableData();
-					Taker->UpdateInteractionWidget();
-					break;
-				case EItemAddResult::IAR_AllItemsAdded:
-					Destroy();
-					break;
-				default:
-					break;
-				}
+                // Store the data for notification before potentially destroying the pickup
+                FInteractableData LootData = InteractableData;
+                LootData.Quantity = AddResult.AmountAdded; // Show actual amount added
 
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *AddResult.ResultMessage.ToString());
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Player inventory component is null!"));
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Pickup internal item reference was somehow null!"));
-		}
-	}
+                switch (AddResult.OperationResult)
+                {
+                case EItemAddResult::IAR_NoItemAdded:
+                    break;
+                case EItemAddResult::IAR_PartialAmountItemAdded:
+                    UpdateInteractableData();
+                    Taker->UpdateInteractionWidget();
+                    
+                    // Notify character about loot pickup
+                    if (AAlphaCharacter* NonConstTaker = const_cast<AAlphaCharacter*>(Taker))
+                    {
+                        NonConstTaker->NotifyLootPickedUp(LootData);
+                    }
+                    break;
+                case EItemAddResult::IAR_AllItemsAdded:
+                    // Notify character about loot pickup before destruction
+                    if (AAlphaCharacter* NonConstTaker = const_cast<AAlphaCharacter*>(Taker))
+                    {
+                        NonConstTaker->NotifyLootPickedUp(LootData);
+                    }
+                    Destroy();
+                    break;
+                default:
+                    break;
+                }
+
+                UE_LOG(LogTemp, Warning, TEXT("%s"), *AddResult.ResultMessage.ToString());
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Player inventory component is null!"));
+            }
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Pickup internal item reference was somehow null!"));
+        }
+    }
 }
 
 #if WITH_EDITOR

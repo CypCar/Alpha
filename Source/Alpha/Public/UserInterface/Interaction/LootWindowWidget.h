@@ -36,18 +36,32 @@ public:
 	// Dodaj nowy wpis na górę listy
 	void PushLoot(const FInteractableData& Data);
 
+	UFUNCTION(BlueprintCallable, Category = "Loot")
+	void BindToCharacter(AAlphaCharacter* Character);
+
+	UFUNCTION(BlueprintCallable, Category = "Loot")
+	void UnbindFromCharacter();
+
 protected:
 	//==========================================================================
 	//PROPERTIES & VARIABELS
 	//==========================================================================
-	UPROPERTY(meta=(BindWidget)) UVerticalBox* LootListBox = nullptr;
+	UPROPERTY(meta=(BindWidget))
+	UVerticalBox* LootListBox = nullptr;
 	
 	//==========================================================================
 	//FUNCTIONS
 	//==========================================================================
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+
+	UFUNCTION()
+	void OnLootPickedUp(const FInteractableData& LootData);
 
 private:
+
+	UPROPERTY()
+	AAlphaCharacter* BoundCharacter = nullptr;
 	
 	void ScheduleRemoval(ULootRowWidget* Row);
 

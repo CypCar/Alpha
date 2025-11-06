@@ -20,11 +20,9 @@ public:
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UInventoryPanel> PlayerInventory;
 
-	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UContainerInterface> ContainerInterface;
 
 protected:
-	void NativeOnInitialized() override;
-	void NativeConstruct() override;
-	bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	virtual void NativeOnInitialized() override;
+	virtual void NativeConstruct() override;
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

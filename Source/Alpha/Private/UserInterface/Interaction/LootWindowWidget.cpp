@@ -1,4 +1,6 @@
 #include "UserInterface/Interaction/LootWindowWidget.h"
+
+#include "AlphaCharacter.h"
 #include "UserInterface/Interaction/LootRowWidget.h"
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
@@ -8,6 +10,47 @@ void ULootWindowWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	SetVisibility(ESlateVisibility::Collapsed);
+
+	if (const APlayerController* PlayerController = GetOwningPlayer();
+		PlayerController && PlayerController->GetPawn())
+	{
+		if (AAlphaCharacter* Character = Cast<AAlphaCharacter>(PlayerController->GetPawn()))
+		{
+			BindToCharacter(Character);
+		}
+	}
+}
+
+void ULootWindowWidget::NativeDestruct()
+{
+	UnbindFromCharacter();
+	Super::NativeDestruct();
+}
+
+
+void ULootWindowWidget::BindToCharacter(AAlphaCharacter* Character)
+{
+	if (Character && !BoundCharacter)
+	{
+		BoundCharacter = Character;
+		Character->OnLootPickedUp.AddDynamic(this, &ULootWindowWidget::OnLootPickedUp);
+		UE_LOG(LogTemp, Log, TEXT("LootWindowWidget bound to character"));
+	}
+}
+
+void ULootWindowWidget::UnbindFromCharacter()
+{
+	if (BoundCharacter)
+	{
+		BoundCharacter->OnLootPickedUp.RemoveDynamic(this, &ULootWindowWidget::OnLootPickedUp);
+		BoundCharacter = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("LootWindowWidget unbound from character"));
+	}
+}
+
+void ULootWindowWidget::OnLootPickedUp(const FInteractableData& LootData)
+{
+	PushLoot(LootData);
 }
 
 void ULootWindowWidget::PushLoot(const FInteractableData& Data)

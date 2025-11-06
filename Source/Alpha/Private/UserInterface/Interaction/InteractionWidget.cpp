@@ -74,6 +74,7 @@ void UInteractionWidget::UpdateWidget(const FInteractableData* InteractableData)
 
 	// ----------------------------- CONTAINER -----------------------------
 	case EInteractableType::Container:
+		KeyPressText->SetText(FText::FromString("Press"));
 		QuantityText->SetVisibility(ESlateVisibility::Collapsed);
 		InteractionProgressBar->SetVisibility(ESlateVisibility::Collapsed);
 		break;

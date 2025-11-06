@@ -24,6 +24,7 @@ class UInputMappingContext;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLootPickedUpSignature, const FInteractableData&, LootData);
 
 UCLASS(abstract)
 class AAlphaCharacter : public ACharacter
@@ -38,12 +39,15 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStatsComponent* StatsComponent;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<UStatsWidget> StatsWidgetClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
 	UStatsWidget* StatsWidget;
+
+	UPROPERTY()
+	FLootPickedUpSignature OnLootPickedUp;
 	
 	//==========================================================================
 	//FUNCTIONS
@@ -71,18 +75,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void CreateStatsWidget();
 
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	void ShowStatsWidget();
-
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	void HideStatsWidget();
-
-	// Debug Functions
-	UFUNCTION(BlueprintCallable, Category = "Debug")
-	void DebugTakeDamage(float DamageAmount);
-
-	UFUNCTION(BlueprintCallable, Category = "Debug")
-	void DebugConsumeStamina(float StaminaAmount);
+	// Loot Widget management
+	void NotifyLootPickedUp(const FInteractableData& LootData);
 
 	// Sprint Management
 	UFUNCTION(BlueprintCallable, Category = "Movement")
@@ -130,7 +124,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category= "PlayerCharacter | Inventory")
 	TObjectPtr<UInventoryComponent> PlayerInventory;
-	
 
 	// input mapping properties
 	//---------------------------------------------------------
