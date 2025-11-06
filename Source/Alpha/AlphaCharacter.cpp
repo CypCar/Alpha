@@ -18,7 +18,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-
+#include "Components/AttackComponent.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -54,7 +54,7 @@ AAlphaCharacter::AAlphaCharacter() :
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f;
+	CameraBoom->TargetArmLength = 400.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	// Create a follow camera
@@ -70,7 +70,7 @@ AAlphaCharacter::AAlphaCharacter() :
 
 	AimingCameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("AimingCameraTimeline"));
 	DefaultCameraLocation = FVector{0.0f, 0.0f, 65.0f};
-	AimingCameraLocation = FVector{175.0f, 50.0f, 55.0f};
+	AimingCameraLocation = FVector{200.0f, 60.0f, 65.0f};
 	CameraBoom->SocketOffset = DefaultCameraLocation;
 
 	// capsule default dimensions = 34.0f, 88.0f
@@ -79,6 +79,8 @@ AAlphaCharacter::AAlphaCharacter() :
 	
 	//Create Stats Component
 	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
+
+	AttackComp = CreateDefaultSubobject<UAttackComponent>(TEXT("AttackComponent"));
 }
 
 void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -110,6 +112,7 @@ void AAlphaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(ToggleMenuAction, ETriggerEvent::Started, this, &AAlphaCharacter::ToggleMenu);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AAlphaCharacter::StartSprinting);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAlphaCharacter::StopSprinting);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AAlphaCharacter::OnAttackPressed);
 	}
 	else
 	{
@@ -185,17 +188,15 @@ void AAlphaCharacter::Tick(float DeltaSeconds)
 	
 	if (HUD && HUD->bContainerInterfaceOpen) // bool jest publiczny u Ciebie
 	{
-		if (AContainer* OpenContainer = HUD->GetCurrentContainer())
+		if (const AContainer* OpenContainer = HUD->GetCurrentContainer())
 		{
 			const float DistSq = FVector::DistSquared(
 				GetActorLocation(),
 				OpenContainer->GetActorLocation()
 			);
 
-			const float MaxDistSq = FMath::Square(ContainerAutoCloseDistance);
-
 			// Za daleko? Zamykamy okno
-			if (DistSq > MaxDistSq)
+			if (const float MaxDistSq = FMath::Square(ContainerAutoCloseDistance); DistSq > MaxDistSq)
 			{
 				HUD->HideContainerInterface(false);
 				UE_LOG(LogTemp, Log, TEXT("Auto-close container UI: player moved too far from %s"), *OpenContainer->GetName());
@@ -593,6 +594,14 @@ void AAlphaCharacter::StopSprinting()
             MovementComp->MaxWalkSpeed = 500.0f; // Przykładowa normalna prędkość
         }
     }
+}
+
+void AAlphaCharacter::OnAttackPressed()
+{
+	if (AttackComp)
+	{
+		AttackComp->OnAttackInput();
+	}
 }
 
 void AAlphaCharacter::HandleDeath(AActor* DeadActor)

@@ -11,6 +11,7 @@
 #include "GameFramework/Character.h"
 #include "AlphaCharacter.generated.h"
 
+class UAttackComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
@@ -85,6 +86,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void StopSprinting();
 
+	UFUNCTION(BlueprintCallable, Category = "Action")
+	void OnAttackPressed();
+
 protected:
 
 	//==========================================================================
@@ -125,6 +129,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category= "PlayerCharacter | Inventory")
 	TObjectPtr<UInventoryComponent> PlayerInventory;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
+	UAttackComponent* AttackComp;
+
 	// input mapping properties
 	//---------------------------------------------------------
 	UPROPERTY(EditAnywhere, Category="PlayerCharacter | Input")
@@ -138,6 +145,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Input")
 	TObjectPtr<UInputAction> ToggleMenuAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Input")
+	TObjectPtr<UInputAction> AttackAction;
 
 	// interaction properties
 	//---------------------------------------------------------
