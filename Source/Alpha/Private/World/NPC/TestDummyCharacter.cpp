@@ -50,22 +50,22 @@ void ATestDummyCharacter::Tick(float DeltaTime)
 
     if (!StatsWidgetComponent) return;
 
-    if (APlayerCameraManager* CamMgr = UGameplayStatics::GetPlayerCameraManager(this, 0))
+    if (const APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
     {
-        FVector CamLoc = CamMgr->GetCameraLocation();
-        FVector ToCam = CamLoc - StatsWidgetComponent->GetComponentLocation();
-        FRotator LookRot = FRotationMatrix::MakeFromX(ToCam).Rotator();
-        StatsWidgetComponent->SetWorldRotation(LookRot);
+        const FVector CameraLocation = CameraManager->GetCameraLocation();
+        const FVector ToCamera = CameraLocation - StatsWidgetComponent->GetComponentLocation();
+        const FRotator LookRotation = FRotationMatrix::MakeFromX(ToCamera).Rotator();
+        StatsWidgetComponent->SetWorldRotation(LookRotation);
 
         // --- FADING ---
 
-        float Distance = FVector::Dist(CamLoc, GetActorLocation());
+        const float Distance = FVector::Dist(CameraLocation, GetActorLocation());
 
         float TargetOpacity = 1.0f;
 
         if (Distance > WidgetFadeStartDistance)
         {
-            float Alpha = FMath::Clamp(
+            const float Alpha = FMath::Clamp(
                 1.0f - (Distance - WidgetFadeStartDistance) / (WidgetFadeEndDistance - WidgetFadeStartDistance),
                 0.0f,
                 1.0f

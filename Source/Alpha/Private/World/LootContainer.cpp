@@ -126,6 +126,7 @@ FItemAddResult AContainer::AddItemFromRowHandle(const FDataTableRowHandle& ItemR
 	NewItem->NumericData = ItemData->NumericData;
 	NewItem->TextData    = ItemData->TextData;
 	NewItem->AssetData   = ItemData->AssetData;
+	NewItem->ItemStatistics = ItemData->ItemStatistics;
 
 	NewItem->NumericData.bIsStackable = ItemData->NumericData.MaxStackSize > 1;
 

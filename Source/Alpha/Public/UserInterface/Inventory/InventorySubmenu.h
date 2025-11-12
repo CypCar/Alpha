@@ -4,6 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "InventorySubmenu.generated.h"
 
+class UItemBase;
 class AAlphaCharacter;
 class UInventoryComponent;
 class UInventoryItemSlot;
@@ -28,7 +29,12 @@ public:
 	TObjectPtr<UInventoryItemSlot> OriginatingItemSlot;
 	UPROPERTY()
 	TObjectPtr<AAlphaCharacter> PlayerCharacter;
+	
+	UPROPERTY(BlueprintReadOnly, Category="Inventory")
+	TObjectPtr<UItemBase> SelectedItem;
 
+	//UPROPERTY(BlueprintReadOnly) UItemBase* SelectedItem = nullptr;
+	
 	bool bSubMenuActive;
 
 	//#############################################################################

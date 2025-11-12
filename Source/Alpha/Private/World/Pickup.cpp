@@ -35,6 +35,7 @@ void APickup::InitializePickup(const int32 InQuantity)
 		ItemReference->NumericData = ItemData->NumericData;
 		ItemReference->TextData = ItemData->TextData;
 		ItemReference->AssetData = ItemData->AssetData;
+		ItemReference->ItemStatistics = ItemData->ItemStatistics;
 
 		ItemReference->NumericData.bIsStackable = ItemData->NumericData.MaxStackSize > 1;
 		InQuantity <= 0 ? ItemReference->SetQuantity(1) : ItemReference->SetQuantity(InQuantity);

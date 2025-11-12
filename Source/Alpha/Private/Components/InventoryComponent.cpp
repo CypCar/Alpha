@@ -81,26 +81,33 @@ void UInventoryComponent::MergeItems(const TObjectPtr<UItemBase>& TargetItem, co
 	}
 }
 
-void UInventoryComponent::HandleRemoveItem(UItemBase* ItemToRemove, const int32 AmountToRemove, const bool bAdjustWeight)
+void UInventoryComponent::HandleRemoveItem(UItemBase* ItemToRemove, int32 AmountToRemove, const bool bAdjustWeight)
 {
-	if (bAdjustWeight)
-		InventoryTotalWeight -= ItemToRemove->GetItemStackWeight();
+	if (!ItemToRemove) return;
 
-	if (AmountToRemove > 0)
+	// Czy usuwamy cały wpis (Amount<=0 traktuj jako "usuń cały")
+	const bool bRemoveWholeEntry = (AmountToRemove <= 0) || (AmountToRemove >= ItemToRemove->Quantity);
+
+	if (bRemoveWholeEntry)
 	{
-		// adjust the quantity
-		ItemToRemove->SetQuantity(ItemToRemove->Quantity - AmountToRemove);
-
-		// if quantity is now 0, the entire item should be removed from the inventory
-		if (ItemToRemove->Quantity <= 0)
+		if (bAdjustWeight)
 		{
-			InventoryContents.RemoveSingle(ItemToRemove);
+			InventoryTotalWeight -= ItemToRemove->GetItemSingleWeight() * ItemToRemove->Quantity;
+			InventoryTotalWeight = FMath::Max(0.f, InventoryTotalWeight); // bez ujemnych
 		}
-	}
-	else
-	{
-		// if amount to remove is 0, assume the item entry should be removed directly
+
 		InventoryContents.RemoveSingle(ItemToRemove);
+		InventoryWasUpdated.Broadcast();
+		return;
+	}
+
+	// Częściowe zdejmowanie sztuk ze stacka
+	ItemToRemove->SetQuantity(ItemToRemove->Quantity - AmountToRemove);
+
+	if (bAdjustWeight)
+	{
+		InventoryTotalWeight -= ItemToRemove->GetItemSingleWeight() * AmountToRemove;
+		InventoryTotalWeight = FMath::Max(0.f, InventoryTotalWeight);
 	}
 
 	InventoryWasUpdated.Broadcast();
@@ -298,4 +305,66 @@ void UInventoryComponent::AddNewItem(const TObjectPtr<UItemBase>& Item, const in
 	InventoryContents.Add(NewItem);
 	InventoryTotalWeight += NewItem->GetItemStackWeight();
 	InventoryWasUpdated.Broadcast();
+}
+
+EItemUseResult UInventoryComponent::UseItemForActor(UItemBase* ItemToUse, AActor* UserActor)
+{
+    UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: Item=%s (Type=%d, Heal=%.2f, Qty=%d), Actor=%s"),
+        ItemToUse ? *ItemToUse->TextData.Name.ToString() : TEXT("<null>"),
+        ItemToUse ? (int32)ItemToUse->ItemType : -1,
+        ItemToUse ? ItemToUse->ItemStatistics.RestorationAmount : -1.f,
+        ItemToUse ? ItemToUse->Quantity : -1,
+        UserActor ? *UserActor->GetName() : TEXT("<null>"));
+
+    if (!ItemToUse || !UserActor)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: nullptr (Item or Actor)"));
+        return EItemUseResult::IUR_Failed;
+    }
+
+    if (ItemToUse->ItemType != EItemType::Consumable)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: WrongType (%d) for '%s'"),
+            (int32)ItemToUse->ItemType, *ItemToUse->TextData.Name.ToString());
+        return EItemUseResult::IUR_WrongType;
+    }
+
+    const float HealAmount = ItemToUse->ItemStatistics.RestorationAmount;
+    if (HealAmount <= 0.f)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: HealAmount <= 0 (%.2f) for '%s'"),
+            HealAmount, *ItemToUse->TextData.Name.ToString());
+        return EItemUseResult::IUR_Failed;
+    }
+
+    UStatsComponent* Stats = UserActor->FindComponentByClass<UStatsComponent>();
+    if (!Stats)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: No UStatsComponent on %s"), *UserActor->GetName());
+        return EItemUseResult::IUR_NoStats;
+    }
+
+    const float Cur = Stats->GetCurrentHealth();
+    const float Max = Stats->GetMaxHealth();
+    if (Cur >= Max)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: Full HP (%.2f/%.2f) for '%s'"),
+            Cur, Max, *ItemToUse->TextData.Name.ToString());
+        return EItemUseResult::IUR_Failed; // zmień na NoEffect jeśli chcesz odróżniać
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: BEFORE Heal -> %.2f/%.2f, Heal=%.2f"), Cur, Max, HealAmount);
+    Stats->Heal(HealAmount);
+    const float After = Stats->GetCurrentHealth();
+    const float Applied = After - Cur;
+
+    if (Applied <= 0.f)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UseItemForActor: Applied <= 0 (Before=%.2f, After=%.2f)"), Cur, After);
+        return EItemUseResult::IUR_Failed;
+    }
+
+    HandleRemoveItem(ItemToUse, 1, true);
+    UE_LOG(LogTemp, Log, TEXT("UseItemForActor: SUCCESS Heal=%.2f → Now %.2f/%.2f"), Applied, After, Max);
+    return EItemUseResult::IUR_Success;
 }

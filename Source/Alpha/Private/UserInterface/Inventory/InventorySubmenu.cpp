@@ -68,8 +68,31 @@ void UInventorySubmenu::ConfigureSubmenuButtons()
 
 void UInventorySubmenu::UseButtonClicked()
 {
-	// TODO
+	if (!SelectedItem || !LinkedInventory || !PlayerCharacter) return;
+
+	const EItemUseResult Result = LinkedInventory->UseItemForActor(SelectedItem, PlayerCharacter);
+
+	switch (Result)
+	{
+	case EItemUseResult::IUR_Success:
+		UE_LOG(LogTemp, Log, TEXT("Used item %s successfully."),
+			*SelectedItem->TextData.Name.ToString());
+		break;
+	case EItemUseResult::IUR_WrongType:
+		UE_LOG(LogTemp, Warning, TEXT("%s is not a usable (consumable) item."),
+			*SelectedItem->TextData.Name.ToString());
+		break;
+	case EItemUseResult::IUR_NoStats:
+		UE_LOG(LogTemp, Warning, TEXT("No StatsComponent found on player to apply heal."));
+		break;
+	default:
+		UE_LOG(LogTemp, Warning, TEXT("Failed to use item %s."), *SelectedItem->TextData.Name.ToString());
+		break;
+	}
+
+	SetVisibility(ESlateVisibility::Collapsed);
 }
+
 
 void UInventorySubmenu::ExamineButtonClicked()
 {

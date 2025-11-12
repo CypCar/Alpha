@@ -89,6 +89,7 @@ FReply UInventoryItemSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 			// spawn the submenu just very slightly to the left and above the mouse pointer
 			// so that it's easier to move the mouse down into it
 			SubMenuReference->SetAlignmentInViewport(FVector2D{0.05, 0.05});
+			SubMenuReference->SelectedItem = InternalItemReference;
 
 			if (!SubMenuReference->bSubMenuActive)
 			{

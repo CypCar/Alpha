@@ -16,6 +16,16 @@ enum class EItemAddResult : uint8
 	IAR_AllItemsAdded UMETA(DisplayName = "All of item added")
 };
 
+UENUM(BlueprintType)
+enum class EItemUseResult : uint8
+{
+	IUR_Failed            UMETA(DisplayName="Failed"),
+	IUR_WrongType         UMETA(DisplayName="Wrong type"),
+	IUR_NoStats           UMETA(DisplayName="No stats"),
+	IUR_NoCharges         UMETA(DisplayName="No charges"),
+	IUR_Success           UMETA(DisplayName="Success")
+};
+
 USTRUCT(BlueprintType)
 struct FItemAddResult
 {
@@ -97,6 +107,9 @@ public:
 	/** @brief Used to split an existing stack. Reduces the target stack quantity and adds the split amount as a new item.*/
 	void SplitExistingStack(UItemBase* ItemIn, const int32 AmountToSplit);
 
+	UFUNCTION(BlueprintCallable, Category="Inventory|Use")
+	EItemUseResult UseItemForActor(class UItemBase* ItemToUse, class AActor* UserActor);
+	
 	// getters
 	// ------------------------------
 	FORCEINLINE TArray<UItemBase*> GetInventoryContents() const { return InventoryContents; }
