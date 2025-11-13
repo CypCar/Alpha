@@ -8,6 +8,7 @@
 
 // engine
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 
 void UInventorySubmenu::NativeOnInitialized()
 {
@@ -27,7 +28,6 @@ void UInventorySubmenu::NativeOnInitialized()
 	}
 
 	UseButton->OnClicked.AddDynamic(this, &UInventorySubmenu::UseButtonClicked);
-	ExamineButton->OnClicked.AddDynamic(this, &UInventorySubmenu::ExamineButtonClicked);
 	DropButton->OnClicked.AddDynamic(this, &UInventorySubmenu::DropButtonClicked);
 	SplitButton->OnClicked.AddDynamic(this, &UInventorySubmenu::SplitButtonClicked);
 
@@ -77,6 +77,14 @@ void UInventorySubmenu::UseButtonClicked()
 	case EItemUseResult::IUR_Success:
 		UE_LOG(LogTemp, Log, TEXT("Used item %s successfully."),
 			*SelectedItem->TextData.Name.ToString());
+		if (PlayerCharacter && SelectedItem->ItemType == EItemType::Consumable)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				UseSound,                    // referencja do dźwięku
+				PlayerCharacter->GetActorLocation()
+			);
+		}
 		break;
 	case EItemUseResult::IUR_WrongType:
 		UE_LOG(LogTemp, Warning, TEXT("%s is not a usable (consumable) item."),
@@ -93,11 +101,6 @@ void UInventorySubmenu::UseButtonClicked()
 	SetVisibility(ESlateVisibility::Collapsed);
 }
 
-
-void UInventorySubmenu::ExamineButtonClicked()
-{
-	// TODO
-}
 
 void UInventorySubmenu::DropButtonClicked()
 {

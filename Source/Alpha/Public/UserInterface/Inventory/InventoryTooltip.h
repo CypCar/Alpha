@@ -27,7 +27,7 @@ public:
 	TObjectPtr<UTextBlock> DamageValue;
 
 	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UTextBlock> ArmorRating;
+	TObjectPtr<UTextBlock> RestorationAmount;
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UTextBlock> UsageText;

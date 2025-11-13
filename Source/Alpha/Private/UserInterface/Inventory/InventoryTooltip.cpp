@@ -47,7 +47,6 @@ void UInventoryTooltip::NativeConstruct()
 		case EItemType::Consumable:
 			ItemType->SetText(FText::FromString("Consumable"));
 			DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-			ArmorRating->SetVisibility(ESlateVisibility::Collapsed);
 			break;
 
 		case EItemType::Quest:
@@ -56,7 +55,7 @@ void UInventoryTooltip::NativeConstruct()
 		case EItemType::Mundane:
 			ItemType->SetText(FText::FromString("Mundane"));
 			DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-			ArmorRating->SetVisibility(ESlateVisibility::Collapsed);
+			RestorationAmount->SetVisibility(ESlateVisibility::Collapsed);
 			UsageText->SetVisibility(ESlateVisibility::Collapsed);
 			break;
 
@@ -65,10 +64,15 @@ void UInventoryTooltip::NativeConstruct()
 
 		ItemName->SetText(ItemBeingHovered->TextData.Name);
 		DamageValue->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.DamageValue));
-		ArmorRating->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.ArmorRating));
+		//RestorationAmount->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.RestorationAmount));
 		UsageText->SetText(ItemBeingHovered->TextData.UsageText);
 		ItemDescription->SetText(ItemBeingHovered->TextData.Description);
 
+		const FString RestorationInfo =
+		{"Restoration: " + FString::SanitizeFloat(ItemBeingHovered->ItemStatistics.RestorationAmount)};
+
+		RestorationAmount->SetText(FText::FromString(RestorationInfo));
+		
 		const FString WeightInfo =
 			{"Weight: " + FString::SanitizeFloat(ItemBeingHovered->GetItemStackWeight())};
 

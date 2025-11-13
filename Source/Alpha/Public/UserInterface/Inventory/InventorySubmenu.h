@@ -55,14 +55,14 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> UseButton;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ExamineButton;
-	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> DropButton;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> SplitButton;
-
 	UPROPERTY()
 	TObjectPtr<UAmountWidget> AmountWidget;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Audio")
+	USoundBase* UseSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UAmountWidget> AmountWidgetClass;
@@ -72,8 +72,6 @@ protected:
 	//#############################################################################
 	UFUNCTION()
 	void UseButtonClicked();
-	UFUNCTION()
-	void ExamineButtonClicked();
 	UFUNCTION()
 	void DropButtonClicked();
 	UFUNCTION()
