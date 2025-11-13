@@ -1,93 +1,116 @@
 #include "UserInterface/Inventory/InventoryTooltip.h"
-
 #include "Components/TextBlock.h"
 #include "UserInterface/Inventory/InventoryItemSlot.h"
 #include "Items/ItemBase.h"
 
+//==========================================================================
+// NATIVE CONSTRUCT
+//==========================================================================
 void UInventoryTooltip::NativeConstruct()
 {
-	Super::NativeConstruct();
+    Super::NativeConstruct();
 
-	if (const UItemBase* ItemBeingHovered = InventorySlotBeingHovered->InternalItemReference)
-	{
-		switch (ItemBeingHovered->ItemQuality)
-		{
-		case EItemQuality::Shoddy:
-			ItemType->SetColorAndOpacity(FLinearColor::Gray);
-			break;
-		case EItemQuality::Common:
-			ItemType->SetColorAndOpacity(FLinearColor::White);
-			break;
-		case EItemQuality::Quality:
-			ItemType->SetColorAndOpacity(FLinearColor(0.0f, 0.51f, 0.169f));
-			break;
-		case EItemQuality::Masterwork:
-			ItemType->SetColorAndOpacity(FLinearColor(0.0f, 0.4f, 0.75f));
-			break;
-		case EItemQuality::Grandmaster:
-			ItemType->SetColorAndOpacity(FLinearColor(1.0f, 0.45f, 0.0f));
-			break;
-		default: ;
-		}
+    if (const UItemBase* ItemBeingHovered = InventorySlotBeingHovered->InternalItemReference)
+    {
+        //==========================================================================
+        // ITEM QUALITY COLOR CODING
+        //==========================================================================
+        switch (ItemBeingHovered->ItemQuality)
+        {
+        case EItemQuality::Shoddy:
+            ItemType->SetColorAndOpacity(FLinearColor::Gray);
+            break;
+        case EItemQuality::Common:
+            ItemType->SetColorAndOpacity(FLinearColor::White);
+            break;
+        case EItemQuality::Quality:
+            ItemType->SetColorAndOpacity(FLinearColor(0.0f, 0.51f, 0.169f));
+            break;
+        case EItemQuality::Masterwork:
+            ItemType->SetColorAndOpacity(FLinearColor(0.0f, 0.4f, 0.75f));
+            break;
+        case EItemQuality::Grandmaster:
+            ItemType->SetColorAndOpacity(FLinearColor(1.0f, 0.45f, 0.0f));
+            break;
+        default:
+            break;
+        }
 
-		switch (ItemBeingHovered->ItemType)
-		{
-		case EItemType::Armor:
-			break;
+        //==========================================================================
+        // ITEM TYPE SPECIFIC DISPLAY
+        //==========================================================================
+        switch (ItemBeingHovered->ItemType)
+        {
+        case EItemType::Armor:
+            // Future implementation for armor tooltips
+            break;
 
-		case EItemType::Weapon:
-			break;
+        case EItemType::Weapon:
+            // Future implementation for weapon tooltips
+            break;
 
-		case EItemType::Shield:
-			break;
+        case EItemType::Shield:
+            // Future implementation for shield tooltips
+            break;
 
-		case EItemType::Spell:
-			break;
+        case EItemType::Spell:
+            // Future implementation for spell tooltips
+            break;
 
-		case EItemType::Consumable:
-			ItemType->SetText(FText::FromString("Consumable"));
-			DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-			break;
+        case EItemType::Consumable:
+            ItemType->SetText(FText::FromString("Consumable"));
+            DamageValue->SetVisibility(ESlateVisibility::Collapsed);
+            break;
 
-		case EItemType::Quest:
-			break;
+        case EItemType::Quest:
+            // Future implementation for quest item tooltips
+            break;
 
-		case EItemType::Mundane:
-			ItemType->SetText(FText::FromString("Mundane"));
-			DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-			RestorationAmount->SetVisibility(ESlateVisibility::Collapsed);
-			UsageText->SetVisibility(ESlateVisibility::Collapsed);
-			break;
+        case EItemType::Mundane:
+            ItemType->SetText(FText::FromString("Mundane"));
+            DamageValue->SetVisibility(ESlateVisibility::Collapsed);
+            RestorationAmount->SetVisibility(ESlateVisibility::Collapsed);
+            UsageText->SetVisibility(ESlateVisibility::Collapsed);
+            break;
 
-		default: ;
-		}
+        default:
+            break;
+        }
 
-		ItemName->SetText(ItemBeingHovered->TextData.Name);
-		DamageValue->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.DamageValue));
-		//RestorationAmount->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.RestorationAmount));
-		UsageText->SetText(ItemBeingHovered->TextData.UsageText);
-		ItemDescription->SetText(ItemBeingHovered->TextData.Description);
+        //==========================================================================
+        // BASIC ITEM INFORMATION
+        //==========================================================================
+        ItemName->SetText(ItemBeingHovered->TextData.Name);
+        DamageValue->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.DamageValue));
+        UsageText->SetText(ItemBeingHovered->TextData.UsageText);
+        ItemDescription->SetText(ItemBeingHovered->TextData.Description);
 
-		const FString RestorationInfo =
-		{"Restoration: " + FString::SanitizeFloat(ItemBeingHovered->ItemStatistics.RestorationAmount)};
+        //==========================================================================
+        // RESTORATION INFORMATION
+        //==========================================================================
+        const FString RestorationInfo = 
+            "Restoration: " + FString::SanitizeFloat(ItemBeingHovered->ItemStatistics.RestorationAmount);
+        RestorationAmount->SetText(FText::FromString(RestorationInfo));
 
-		RestorationAmount->SetText(FText::FromString(RestorationInfo));
-		
-		const FString WeightInfo =
-			{"Weight: " + FString::SanitizeFloat(ItemBeingHovered->GetItemStackWeight())};
+        //==========================================================================
+        // WEIGHT INFORMATION
+        //==========================================================================
+        const FString WeightInfo = 
+            "Weight: " + FString::SanitizeFloat(ItemBeingHovered->GetItemStackWeight());
+        StackWeight->SetText(FText::FromString(WeightInfo));
 
-		StackWeight->SetText(FText::FromString(WeightInfo));
-
-		if (ItemBeingHovered->NumericData.bIsStackable)
-		{
-			const FString StackInfo =
-				{"Max stack size: " + FString::FromInt(ItemBeingHovered->NumericData.MaxStackSize)};
-
-			MaxStackSize->SetText(FText::FromString(StackInfo));
-		}
-		else
-		{
-			MaxStackSize->SetVisibility(ESlateVisibility::Collapsed);
-		}
-	}
+        //==========================================================================
+        // STACK INFORMATION
+        //==========================================================================
+        if (ItemBeingHovered->NumericData.bIsStackable)
+        {
+            const FString StackInfo = 
+                "Max stack size: " + FString::FromInt(ItemBeingHovered->NumericData.MaxStackSize);
+            MaxStackSize->SetText(FText::FromString(StackInfo));
+        }
+        else
+        {
+            MaxStackSize->SetVisibility(ESlateVisibility::Collapsed);
+        }
+    }
 }

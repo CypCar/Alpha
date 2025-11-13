@@ -1,70 +1,82 @@
 #pragma once
+
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "LootWindowWidget.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UVerticalBox;
 class ULootRowWidget;
 struct FInteractableData;
+class AAlphaCharacter;
 
+//==========================================================================
+// CLASS: ULootWindowWidget
+//==========================================================================
 UCLASS()
 class ALPHA_API ULootWindowWidget : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	
-	// Ile wpisów ma być widocznych jednocześnie (starsze usuwamy z dołu)
-	UPROPERTY(EditDefaultsOnly, Category="Loot")
-	int32 MaxVisibleEntries = 5;
+    //==========================================================================
+    // PUBLIC FUNCTIONS
+    //==========================================================================
+    void PushLoot(const FInteractableData& Data);
 
-	// Jak długo jeden wpis ma wisieć (sekundy)
-	UPROPERTY(EditDefaultsOnly, Category="Loot")
-	float EntryLifetime = 5.f;
+    UFUNCTION(BlueprintCallable, Category = "Loot")
+    void BindToCharacter(AAlphaCharacter* Character);
 
-	// Klasa pojedynczego wiersza
-	UPROPERTY(EditDefaultsOnly, Category="Loot")
-	TSubclassOf<ULootRowWidget> RowClass;
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	
-	// Dodaj nowy wpis na górę listy
-	void PushLoot(const FInteractableData& Data);
+    UFUNCTION(BlueprintCallable, Category = "Loot")
+    void UnbindFromCharacter();
 
-	UFUNCTION(BlueprintCallable, Category = "Loot")
-	void BindToCharacter(AAlphaCharacter* Character);
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    
+    // Display Configuration
+    UPROPERTY(EditDefaultsOnly, Category = "Loot")
+    int32 MaxVisibleEntries = 5;
 
-	UFUNCTION(BlueprintCallable, Category = "Loot")
-	void UnbindFromCharacter();
+    UPROPERTY(EditDefaultsOnly, Category = "Loot")
+    float EntryLifetime = 5.f;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Loot")
+    TSubclassOf<ULootRowWidget> RowClass;
 
 protected:
-	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-	UPROPERTY(meta=(BindWidget))
-	UVerticalBox* LootListBox = nullptr;
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	virtual void NativeConstruct() override;
-	virtual void NativeDestruct() override;
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void NativeConstruct() override;
+    virtual void NativeDestruct() override;
 
-	UFUNCTION()
-	void OnLootPickedUp(const FInteractableData& LootData);
+    UFUNCTION()
+    void OnLootPickedUp(const FInteractableData& LootData);
+
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    UPROPERTY(meta = (BindWidget))
+    UVerticalBox* LootListBox = nullptr;
 
 private:
+    //==========================================================================
+    // PRIVATE FUNCTIONS
+    //==========================================================================
+    void ScheduleRemoval(ULootRowWidget* Row);
 
-	UPROPERTY()
-	AAlphaCharacter* BoundCharacter = nullptr;
-	
-	void ScheduleRemoval(ULootRowWidget* Row);
+    //==========================================================================
+    // PRIVATE PROPERTIES
+    //==========================================================================
+    UPROPERTY()
+    AAlphaCharacter* BoundCharacter = nullptr;
 
-	// trzymamy timery per-wiersz żeby móc je bezpiecznie anulować
-	TMap<TWeakObjectPtr<ULootRowWidget>, FTimerHandle> RowTimers;
+    // Store timers per row for safe cancellation
+    TMap<TWeakObjectPtr<ULootRowWidget>, FTimerHandle> RowTimers;
 };

@@ -1,9 +1,15 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "AlphaHUD.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class ULootWindowWidget;
 class UMainMenu;
 class UInteractionWidget;
@@ -13,99 +19,111 @@ class UContainerInterface;
 class AAlphaCharacter;
 struct FInteractableData;
 
+//==========================================================================
+// CLASS: AAlphaHUD
+//==========================================================================
 UCLASS()
 class ALPHA_API AAlphaHUD : public AHUD
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	//======================================================================================
-	// PROPERTIES & VARIABLES
-	//======================================================================================
-	bool bMainMenuOpen;
-	bool bContainerInterfaceOpen;
-	bool bInteractionWidgetVisible;
+    //==========================================================================
+    // CONSTRUCTOR & PUBLIC FUNCTIONS
+    //==========================================================================
+    AAlphaHUD();
 
+    // Menu System
+    bool HasAnyMenuOpen() const;
+    void DisplayMenu();
+    void HideMenu();
+    void ToggleMenu();
 
-	
-	//======================================================================================
-	// FUNCTIONS
-	//======================================================================================
-	AAlphaHUD();
+    // Crosshair System
+    void ShowCrosshair() const;
+    void HideCrosshair() const;
 
-	bool HasAnyMenuOpen() const;
+    // Interaction System
+    void ShowInteractionWidget();
+    void HideInteractionWidget();
+    void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
+    TObjectPtr<UInteractionWidget> GetInteractionWidget() { return InteractionWidget; }
 
-	void DisplayMenu();
-	void HideMenu();
-	void ToggleMenu();
+    // Container Interface System
+    UFUNCTION(BlueprintCallable, Category = "HUD|Container")
+    void ShowContainerInterface(AContainer* TargetContainer = nullptr);
 
-	void ShowCrosshair() const;
-	void HideCrosshair() const;
+    UFUNCTION(BlueprintCallable, Category = "HUD|Container")
+    void HideContainerInterface(bool bSuccess = true);
 
-	void ShowInteractionWidget();
-	void HideInteractionWidget();
-	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
-	TObjectPtr<UInteractionWidget> GetInteractionWidget() { return InteractionWidget; }
+    UFUNCTION(BlueprintCallable, Category = "HUD|Container")
+    void SetTargetContainer(AContainer* TargetContainer);
+    
+    UFUNCTION(BlueprintCallable, Category = "HUD|Container")
+    void ClearTargetContainer();
 
-	
-	/** Pokaż interfejs kontenera */
-	UFUNCTION(BlueprintCallable, Category="HUD|Container")
-	void ShowContainerInterface(AContainer* TargetContainer = nullptr);
+    UFUNCTION(BlueprintPure, Category = "HUD|Container")
+    AContainer* GetCurrentContainer() const;
 
-	/** Ukryj interfejs kontenera */
-	UFUNCTION(BlueprintCallable, Category="HUD|Container")
-	void HideContainerInterface(bool bSuccess = true);
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    UPROPERTY(BlueprintReadOnly, Category = "HUD State")
+    bool bMainMenuOpen;
 
-	/** Ustaw target kontenera */
-	UFUNCTION(BlueprintCallable, Category="HUD|Container")
-	void SetTargetContainer(AContainer* TargetContainer);
-	
-	UFUNCTION(BlueprintCallable, Category="HUD|Container")
-	void ClearTargetContainer();
+    UPROPERTY(BlueprintReadOnly, Category = "HUD State")
+    bool bContainerInterfaceOpen;
 
-	UFUNCTION(BlueprintPure, Category="HUD|Container")
-	AContainer* GetCurrentContainer() const;
+    UPROPERTY(BlueprintReadOnly, Category = "HUD State")
+    bool bInteractionWidgetVisible;
 
 protected:
-	//======================================================================================
-	// PROPERTIES & VARIABLES
-	//======================================================================================
-	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-	TSubclassOf<UMainMenu> MainMenuClass;
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void BeginPlay() override;
+    void CreateGameWidgets();
 
-	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-	TSubclassOf<UInteractionWidget> InteractionWidgetClass;
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // Widget Classes
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<UMainMenu> MainMenuClass;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-	TSubclassOf<UUserWidget> CrosshairWidgetClass;
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<UInteractionWidget> InteractionWidgetClass;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-	TSubclassOf<UContainerInterface> ContainerInterfaceClass;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-	TSubclassOf<ULootWindowWidget> LootWindowWidgetClass;
-	
-	UPROPERTY()
-	TObjectPtr<UMainMenu> MainMenuWidget;
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<UUserWidget> CrosshairWidgetClass;
 
-	UPROPERTY()
-	TObjectPtr<UInteractionWidget> InteractionWidget;
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<UContainerInterface> ContainerInterfaceClass;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<ULootWindowWidget> LootWindowWidgetClass;
 
-	UPROPERTY()
-	TObjectPtr<UUserWidget> CrosshairWidget;
+    // Widget Instances
+    UPROPERTY()
+    TObjectPtr<UMainMenu> MainMenuWidget;
 
-	UPROPERTY()
-	TObjectPtr<ULootWindowWidget> LootWindowWidget;
+    UPROPERTY()
+    TObjectPtr<UInteractionWidget> InteractionWidget;
 
-	//======================================================================================
-	// FUNCTIONS
-	//======================================================================================
-	virtual void BeginPlay() override;
-	void CreateGameWidgets();
+    UPROPERTY()
+    TObjectPtr<UUserWidget> CrosshairWidget;
+
+    UPROPERTY()
+    TObjectPtr<ULootWindowWidget> LootWindowWidget;
 
 private:
-	UPROPERTY()
-	TObjectPtr<UContainerInterface> ContainerInterface = nullptr;
-	UPROPERTY()
-	bool bContainerInterfaceManuallyOpened = false;
+    //==========================================================================
+    // PRIVATE PROPERTIES
+    //==========================================================================
+    UPROPERTY()
+    TObjectPtr<UContainerInterface> ContainerInterface = nullptr;
+    
+    UPROPERTY()
+    bool bContainerInterfaceManuallyOpened = false;
 };

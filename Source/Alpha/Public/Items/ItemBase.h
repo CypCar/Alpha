@@ -1,75 +1,89 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Data/ItemDataStructs.h"
 #include "Components/InventoryComponent.h"
 #include "Alpha/AlphaCharacter.h"
 #include "ItemBase.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UInventoryComponent;
 
+//==========================================================================
+// CLASS: UItemBase
+//==========================================================================
 UCLASS()
 class ALPHA_API UItemBase : public UObject
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	//======================================================================================
-	// PROPERTIES & VARIABLES
-	//======================================================================================
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FName ID;
+    //==========================================================================
+    // CONSTRUCTOR & PUBLIC FUNCTIONS
+    //==========================================================================
+    UItemBase();
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	int32 Quantity;
+    // Getters
+    UFUNCTION(Category = "Item")
+    FORCEINLINE UInventoryComponent* GetOwningInventory() const { return Cast<UInventoryComponent>(GetOuter()); }
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	EItemType ItemType;
+    UFUNCTION(Category = "Item")
+    FORCEINLINE float GetItemStackWeight() const { return Quantity * NumericData.Weight; }
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	EItemQuality ItemQuality;
+    UFUNCTION(Category = "Item")
+    FORCEINLINE float GetItemSingleWeight() const { return NumericData.Weight; }
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemStatistics ItemStatistics;
+    UFUNCTION(Category = "Item")
+    FORCEINLINE bool IsFullItemStack() const { return Quantity == NumericData.MaxStackSize; }
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemTextData TextData;
+    // Item Management
+    UFUNCTION(Category = "Item")
+    static UItemBase* CreateItemCopy(const UItemBase* ItemToCopy, UObject* NewOuter);
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemNumericData NumericData;
+    UFUNCTION(Category = "Item")
+    void SetQuantity(const int32 NewQuantity);
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemAssetData AssetData;
+    UFUNCTION(Category = "Item")
+    virtual void Use(AAlphaCharacter* PlayerCharacter);
 
-	//======================================================================================
-	// FUNCTIONS
-	//======================================================================================
-	UItemBase();
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    FName ID;
 
-	UFUNCTION(Category = "Item")
-	FORCEINLINE UInventoryComponent* GetOwningInventory() const { return Cast<UInventoryComponent>(GetOuter()); }
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    int32 Quantity;
 
-	UFUNCTION(Category = "Item")
-	static UItemBase* CreateItemCopy(const UItemBase* ItemToCopy, UObject* NewOuter);
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    EItemType ItemType;
 
-	UFUNCTION(Category = "Item")
-	FORCEINLINE float GetItemStackWeight() const { return Quantity * NumericData.Weight; };
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    EItemQuality ItemQuality;
 
-	UFUNCTION(Category = "Item")
-	FORCEINLINE float GetItemSingleWeight() const { return NumericData.Weight; };
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    FItemStatistics ItemStatistics;
 
-	UFUNCTION(Category = "Item")
-	FORCEINLINE bool IsFullItemStack() const { return Quantity == NumericData.MaxStackSize; };
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    FItemTextData TextData;
 
-	UFUNCTION(Category = "Item")
-	void SetQuantity(const int32 NewQuantity);
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    FItemNumericData NumericData;
 
-	UFUNCTION(Category = "Item")
-	virtual void Use(AAlphaCharacter* PlayerCharacter);
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    FItemAssetData AssetData;
 
 protected:
-	bool operator==(const FName& OtherID) const
-	{
-		return this->ID == OtherID;
-	}
+    //==========================================================================
+    // PROTECTED OPERATORS
+    //==========================================================================
+    bool operator==(const FName& OtherID) const
+    {
+        return this->ID == OtherID;
+    }
 };

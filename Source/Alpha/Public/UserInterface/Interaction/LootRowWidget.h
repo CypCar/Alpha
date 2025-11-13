@@ -1,30 +1,39 @@
 #pragma once
+
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "LootRowWidget.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UTextBlock;
 struct FInteractableData;
 
+//==========================================================================
+// CLASS: ULootRowWidget
+//==========================================================================
 UCLASS()
 class ALPHA_API ULootRowWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
 public:
 	//==========================================================================
-	//FUNCTIONS
+	// PUBLIC FUNCTIONS
 	//==========================================================================
 	void Setup(const FInteractableData& Data);
 
 protected:
 	//==========================================================================
-	//PROPERTIES & VARIABELS
+	// PROTECTED PROPERTIES
 	//==========================================================================
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(meta = (BindWidget))
 	UTextBlock* NameText;
-	
-	UPROPERTY(meta=(BindWidget))
+    
+	UPROPERTY(meta = (BindWidget))
 	UTextBlock* QuantityText;
 };
-
-

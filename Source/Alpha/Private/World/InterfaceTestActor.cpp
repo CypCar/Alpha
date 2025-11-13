@@ -1,32 +1,37 @@
 #include "World/InterfaceTestActor.h"
 
-// Sets default values
+//==========================================================================
+// CONSTRUCTOR
+//==========================================================================
 AInterfaceTestActor::AInterfaceTestActor()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Mesh Component Setup
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-
 	SetRootComponent(Mesh);
 
+	// Collision Setup for Interaction System
 	Mesh->SetCollisionObjectType(ECC_GameTraceChannel1);
 }
 
-// Called when the game starts or when spawned
+//==========================================================================
+// GAME FLOW
+//==========================================================================
 void AInterfaceTestActor::BeginPlay()
 {
 	Super::BeginPlay();
-
 	InteractableData = InstanceInteractableData;
 }
 
-// Called every frame
 void AInterfaceTestActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
+//==========================================================================
+// INTERACTION INTERFACE IMPLEMENTATION
+//==========================================================================
 void AInterfaceTestActor::BeginFocus()
 {
 	if (Mesh)

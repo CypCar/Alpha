@@ -1,9 +1,15 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "InventoryItemSlot.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UInventoryPanel;
 class UInventoryTooltip;
 class UInventorySubmenu;
@@ -12,44 +18,59 @@ class UItemBase;
 class UTextBlock;
 class UBorder;
 class UImage;
-/**
- * 
- */
+
+//==========================================================================
+// CLASS: UInventoryItemSlot
+//==========================================================================
 UCLASS()
 class ALPHA_API UInventoryItemSlot : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, Category="Inventory Slot")
-	TObjectPtr<UItemBase> InternalItemReference;
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    UPROPERTY(VisibleAnywhere, Category = "Inventory Slot")
+    TObjectPtr<UItemBase> InternalItemReference;
 
-	UPROPERTY()
-	TObjectPtr<UInventorySubmenu> SubMenuReference;
+    UPROPERTY()
+    TObjectPtr<UInventorySubmenu> SubMenuReference;
 
-	UPROPERTY()
-	TObjectPtr<UInventoryPanel> OwningInventoryPanel;
+    UPROPERTY()
+    TObjectPtr<UInventoryPanel> OwningInventoryPanel;
 
 protected:
-	UPROPERTY(VisibleAnywhere, Category="Inventory Slot", meta=(BindWidget))
-	TObjectPtr<UBorder> ItemBorder;
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void NativeOnInitialized() override;
+    virtual void NativeConstruct() override;
+    virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+    virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
+    virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, 
+                                     UDragDropOperation*& OutOperation) override;
+    virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, 
+                             UDragDropOperation* InOperation) override;
 
-	UPROPERTY(VisibleAnywhere, Category="Inventory Slot", meta=(BindWidget))
-	TObjectPtr<UImage> ItemIcon;
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // Widget Bindings
+    UPROPERTY(VisibleAnywhere, Category = "Inventory Slot", meta = (BindWidget))
+    TObjectPtr<UBorder> ItemBorder;
 
-	UPROPERTY(VisibleAnywhere, Category="Inventory Slot", meta=(BindWidget))
-	TObjectPtr<UTextBlock> ItemQuantity;
+    UPROPERTY(VisibleAnywhere, Category = "Inventory Slot", meta = (BindWidget))
+    TObjectPtr<UImage> ItemIcon;
 
-	UPROPERTY(EditDefaultsOnly, Category="Inventory Slot")
-	TSubclassOf<UDragItemVisual> DragItemVisualClass;
+    UPROPERTY(VisibleAnywhere, Category = "Inventory Slot", meta = (BindWidget))
+    TObjectPtr<UTextBlock> ItemQuantity;
 
-	UPROPERTY(EditDefaultsOnly, Category="Inventory Slot")
-	TSubclassOf<UInventoryTooltip> ToolTipClass;
+    // Widget Classes
+    UPROPERTY(EditDefaultsOnly, Category = "Inventory Slot")
+    TSubclassOf<UDragItemVisual> DragItemVisualClass;
 
-	virtual void NativeOnInitialized() override;
-	virtual void NativeConstruct() override;
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
-	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+    UPROPERTY(EditDefaultsOnly, Category = "Inventory Slot")
+    TSubclassOf<UInventoryTooltip> ToolTipClass;
 };

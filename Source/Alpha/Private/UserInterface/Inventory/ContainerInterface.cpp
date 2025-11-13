@@ -1,19 +1,26 @@
 #include "UserInterface/Inventory/ContainerInterface.h"
 
-// game
+//==========================================================================
+// INCLUDES
+//==========================================================================
+// Game
 #include "World/LootContainer.h"
 #include "UserInterface/Inventory/InventoryPanel.h"
 #include "Alpha/AlphaCharacter.h"
 #include "Components/InventoryComponent.h"
 #include "Items/ItemBase.h"
 
-// engine
+// Engine
 #include "Components/Button.h"
 
+//==========================================================================
+// WIDGET INITIALIZATION & CLEANUP
+//==========================================================================
 void UContainerInterface::NativeOnInitialized()
 {
     Super::NativeOnInitialized();
 
+    // Bind Button Events
     if (CloseButton)
     {
         CloseButton->OnClicked.AddDynamic(this, &UContainerInterface::HideContainerInterface);
@@ -24,17 +31,20 @@ void UContainerInterface::NativeOnInitialized()
         LootAllButton->OnClicked.AddDynamic(this, &UContainerInterface::LootAllItems);
     }
 
-    // Znajdź gracza
+    // Find Player Character Reference
     PlayerCharacter = Cast<AAlphaCharacter>(GetOwningPlayerPawn());
 }
 
 void UContainerInterface::NativeDestruct()
 {
-    // Oczyść przy odinstalowywaniu
+    // Clean up when widget is being destroyed
     ClearTargetContainer();
     Super::NativeDestruct();
 }
 
+//==========================================================================
+// CONTAINER LINKING SYSTEM
+//==========================================================================
 void UContainerInterface::LinkContainerInterface(AContainer* InContainer)
 {
     TargetContainer = InContainer;
@@ -45,6 +55,7 @@ void UContainerInterface::LinkContainerInterface(AContainer* InContainer)
         return;
     }
 
+    // Link inventory panel to container's inventory
     ContainerInventoryPanel->LinkToInventory(TargetContainer->GetContainerInventory());
 }
 
@@ -55,23 +66,32 @@ void UContainerInterface::ClearTargetContainer()
         ContainerInventoryPanel->UnlinkFromInventory();
     }
 
-    UE_LOG(LogTemp, Log, TEXT("%s: Nulling TargetContainer reference in %s."), ANSI_TO_TCHAR(__FUNCTION__), *GetName());
+    UE_LOG(LogTemp, Log, TEXT("%s: Nulling TargetContainer reference in %s."), 
+        ANSI_TO_TCHAR(__FUNCTION__), *GetName());
     TargetContainer = nullptr;
 }
 
+//==========================================================================
+// UI MANAGEMENT
+//==========================================================================
 void UContainerInterface::HideContainerInterface()
 {
     if (CloseContainerInterface.ExecuteIfBound(true))
     {
-        UE_LOG(LogTemp, Log, TEXT("%s: Closing container interface via delegate."), ANSI_TO_TCHAR(__FUNCTION__));
+        UE_LOG(LogTemp, Log, TEXT("%s: Closing container interface via delegate."), 
+            ANSI_TO_TCHAR(__FUNCTION__));
     }
 }
 
+//==========================================================================
+// LOOTING SYSTEM
+//==========================================================================
 void UContainerInterface::LootAllItems()
 {
     if (!TargetContainer || !PlayerCharacter)
     {
-        UE_LOG(LogTemp, Warning, TEXT("%s: Missing target container or player character!"), ANSI_TO_TCHAR(__FUNCTION__));
+        UE_LOG(LogTemp, Warning, TEXT("%s: Missing target container or player character!"), 
+            ANSI_TO_TCHAR(__FUNCTION__));
         return;
     }
 
@@ -80,11 +100,12 @@ void UContainerInterface::LootAllItems()
 
     if (!ContainerInventory || !PlayerInventory)
     {
-        UE_LOG(LogTemp, Warning, TEXT("%s: Missing container or player inventory!"), ANSI_TO_TCHAR(__FUNCTION__));
+        UE_LOG(LogTemp, Warning, TEXT("%s: Missing container or player inventory!"), 
+            ANSI_TO_TCHAR(__FUNCTION__));
         return;
     }
 
-    // Pobierz kopię listy przedmiotów (bo oryginalna może się zmieniać podczas iteracji)
+    // Get a copy of items list (original may change during iteration)
     TArray<UItemBase*> ItemsToLoot = ContainerInventory->GetInventoryContents();
 
     int32 LootedCount = 0;
@@ -97,13 +118,14 @@ void UContainerInterface::LootAllItems()
         }
     }
 
-    UE_LOG(LogTemp, Log, TEXT("%s: Looted %d items from container"), ANSI_TO_TCHAR(__FUNCTION__), LootedCount);
+    UE_LOG(LogTemp, Log, TEXT("%s: Looted %d items from container"), 
+        ANSI_TO_TCHAR(__FUNCTION__), LootedCount);
 
-    
-    //  NOWE: jeśli po próbie lootowania kontener jest pusty → zamknij okno
+    // NEW: Close interface if container is empty after looting
     if (ContainerInventory->GetInventoryContents().Num() == 0)
     {
-        UE_LOG(LogTemp, Log, TEXT("%s: Container is now empty, closing container interface."), ANSI_TO_TCHAR(__FUNCTION__));
+        UE_LOG(LogTemp, Log, TEXT("%s: Container is now empty, closing container interface."), 
+            ANSI_TO_TCHAR(__FUNCTION__));
         HideContainerInterface();
     }
 }
@@ -123,19 +145,19 @@ void UContainerInterface::LootSingleItem(UItemBase* Item)
         return;
     }
 
-    // Przenieś przedmiot do ekwipunku gracza
+    // Transfer item to player's inventory
     const FItemAddResult AddResult = PlayerInventory->HandleAddItem(Item);
 
     if (AddResult.OperationResult == EItemAddResult::IAR_AllItemsAdded || 
         AddResult.OperationResult == EItemAddResult::IAR_PartialAmountItemAdded)
     {
-        // Usuń przedmiot z kontenera (lub zaktualizuj ilość)
+        // Remove item from container (or update quantity)
         ContainerInventory->HandleRemoveItem(Item);
 
-        // Stwórz i wyślij powiadomienie
+        // Create and send loot notification
         FInteractableData LootData = CreateLootDataFromItem(Item, AddResult.AmountAdded);
         
-        // Wywołaj powiadomienie na kontenerze
+        // Trigger notification on container
         TargetContainer->NotifyItemLooted(LootData);
 
         UE_LOG(LogTemp, Verbose, TEXT("%s: Looted %s x%d"), 

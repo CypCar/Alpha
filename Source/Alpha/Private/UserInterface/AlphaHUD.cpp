@@ -6,89 +6,107 @@
 #include "UserInterface/Inventory/ContainerInterface.h"
 #include "UserInterface/Interaction/LootWindowWidget.h"
 
+//==========================================================================
+// CONSTRUCTOR
+//==========================================================================
 AAlphaHUD::AAlphaHUD() :
-	bMainMenuOpen(false),
-	bContainerInterfaceOpen(false),
-	bInteractionWidgetVisible(false)
+    bMainMenuOpen(false),
+    bContainerInterfaceOpen(false),
+    bInteractionWidgetVisible(false)
 {
 }
 
+//==========================================================================
+// GAME FLOW
+//==========================================================================
 void AAlphaHUD::BeginPlay()
 {
-	Super::BeginPlay();
-	CreateGameWidgets();
+    Super::BeginPlay();
+    CreateGameWidgets();
 }
 
+//==========================================================================
+// MENU SYSTEM
+//==========================================================================
 bool AAlphaHUD::HasAnyMenuOpen() const
 {
-	return bMainMenuOpen || bContainerInterfaceOpen;
+    return bMainMenuOpen || bContainerInterfaceOpen;
 }
 
 void AAlphaHUD::DisplayMenu()
 {
-	bMainMenuOpen = true;
-	MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
+    bMainMenuOpen = true;
+    MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AAlphaHUD::HideMenu()
 {
-	bMainMenuOpen = false;
-	MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+    bMainMenuOpen = false;
+    MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void AAlphaHUD::ToggleMenu()
 {
-	if (bMainMenuOpen)
-	{
-		HideMenu();
-		const FInputModeGameOnly InputMode;
-		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(false);
-	}
-	else
-	{
-		DisplayMenu();
-		const FInputModeGameAndUI InputMode;
-		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(true);
-	}
+    if (bMainMenuOpen)
+    {
+        HideMenu();
+        const FInputModeGameOnly InputMode;
+        GetOwningPlayerController()->SetInputMode(InputMode);
+        GetOwningPlayerController()->SetShowMouseCursor(false);
+    }
+    else
+    {
+        DisplayMenu();
+        const FInputModeGameAndUI InputMode;
+        GetOwningPlayerController()->SetInputMode(InputMode);
+        GetOwningPlayerController()->SetShowMouseCursor(true);
+    }
 }
 
+//==========================================================================
+// CROSSHAIR SYSTEM
+//==========================================================================
 void AAlphaHUD::ShowCrosshair() const
 {
-	CrosshairWidget->SetVisibility(ESlateVisibility::Visible);
+    CrosshairWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AAlphaHUD::HideCrosshair() const
 {
-	CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
+    CrosshairWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
+//==========================================================================
+// INTERACTION SYSTEM
+//==========================================================================
 void AAlphaHUD::ShowInteractionWidget()
 {
-	bInteractionWidgetVisible = true;
-	InteractionWidget->SetVisibility(ESlateVisibility::Visible);
+    bInteractionWidgetVisible = true;
+    InteractionWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AAlphaHUD::HideInteractionWidget()
 {
-	bInteractionWidgetVisible = false;
-	InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
+    bInteractionWidgetVisible = false;
+    InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void AAlphaHUD::UpdateInteractionWidget(const FInteractableData* InteractableData) const
 {
-	if (InteractionWidget->GetVisibility() == ESlateVisibility::Collapsed)
-	{
-		InteractionWidget->SetVisibility(ESlateVisibility::Visible);
-	}
+    if (InteractionWidget->GetVisibility() == ESlateVisibility::Collapsed)
+    {
+        InteractionWidget->SetVisibility(ESlateVisibility::Visible);
+    }
 
-	InteractionWidget->UpdateWidget(InteractableData);
+    InteractionWidget->UpdateWidget(InteractableData);
 }
 
+//==========================================================================
+// WIDGET CREATION SYSTEM
+//==========================================================================
 void AAlphaHUD::CreateGameWidgets()
 {
-    // MainMenuWidget
+    // Main Menu Widget
     if (IsValid(MainMenuClass))
     {
         MainMenuWidget = CreateWidget<UMainMenu>(GetWorld(), MainMenuClass);
@@ -100,7 +118,7 @@ void AAlphaHUD::CreateGameWidgets()
         UE_LOG(LogTemp, Error, TEXT("%s: MainMenuWidgetClass was null!"), ANSI_TO_TCHAR(__FUNCTION__));
     }
 
-    // InteractionWidget
+    // Interaction Widget
     if (IsValid(InteractionWidgetClass))
     {
         InteractionWidget = CreateWidget<UInteractionWidget>(GetWorld(), InteractionWidgetClass);
@@ -112,7 +130,7 @@ void AAlphaHUD::CreateGameWidgets()
         UE_LOG(LogTemp, Error, TEXT("%s: InteractionWidgetClass was null!"), ANSI_TO_TCHAR(__FUNCTION__));
     }
 
-    // CrosshairWidget
+    // Crosshair Widget
     if (IsValid(CrosshairWidgetClass))
     {
         CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
@@ -124,7 +142,7 @@ void AAlphaHUD::CreateGameWidgets()
         UE_LOG(LogTemp, Error, TEXT("%s: CrosshairWidgetClass was null!"), ANSI_TO_TCHAR(__FUNCTION__));
     }
 
-    // LootWindowWidget
+    // Loot Window Widget
     if (IsValid(LootWindowWidgetClass))
     {
         if (APlayerController* PlayerController = GetOwningPlayerController())
@@ -139,7 +157,7 @@ void AAlphaHUD::CreateGameWidgets()
         UE_LOG(LogTemp, Error, TEXT("%s: LootWindowWidgetClass was null!"), ANSI_TO_TCHAR(__FUNCTION__));
     }
 
-    // ContainerInterface - TERAZ OSOBNY WIDGET
+    // Container Interface Widget
     if (IsValid(ContainerInterfaceClass))
     {
         APlayerController* PC = GetOwningPlayerController();
@@ -147,7 +165,7 @@ void AAlphaHUD::CreateGameWidgets()
         
         if (ContainerInterface)
         {
-            ContainerInterface->AddToViewport(10); // Wyższy Z-order
+            ContainerInterface->AddToViewport(10); // Higher Z-order
             ContainerInterface->SetVisibility(ESlateVisibility::Collapsed);
             ContainerInterface->CloseContainerInterface.BindUObject(this, &AAlphaHUD::HideContainerInterface);
             
@@ -164,54 +182,57 @@ void AAlphaHUD::CreateGameWidgets()
     }
 }
 
+//==========================================================================
+// CONTAINER INTERFACE SYSTEM
+//==========================================================================
 void AAlphaHUD::ShowContainerInterface(AContainer* TargetContainer)
 {
-	if (!ContainerInterface)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ShowContainerInterface: ContainerInterface is null!"));
-		return;
-	}
+    if (!ContainerInterface)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("ShowContainerInterface: ContainerInterface is null!"));
+        return;
+    }
 
-	// Podepnij do kontenera jeśli podano
-	if (TargetContainer)
-	{
-		SetTargetContainer(TargetContainer);
-	}
+    // Link to container if provided
+    if (TargetContainer)
+    {
+        SetTargetContainer(TargetContainer);
+    }
 
-	// Pokaż widget
-	bContainerInterfaceOpen = true;
-	bContainerInterfaceManuallyOpened = true; // DODAJ FLAGĘ
-	ContainerInterface->SetVisibility(ESlateVisibility::Visible);
+    // Show widget
+    bContainerInterfaceOpen = true;
+    bContainerInterfaceManuallyOpened = true;
+    ContainerInterface->SetVisibility(ESlateVisibility::Visible);
     
-	// Zmień tryb inputu
-	FInputModeGameAndUI InputMode;
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputMode.SetHideCursorDuringCapture(false);
-	GetOwningPlayerController()->SetInputMode(InputMode);
-	GetOwningPlayerController()->SetShowMouseCursor(true);
+    // Change input mode
+    FInputModeGameAndUI InputMode;
+    InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+    InputMode.SetHideCursorDuringCapture(false);
+    GetOwningPlayerController()->SetInputMode(InputMode);
+    GetOwningPlayerController()->SetShowMouseCursor(true);
     
-	// Ukryj interakcję jeśli jest widoczna
-	HideInteractionWidget();
+    // Hide interaction widget if visible
+    HideInteractionWidget();
     
-	UE_LOG(LogTemp, Log, TEXT("ShowContainerInterface: Container interface shown"));
+    UE_LOG(LogTemp, Log, TEXT("ShowContainerInterface: Container interface shown"));
 }
 
 void AAlphaHUD::HideContainerInterface(bool bSuccess)
 {
-	if (ContainerInterface)
-	{
-		bContainerInterfaceOpen = false;
-		bContainerInterfaceManuallyOpened = false; // ZRESETUJ FLAGĘ
-		ContainerInterface->SetVisibility(ESlateVisibility::Collapsed);
-		ContainerInterface->ClearTargetContainer();
+    if (ContainerInterface)
+    {
+        bContainerInterfaceOpen = false;
+        bContainerInterfaceManuallyOpened = false;
+        ContainerInterface->SetVisibility(ESlateVisibility::Collapsed);
+        ContainerInterface->ClearTargetContainer();
         
-		// Przywróć tryb gry
-		FInputModeGameOnly InputMode;
-		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(false);
+        // Restore game mode
+        FInputModeGameOnly InputMode;
+        GetOwningPlayerController()->SetInputMode(InputMode);
+        GetOwningPlayerController()->SetShowMouseCursor(false);
         
-		UE_LOG(LogTemp, Log, TEXT("HideContainerInterface: Container interface hidden"));
-	}
+        UE_LOG(LogTemp, Log, TEXT("HideContainerInterface: Container interface hidden"));
+    }
 }
 
 void AAlphaHUD::SetTargetContainer(AContainer* TargetContainer)
@@ -222,22 +243,22 @@ void AAlphaHUD::SetTargetContainer(AContainer* TargetContainer)
         return;
     }
 
-    // Podepnij do kontenera
+    // Link to container
     ContainerInterface->LinkContainerInterface(TargetContainer);
     UE_LOG(LogTemp, Log, TEXT("SetTargetContainer: Linked to container %s"), *TargetContainer->GetName());
 }
 
 void AAlphaHUD::ClearTargetContainer()
 {
-	HideContainerInterface();
-	UE_LOG(LogTemp, Log, TEXT("ClearTargetContainer: Called"));
+    HideContainerInterface();
+    UE_LOG(LogTemp, Log, TEXT("ClearTargetContainer: Called"));
 }
 
 AContainer* AAlphaHUD::GetCurrentContainer() const
 {
-	if (ContainerInterface)
-	{
-		return ContainerInterface->GetTargetContainer();
-	}
-	return nullptr;
+    if (ContainerInterface)
+    {
+        return ContainerInterface->GetTargetContainer();
+    }
+    return nullptr;
 }

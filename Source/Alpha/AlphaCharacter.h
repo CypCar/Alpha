@@ -1,254 +1,244 @@
 #pragma once
-//game
-#include "UserInterface/AlphaHUD.h" 
-#include "AlphaPlayerController.h" 
+
+//==========================================================================
+// INCLUDES
+//==========================================================================
+// Engine
+#include "CoreMinimal.h"
+#include "GameFramework/Character.h"
+
+// Game
+#include "UserInterface/AlphaHUD.h"
+#include "AlphaPlayerController.h"
 #include "Interfaces/InteractionInterface.h"
 #include "Components/StatsComponent.h"
 #include "UserInterface/HUD/StatsWidget.h"
-
-//engine
-#include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "AlphaCharacter.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UAttackComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
-class ACSTutorialPlayerController;
 class UTimelineComponent;
 class UInventoryComponent;
-class ACSTutorialHUD;
 class UItemBase;
-class IInteractionInterface;
 class UInputMappingContext;
 struct FInputActionValue;
 
+//==========================================================================
+// DELEGATES
+//==========================================================================
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLootPickedUpSignature, const FInteractableData&, LootData);
 
+//==========================================================================
+// CLASS: AAlphaCharacter
+//==========================================================================
 UCLASS(abstract)
 class AAlphaCharacter : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	//==========================================================================
-	//PROPERTIES & VARIABLES
-	//==========================================================================
-	bool bAiming;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UStatsComponent* StatsComponent;
+    //==========================================================================
+    // CONSTRUCTOR & PUBLIC FUNCTIONS
+    //==========================================================================
+    AAlphaCharacter();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UStatsWidget> StatsWidgetClass;
+    // Unreal Default Functions
+    FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+    FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+    FORCEINLINE bool IsInteracting() const { return GetWorldTimerManager().IsTimerActive(TH_TimedInteraction); }
+    FORCEINLINE UInventoryComponent* GetInventory() const { return PlayerInventory; }
+    FORCEINLINE AAlphaHUD* GetHUD() const { return HUD; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
-	UStatsWidget* StatsWidget;
+    // Interaction System
+    void UpdateInteractionWidget() const;
+    void DropItem(UItemBase* ItemToDrop);
+    void ExitContainerRadius() const;
+    void NotifyLootPickedUp(const FInteractableData& LootData) const;
 
-	UPROPERTY()
-	FLootPickedUpSignature OnLootPickedUp;
-	
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	AAlphaCharacter();
-	
-	//UNREAL DEFAULTS UP ==========================================================
-	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-	
-	
-	
-	FORCEINLINE bool IsInteracting() const { return GetWorldTimerManager().IsTimerActive(TH_TimedInteraction); };
-	
-	FORCEINLINE UInventoryComponent* GetInventory() const { return PlayerInventory; };
-	FORCEINLINE AAlphaHUD* GetHUD() const { return HUD; }
+    // UI Management
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    void CreateStatsWidget();
 
-	void UpdateInteractionWidget() const;
+    // Movement System
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    void StartSprinting();
 
-	void DropItem(UItemBase* ItemToDrop);
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    void StopSprinting();
 
-	void ExitContainerRadius() const;
+    // Combat System
+    UFUNCTION(BlueprintCallable, Category = "Action")
+    void OnAttackPressed();
 
-	//UI Management
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	void CreateStatsWidget();
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    UPROPERTY(BlueprintReadWrite, Category = "Combat")
+    bool bAiming;
 
-	// Loot Widget management
-	void NotifyLootPickedUp(const FInteractableData& LootData);
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UStatsComponent* StatsComponent;
 
-	// Sprint Management
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void StartSprinting();
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+    TSubclassOf<UStatsWidget> StatsWidgetClass;
 
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void StopSprinting();
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+    UStatsWidget* StatsWidget;
 
-	UFUNCTION(BlueprintCallable, Category = "Action")
-	void OnAttackPressed();
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FLootPickedUpSignature OnLootPickedUp;
 
 protected:
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void BeginPlay() override;
+    virtual void Tick(float DeltaSeconds) override;
+    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	//==========================================================================
-	//PROPERTIES & VARIABLES
-	//==========================================================================
-	
-	// default/built-in UE game template properties
-	//---------------------------------------------------------
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
-	UInputAction* JumpAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
-	UInputAction* MoveAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
-	UInputAction* LookAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
-	UInputAction* MouseLookAction;
+    // Input System
+    void Move(const FInputActionValue& Value);
+    void Look(const FInputActionValue& Value);
+    void ToggleMenu();
+    void Aim();
+    void StopAiming();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PlayerCharacter | Input")
-	UInputAction* SprintAction;
-	
-	// Alpha miscellaneous game properties
-	//---------------------------------------------------------
-	UPROPERTY()
-	TObjectPtr<AAlphaHUD> HUD;
+    // Camera System
+    UFUNCTION()
+    void UpdateCameraTimeline(const float TimelineValue) const;
 
-	UPROPERTY()
-	TObjectPtr<class AAlphaPlayerController> MainPlayerController;
+    UFUNCTION()
+    void CameraTimelineEnd() const;
 
-	UPROPERTY(VisibleAnywhere, Category= "PlayerCharacter | Inventory")
-	TObjectPtr<UInventoryComponent> PlayerInventory;
+    // Interaction System
+    void PerformInteractionCheck();
+    void FoundInteractable(AActor* NewInteractable);
+    void NoInteractableFound();
+    void BeginInteract();
+    void EndInteract();
+    void Interact();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
-	UAttackComponent* AttackComp;
+    // Blueprint Callable Input Functions
+    UFUNCTION(BlueprintCallable, Category = "PlayerCharacter | Input")
+    virtual void DoMove(float Right, float Forward);
 
-	// input mapping properties
-	//---------------------------------------------------------
-	UPROPERTY(EditAnywhere, Category="PlayerCharacter | Input")
-	TObjectPtr<UInputMappingContext> DefaultMappingContext;
+    UFUNCTION(BlueprintCallable, Category = "PlayerCharacter | Input")
+    virtual void DoLook(float Yaw, float Pitch);
 
-	UPROPERTY(EditAnywhere, Category="PlayerCharacter | Input")
-	TObjectPtr<UInputAction> InteractAction;
+    UFUNCTION(BlueprintCallable, Category = "PlayerCharacter | Input")
+    virtual void DoJumpStart();
 
-	UPROPERTY(EditAnywhere, Category="PlayerCharacter | Input")
-	TObjectPtr<UInputAction> AimAction;
+    UFUNCTION(BlueprintCallable, Category = "PlayerCharacter | Input")
+    virtual void DoJumpEnd();
 
-	UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Input")
-	TObjectPtr<UInputAction> ToggleMenuAction;
-
-	UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Input")
-	TObjectPtr<UInputAction> AttackAction;
-
-	// interaction properties
-	//---------------------------------------------------------
-	UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Interaction")
-	float InteractionCheckFrequency;
-
-	/** @brief Used to set the maximum distance at which actors can be interacted with while aiming.*/
-	UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Interaction")
-	float AimingInteractionDistance;
-
-	/** @brief Used to set the maximum distance at which actors can be interacted with while not aiming.*/
-	UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Interaction")
-	float DefaultInteractionDistance;
-
-	UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Interaction")
-	TScriptInterface<IInteractionInterface> InteractionTarget;
-
-	UPROPERTY(EditDefaultsOnly, Category="PlayerCharacter | Interaction")
-	float ContainerAutoCloseDistance = 300.f;
-
-	FCollisionQueryParams InteractionCollisionQueryParams;
-	FCollisionObjectQueryParams InteractionObjectQueryParams;
-	// array that will be reused for storing any detected interactables
-	TArray<FHitResult> OutHits;
-
-	/** @brief Timer handle used for a timed interaction (ex: hold button to turn valve, etc.).*/
-	FTimerHandle TH_TimedInteraction;
-
-	/** @brief Timer handle used to control firing the line trace that checks for interactables.*/
-	FTimerHandle TH_InteractionCheck;
-
-	// properties related to camera aiming transition
-	//---------------------------------------------------------
-	UPROPERTY(VisibleAnywhere, Category="PlayerCharacter | Aiming")
-	FVector DefaultCameraLocation;
-
-	UPROPERTY(VisibleAnywhere, Category="PlayerCharacter | Aiming")
-	FVector AimingCameraLocation;
-
-	UPROPERTY(VisibleAnywhere, Category="PlayerCharacter | Aiming")
-	TObjectPtr<UTimelineComponent> AimingCameraTimeline;
-
-	UPROPERTY(EditDefaultsOnly, Category="PlayerCharacter | Aiming")
-	TObjectPtr<UCurveFloat> AimingCameraCurve;
-
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-
-	// default/built-in UE game template functions
-	//---------------------------------------------------------
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	
-	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
-	virtual void DoMove(float Right, float Forward);
-	
-	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
-	virtual void DoLook(float Yaw, float Pitch);
-	
-	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
-	virtual void DoJumpStart();
-	
-	UFUNCTION(BlueprintCallable, Category="PlayerCharacter | Input")
-	virtual void DoJumpEnd();
-
-
-	// Alpha game functions
-	//---------------------------------------------------------
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-
-	void ToggleMenu();
-
-	void Aim();
-	void StopAiming();
-
-	UFUNCTION()
-	void UpdateCameraTimeline(const float TimelineValue) const;
-
-	UFUNCTION()
-	void CameraTimelineEnd() const;
-
-	void PerformInteractionCheck();
-	void FoundInteractable(AActor* NewInteractable);
-	void NoInteractableFound();
-	void BeginInteract();
-	void EndInteract();
-	void Interact();
-	
 private:
-	UFUNCTION()
-	void HandleDeath(AActor* DeadActor);
+    //==========================================================================
+    // PRIVATE FUNCTIONS
+    //==========================================================================
+    UFUNCTION()
+    void HandleDeath(AActor* DeadActor);
 
-	UFUNCTION()
-	void HandleHealthChanged(float NewHealth, float Delta);
+    UFUNCTION()
+    void HandleHealthChanged(float NewHealth, float Delta);
 
-	UFUNCTION()
-	void HandleStaminaChanged(float NewStamina, float Delta);
+    UFUNCTION()
+    void HandleStaminaChanged(float NewStamina, float Delta);
+
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // Camera Components
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+    USpringArmComponent* CameraBoom;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+    UCameraComponent* FollowCamera;
+
+    // Input Actions - Movement
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerCharacter | Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* JumpAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerCharacter | Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* MoveAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerCharacter | Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* LookAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerCharacter | Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* MouseLookAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerCharacter | Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* SprintAction;
+
+    // Game Systems
+    UPROPERTY()
+    TObjectPtr<AAlphaHUD> HUD;
+
+    UPROPERTY()
+    TObjectPtr<AAlphaPlayerController> MainPlayerController;
+
+    UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Inventory")
+    TObjectPtr<UInventoryComponent> PlayerInventory;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+    UAttackComponent* AttackComp;
+
+    // Input Mapping
+    UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Input")
+    TObjectPtr<UInputMappingContext> DefaultMappingContext;
+
+    UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Input")
+    TObjectPtr<UInputAction> InteractAction;
+
+    UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Input")
+    TObjectPtr<UInputAction> AimAction;
+
+    UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Input")
+    TObjectPtr<UInputAction> ToggleMenuAction;
+
+    UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Input")
+    TObjectPtr<UInputAction> AttackAction;
+
+    // Interaction System
+    UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Interaction")
+    float InteractionCheckFrequency;
+
+    UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Interaction")
+    float AimingInteractionDistance;
+
+    UPROPERTY(EditAnywhere, Category = "PlayerCharacter | Interaction")
+    float DefaultInteractionDistance;
+
+    UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Interaction")
+    TScriptInterface<IInteractionInterface> InteractionTarget;
+
+    UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Interaction")
+    float ContainerAutoCloseDistance = 300.f;
+
+    // Camera Aiming System
+    UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Aiming")
+    FVector DefaultCameraLocation;
+
+    UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Aiming")
+    FVector AimingCameraLocation;
+
+    UPROPERTY(VisibleAnywhere, Category = "PlayerCharacter | Aiming")
+    TObjectPtr<UTimelineComponent> AimingCameraTimeline;
+
+    UPROPERTY(EditDefaultsOnly, Category = "PlayerCharacter | Aiming")
+    TObjectPtr<UCurveFloat> AimingCameraCurve;
+
+    // Internal Variables
+    FCollisionQueryParams InteractionCollisionQueryParams;
+    FCollisionObjectQueryParams InteractionObjectQueryParams;
+    TArray<FHitResult> OutHits;
+    FTimerHandle TH_TimedInteraction;
+    FTimerHandle TH_InteractionCheck;
 };
-

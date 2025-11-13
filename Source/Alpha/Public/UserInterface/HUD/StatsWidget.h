@@ -1,5 +1,8 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Border.h"
@@ -8,6 +11,9 @@
 #include "Components/StatsComponent.h"
 #include "StatsWidget.generated.h"
 
+//==========================================================================
+// CLASS: UStatsWidget
+//==========================================================================
 UCLASS()
 class ALPHA_API UStatsWidget : public UUserWidget
 {
@@ -15,11 +21,7 @@ class ALPHA_API UStatsWidget : public UUserWidget
 
 public:
     //==========================================================================
-    //PROPERTIES & VARIABELS
-    //==========================================================================
-
-    //==========================================================================
-    //FUNCTIONS
+    // PUBLIC FUNCTIONS
     //==========================================================================
     UFUNCTION(BlueprintCallable, Category = "Stats")
     void InitializeWidget(UStatsComponent* StatsComp);
@@ -41,9 +43,16 @@ public:
 
 protected:
     //==========================================================================
-    //PROPERTIES & VARIABELS
+    // PROTECTED FUNCTIONS
     //==========================================================================
-    // Bindowanie widgetów
+    virtual void NativeConstruct() override;
+    virtual void NativeDestruct() override;
+
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // Widget Bindings
     UPROPERTY(meta = (BindWidget))
     UProgressBar* HealthBar;
 
@@ -65,7 +74,7 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UWidget* DeathOverlay;
 
-    // Style dla różnych stanów
+    // Appearance Settings
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Appearance")
     FLinearColor HealthColor_Normal;
 
@@ -81,34 +90,27 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Appearance")
     FLinearColor StaminaColor_Exhausted;
 
-    // Progi dla kolorów ostrzegawczych
+    // Threshold Settings
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thresholds")
     float LowHealthThreshold;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thresholds")
     float LowStaminaThreshold;
-    
-    //==========================================================================
-    //FUNCTIONS
-    //==========================================================================
-    virtual void NativeConstruct() override;
-    virtual void NativeDestruct() override;
 
 private:
     //==========================================================================
-    //PROPERTIES & VARIABELS
-    //==========================================================================
-    UPROPERTY()
-    UStatsComponent* StatsComponent;
-
-    // Timer dla efektów wizualnych
-    FTimerHandle StatusTextTimer;
-    
-    //==========================================================================
-    //FUNCTIONS
+    // PRIVATE FUNCTIONS
     //==========================================================================
     void ClearStatusText();
     void UpdateBarColors();
     void UpdateHealthDisplay();
     void UpdateStaminaDisplay();
+
+    //==========================================================================
+    // PRIVATE PROPERTIES
+    //==========================================================================
+    UPROPERTY()
+    UStatsComponent* StatsComponent;
+
+    FTimerHandle StatusTextTimer;
 };

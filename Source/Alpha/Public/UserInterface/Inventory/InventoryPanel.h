@@ -1,9 +1,15 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "InventoryPanel.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UInventoryItemSlot;
 class UInventoryComponent;
 class UInventorySubmenu;
@@ -12,46 +18,62 @@ class UWrapBox;
 class UGridPanel;
 class UTextBlock;
 
+//==========================================================================
+// CLASS: UInventoryPanel
+//==========================================================================
 UCLASS()
 class ALPHA_API UInventoryPanel : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	bool bIsLinkedToInventory;
+    //==========================================================================
+    // PUBLIC FUNCTIONS
+    //==========================================================================
+    UFUNCTION()
+    void RefreshInventory();
 
-	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UWrapBox> InventoryWrapBox;
+    void LinkToInventory(UInventoryComponent* InputInventory, AAlphaCharacter* InputCharacter = nullptr);
+    void UnlinkFromInventory();
 
-	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UTextBlock> InventoryLabel;
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    UPROPERTY(BlueprintReadWrite, Category = "Inventory")
+    bool bIsLinkedToInventory;
 
-	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UTextBlock> WeightInfo;
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UWrapBox> InventoryWrapBox;
 
-	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UTextBlock> CapacityInfo;
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTextBlock> InventoryLabel;
 
-	UPROPERTY()
-	TObjectPtr<UInventoryComponent> InventoryReference;
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTextBlock> WeightInfo;
 
-	UPROPERTY()
-	TObjectPtr<UInventorySubmenu> SubMenu;
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTextBlock> CapacityInfo;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UInventoryItemSlot> InventorySlotClass;
+    UPROPERTY()
+    TObjectPtr<UInventoryComponent> InventoryReference;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UInventorySubmenu> InventorySubMenuClass;
+    UPROPERTY()
+    TObjectPtr<UInventorySubmenu> SubMenu;
 
-	UFUNCTION()
-	void RefreshInventory();
+    // Widget Classes
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<UInventoryItemSlot> InventorySlotClass;
 
-	void LinkToInventory(UInventoryComponent* InputInventory, AAlphaCharacter* InputCharacter = nullptr);
-	void UnlinkFromInventory();
+    UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+    TSubclassOf<UInventorySubmenu> InventorySubMenuClass;
 
 protected:
-	void SetInfoText() const;
-	virtual void NativeOnInitialized() override;
-	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void NativeOnInitialized() override;
+    virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, 
+                             UDragDropOperation* InOperation) override;
+
+    void SetInfoText() const;
 };

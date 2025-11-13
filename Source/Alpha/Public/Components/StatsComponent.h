@@ -1,16 +1,24 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "StatsComponent.generated.h"
 
-// Delegaty dla zdarzeń
+//==========================================================================
+// DELEGATES
+//==========================================================================
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, NewHealth, float, Delta);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStaminaChanged, float, NewStamina, float, Delta);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AActor*, KilledActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStaminaExhausted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTaken, float, DamageAmount);
 
+//==========================================================================
+// CLASS: UStatsComponent
+//==========================================================================
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ALPHA_API UStatsComponent : public UActorComponent
 {
@@ -18,33 +26,11 @@ class ALPHA_API UStatsComponent : public UActorComponent
 
 public:
     //==========================================================================
-    //PROPERTIES & VARIABELS
-    //==========================================================================
-    // === DELEGATY ===
-    UPROPERTY(BlueprintAssignable, Category = "Events")
-    FOnHealthChanged OnHealthChanged;
-
-    UPROPERTY(BlueprintAssignable, Category = "Events")
-    FOnStaminaChanged OnStaminaChanged;
-
-    UPROPERTY(BlueprintAssignable, Category = "Events")
-    FOnDeath OnDeath;
-
-    UPROPERTY(BlueprintAssignable, Category = "Events")
-    FOnStaminaExhausted OnStaminaExhausted;
-
-    UPROPERTY(BlueprintAssignable, Category = "Events")
-    FOnDamageTaken OnDamageTaken;
-    
-    UPROPERTY(EditDefaultsOnly, Category="Audio")
-    USoundBase* UseSound;
-    
-    //==========================================================================
-    //FUNCTIONS
+    // CONSTRUCTOR & PUBLIC FUNCTIONS
     //==========================================================================
     UStatsComponent();
 
-    // === FUNKCJE ZDROWIA ===
+    // Health System
     UFUNCTION(BlueprintCallable, Category = "Health")
     void TakeDamage(float DamageAmount, AController* Instigator = nullptr);
 
@@ -66,7 +52,7 @@ public:
     UFUNCTION(BlueprintPure, Category = "Health")
     bool IsAlive() const { return !bIsDead; }
 
-    // === FUNKCJE STAMINY ===
+    // Stamina System
     UFUNCTION(BlueprintCallable, Category = "Stamina")
     void StartSprinting();
 
@@ -91,10 +77,7 @@ public:
     UFUNCTION(BlueprintPure, Category = "Stamina")
     bool IsExhausted() const { return bIsExhausted; }
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
-    bool bIsSprinting;
-
-    // === GETTERY ===
+    // Getters
     UFUNCTION(BlueprintPure, Category = "Health")
     FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
 
@@ -107,11 +90,46 @@ public:
     UFUNCTION(BlueprintPure, Category = "Stamina")
     FORCEINLINE float GetMaxStamina() const { return MaxStamina; }
 
+    //==========================================================================
+    // PUBLIC PROPERTIES
+    //==========================================================================
+    
+    // Event Delegates
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnHealthChanged OnHealthChanged;
+
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnStaminaChanged OnStaminaChanged;
+
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnDeath OnDeath;
+
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnStaminaExhausted OnStaminaExhausted;
+
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnDamageTaken OnDamageTaken;
+
+    // Audio
+    UPROPERTY(EditDefaultsOnly, Category = "Audio")
+    USoundBase* UseSound;
+
+    // Stamina State
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
+    bool bIsSprinting;
+
 protected:
     //==========================================================================
-    //PROPERTIES & VARIABELS
+    // PROTECTED FUNCTIONS
     //==========================================================================
-    // === ZDROWIE ===
+    virtual void BeginPlay() override;
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // Health System
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
     float MaxHealth;
     
@@ -127,13 +145,10 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (EditCondition = "bCanRegenerateHealth"))
     float HealthRegenDelay;
     
-    FTimerHandle HealthRegenTimer;
-    float LastDamageTime;
-    
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
     bool bIsDead;
-    
-    // === STAMINA ===
+
+    // Stamina System
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
     float MaxStamina;
     
@@ -151,25 +166,11 @@ protected:
     
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
     bool bIsExhausted;
-    
-    // Timery
-    FTimerHandle StaminaRegenTimer;
-    float LastStaminaUseTime;
-    //==========================================================================
-    //FUNCTIONS
-    //==========================================================================
-    virtual void BeginPlay() override;
-    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
     //==========================================================================
-    //PROPERTIES & VARIABELS
+    // PRIVATE FUNCTIONS
     //==========================================================================
-    
-    //==========================================================================
-    //FUNCTIONS
-    //==========================================================================
-    // Funkcje wewnętrzne
     void HandleDeath();
     void StartHealthRegeneration();
     void StopHealthRegeneration();
@@ -178,4 +179,13 @@ private:
     void StopStaminaRegeneration();
     void RegenerateStamina();
     void UpdateStamina(float DeltaTime);
+
+    //==========================================================================
+    // PRIVATE PROPERTIES
+    //==========================================================================
+    FTimerHandle HealthRegenTimer;
+    float LastDamageTime;
+    
+    FTimerHandle StaminaRegenTimer;
+    float LastStaminaUseTime;
 };

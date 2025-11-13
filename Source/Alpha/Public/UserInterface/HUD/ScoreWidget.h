@@ -1,12 +1,16 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include <Components/TextBlock.h>
-
+#include "Components/TextBlock.h"
 #include "ScoreWidget.generated.h"
 
-
+//==========================================================================
+// CLASS: UScoreWidget
+//==========================================================================
 UCLASS()
 class ALPHA_API UScoreWidget : public UUserWidget
 {
@@ -14,26 +18,22 @@ class ALPHA_API UScoreWidget : public UUserWidget
 
 public:
 	//==========================================================================
-	//PROPERTIES & VARIABELS
+	// PUBLIC FUNCTIONS
+	//==========================================================================
+	void NativeConstruct() override;
+
+	//==========================================================================
+	// PUBLIC PROPERTIES
 	//==========================================================================
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UTextBlock* ScoreText;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UTextBlock* ScorePoints;
-	
-	//==========================================================================
-	//FUNCTIONS
-	//==========================================================================
-	void NativeConstruct() override;
 
 protected:
 	//==========================================================================
-	//PROPERTIES & VARIABELS
-	//==========================================================================
-
-	//==========================================================================
-	//FUNCTIONS
+	// PROTECTED FUNCTIONS
 	//==========================================================================
 	UFUNCTION()
 	void OnResChanged(FGameplayTag Resource, int32 NewQuantity);

@@ -1,9 +1,15 @@
 #include "Items/ItemBase.h"
 
+//==========================================================================
+// CONSTRUCTOR
+//==========================================================================
 UItemBase::UItemBase()
 {
 }
 
+//==========================================================================
+// ITEM COPY CREATION
+//==========================================================================
 UItemBase* UItemBase::CreateItemCopy(const UItemBase* ItemToCopy, UObject* NewOuter)
 {
 	UItemBase* ItemCopy = NewObject<UItemBase>(NewOuter, StaticClass());
@@ -20,6 +26,9 @@ UItemBase* UItemBase::CreateItemCopy(const UItemBase* ItemToCopy, UObject* NewOu
 	return ItemCopy;
 }
 
+//==========================================================================
+// QUANTITY MANAGEMENT
+//==========================================================================
 void UItemBase::SetQuantity(const int32 NewQuantity)
 {
 	if (NewQuantity != this->Quantity)
@@ -28,6 +37,9 @@ void UItemBase::SetQuantity(const int32 NewQuantity)
 	}
 }
 
+//==========================================================================
+// ITEM USAGE
+//==========================================================================
 void UItemBase::Use(AAlphaCharacter* PlayerCharacter)
 {
 }

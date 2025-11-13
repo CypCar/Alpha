@@ -1,68 +1,76 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "Interfaces/InteractionInterface.h"
 #include "Pickup.generated.h"
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UDataTable;
 class UItemBase;
 class ULootWindowWidget;
 
+//==========================================================================
+// CLASS: APickup
+//==========================================================================
 UCLASS()
 class ALPHA_API APickup : public AActor, public IInteractionInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	//======================================================================================
-	// PROPERTIES & VARIABLES
-	//======================================================================================
+    //==========================================================================
+    // CONSTRUCTOR & PUBLIC FUNCTIONS
+    //==========================================================================
+    APickup();
 
+    // Initialization
+    void InitializePickup(const int32 InQuantity);
+    void InitializeDrop(const TObjectPtr<UItemBase>& ItemToDrop);
 
-	//======================================================================================
-	// FUNCTIONS
-	//======================================================================================
-	APickup();
+    // Getters
+    FORCEINLINE UItemBase* GetItemData() const { return ItemReference; }
 
-	void InitializePickup(const int32 InQuantity);
-
-	void InitializeDrop(const TObjectPtr<UItemBase>& ItemToDrop);
-
-	FORCEINLINE UItemBase* GetItemData() const { return ItemReference; };
-
-	virtual void BeginFocus() override;
-	virtual void EndFocus() override;
+    // Interaction Interface
+    virtual void BeginFocus() override;
+    virtual void EndFocus() override;
 
 protected:
-	//======================================================================================
-	// PROPERTIES & VARIABLES
-	//======================================================================================
-	UPROPERTY(VisibleAnywhere, Category = "Pickup | Components")
-	UStaticMeshComponent* PickupMesh;
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void BeginPlay() override;
+    virtual void Interact(AAlphaCharacter* PlayerCharacter) override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Pickup | Item Reference")
-	TObjectPtr<UItemBase> ItemReference;
-
-
-	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
-	int32 ItemQuantity;
-
-	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
-	FDataTableRowHandle ItemRowHandle;
-
-	//======================================================================================
-	// FUNCTIONS
-	//======================================================================================
-	virtual void BeginPlay() override;
-
-	virtual void Interact(AAlphaCharacter* PlayerCharacter) override;
-	void UpdateInteractableData();
-
-	void TakePickup(const AAlphaCharacter* Taker);
+    // Internal Functions
+    void UpdateInteractableData();
+    void TakePickup(const AAlphaCharacter* Taker);
 
 #if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
-	
+
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // Components
+    UPROPERTY(VisibleAnywhere, Category = "Pickup | Components")
+    UStaticMeshComponent* PickupMesh;
+
+    // Item Data
+    UPROPERTY(VisibleAnywhere, Category = "Pickup | Item Reference")
+    TObjectPtr<UItemBase> ItemReference;
+
+    // Initialization
+    UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
+    int32 ItemQuantity;
+
+    UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Initialization")
+    FDataTableRowHandle ItemRowHandle;
 };

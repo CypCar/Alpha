@@ -1,102 +1,105 @@
 #pragma once
 
+//==========================================================================
+// INCLUDES
+//==========================================================================
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "AmountWidget.generated.h"
 
+//==========================================================================
+// DELEGATES
+//==========================================================================
 DECLARE_DELEGATE_OneParam(FOnValueConfirm, int32)
 
+//==========================================================================
+// FORWARD DECLARATIONS
+//==========================================================================
 class UItemBase;
 class UButton;
 class UTextBlock;
 
-/**
- * 
- */
+//==========================================================================
+// CLASS: UAmountWidget
+//==========================================================================
 UCLASS()
 class ALPHA_API UAmountWidget : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	//#############################################################################
-	// PROPERTIES & VARIABLES
-	//#############################################################################
-	FOnValueConfirm OnValueConfirm;
+    //==========================================================================
+    // PUBLIC FUNCTIONS
+    //==========================================================================
+    FORCEINLINE void SetItemReference(UItemBase* ItemIn) { ItemReference = ItemIn; }
+    FORCEINLINE void SetHeaderText(const FText& InputText) const;
 
-	//#############################################################################
-	// FUNCTIONS
-	//#############################################################################
-	FORCEINLINE void SetItemReference(UItemBase* ItemIn) { ItemReference = ItemIn; };
-	FORCEINLINE void SetHeaderText(const FText& InputText) const;
+    //==========================================================================
+    // PUBLIC PROPERTIES & DELEGATES
+    //==========================================================================
+    FOnValueConfirm OnValueConfirm;
 
 protected:
-	//#############################################################################
-	// PROPERTIES & VARIABLES
-	//#############################################################################
-	int32 AmountValue;
+    //==========================================================================
+    // PROTECTED FUNCTIONS
+    //==========================================================================
+    virtual void NativeOnInitialized() override;
 
-	UPROPERTY()
-	TObjectPtr<UItemBase> ItemReference;
+    // Button Handlers
+    UFUNCTION()
+    void Minus5Clicked();
+    
+    UFUNCTION()
+    void Minus1Clicked();
+    
+    UFUNCTION()
+    void Plus1Clicked();
+    
+    UFUNCTION()
+    void Plus5Clicked();
+    
+    UFUNCTION()
+    void ConfirmClicked();
+    
+    UFUNCTION()
+    void CancelClicked();
 
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> HeaderText;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Minus5Button;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Minus1Button;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Plus1Button;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Plus5Button;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> AmountText;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> CancelButton;
-	
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ConfirmButton;
+    // Internal Functions
+    void CloseAmountWidget();
 
-	//#############################################################################
-	// FUNCTIONS
-	//#############################################################################
-	UFUNCTION()
-	void Minus5Clicked();
-	
-	UFUNCTION()
-	void Minus1Clicked();
-	
-	UFUNCTION()
-	void Plus1Clicked();
-	
-	UFUNCTION()
-	void Plus5Clicked();
-	
-	UFUNCTION()
-	void ConfirmClicked();
-	
-	UFUNCTION()
-	void CancelClicked();
-	
+    //==========================================================================
+    // PROTECTED PROPERTIES
+    //==========================================================================
+    
+    // State Variables
+    UPROPERTY()
+    int32 AmountValue;
 
-	void CloseAmountWidget();
+    UPROPERTY()
+    TObjectPtr<UItemBase> ItemReference;
 
-	/** 
-	 * Called once only at game time on non-template instances.
-	 * While Construct/Destruct pertain to the underlying Slate, this is called only once for the UUserWidget.
-	 * If you have one-time things to establish up-front (like binding callbacks to events on BindWidget properties), do so here.
-	 */
-	virtual void NativeOnInitialized() override;
-	/**
-	 * Called after the underlying slate widget is constructed.  Depending on how the slate object is used
-	 * this event may be called multiple times due to adding and removing from the hierarchy.
-	 * If you need a true called-once-when-created event, use OnInitialized.
-	 */
-	// virtual void NativeConstruct() override;
+    // Widget Bindings
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTextBlock> HeaderText;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UButton> Minus5Button;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UButton> Minus1Button;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UButton> Plus1Button;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UButton> Plus5Button;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UTextBlock> AmountText;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UButton> CancelButton;
+    
+    UPROPERTY(meta = (BindWidget))
+    TObjectPtr<UButton> ConfirmButton;
 };

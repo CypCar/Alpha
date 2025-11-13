@@ -4,11 +4,14 @@
 #include "GameFramework/Controller.h"
 #include "Kismet/GameplayStatics.h"
 
+//==========================================================================
+// CONSTRUCTOR
+//==========================================================================
 UStatsComponent::UStatsComponent()
 {
     PrimaryComponentTick.bCanEverTick = true;
 
-    // Inicjalizacja zdrowia
+    // Initialize Health System
     MaxHealth = 100.0f;
     CurrentHealth = MaxHealth;
     bCanRegenerateHealth = false;
@@ -17,7 +20,7 @@ UStatsComponent::UStatsComponent()
     bIsDead = false;
     LastDamageTime = 0.0f;
 
-    // Inicjalizacja staminy
+    // Initialize Stamina System
     MaxStamina = 100.0f;
     CurrentStamina = MaxStamina;
     StaminaRegenRate = 20.0f;
@@ -29,11 +32,14 @@ UStatsComponent::UStatsComponent()
     LastStaminaUseTime = 0.0f;
 }
 
+//==========================================================================
+// BEGIN PLAY
+//==========================================================================
 void UStatsComponent::BeginPlay()
 {
     Super::BeginPlay();
     
-    // Reset do wartości początkowych
+    // Reset to initial values
     CurrentHealth = MaxHealth;
     CurrentStamina = MaxStamina;
     bIsDead = false;
@@ -42,14 +48,17 @@ void UStatsComponent::BeginPlay()
     LastStaminaUseTime = GetWorld()->GetTimeSeconds();
 }
 
+//==========================================================================
+// TICK COMPONENT
+//==========================================================================
 void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     
-    // Aktualizacja staminy
+    // Update Stamina System
     UpdateStamina(DeltaTime);
     
-    // Automatyczna regeneracja zdrowia
+    // Handle Health Regeneration
     if (bCanRegenerateHealth && !bIsDead && CurrentHealth < MaxHealth)
     {
         float CurrentTime = GetWorld()->GetTimeSeconds();
@@ -60,8 +69,9 @@ void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
     }
 }
 
-// === IMPLEMENTACJA ZDROWIA ===
-
+//==========================================================================
+// HEALTH SYSTEM IMPLEMENTATION
+//==========================================================================
 void UStatsComponent::TakeDamage(float DamageAmount, AController* Instigator)
 {
     if (bIsDead || DamageAmount <= 0.0f) return;
@@ -73,7 +83,7 @@ void UStatsComponent::TakeDamage(float DamageAmount, AController* Instigator)
     OnHealthChanged.Broadcast(CurrentHealth, -ActualDamage);
     OnDamageTaken.Broadcast(ActualDamage);
 
-    // Zaktualizuj czas ostatnich obrażeń dla regeneracji
+    // Update last damage time for regeneration delay
     LastDamageTime = GetWorld()->GetTimeSeconds();
 
     if (CurrentHealth <= 0.0f)
@@ -81,6 +91,7 @@ void UStatsComponent::TakeDamage(float DamageAmount, AController* Instigator)
         HandleDeath();
     }
     
+    // Play damage sound effect
     if (const AActor* OwnerActor = GetOwner())
     {
         UGameplayStatics::PlaySoundAtLocation(
@@ -117,7 +128,7 @@ void UStatsComponent::Revive(float ReviveHealth)
 
     bIsDead = false;
     CurrentHealth = FMath::Clamp(ReviveHealth > 0.0f ? ReviveHealth : MaxHealth * 0.5f, 0.0f, MaxHealth);
-    CurrentStamina = MaxStamina * 0.25f; // Mała stamina po rewitalizacji
+    CurrentStamina = MaxStamina * 0.25f; // Partial stamina on revive
     
     OnHealthChanged.Broadcast(CurrentHealth, CurrentHealth);
     OnStaminaChanged.Broadcast(CurrentStamina, CurrentStamina);
@@ -176,8 +187,9 @@ void UStatsComponent::RegenerateHealth()
     Heal(HealthRegenRate * 0.1f);
 }
 
-// === IMPLEMENTACJA STAMINY ===
-
+//==========================================================================
+// STAMINA SYSTEM IMPLEMENTATION
+//==========================================================================
 void UStatsComponent::StartSprinting()
 {
     if (!CanSprint() || bIsExhausted) return;
@@ -193,7 +205,7 @@ void UStatsComponent::StopSprinting()
     bIsSprinting = false;
     LastStaminaUseTime = GetWorld()->GetTimeSeconds();
     
-    // Opóźnienie przed rozpoczęciem regeneracji
+    // Delay before starting stamina regeneration
     if (StaminaRegenDelay > 0.0f)
     {
         GetWorld()->GetTimerManager().SetTimer(StaminaRegenTimer, this, &UStatsComponent::StartStaminaRegeneration, StaminaRegenDelay, false);
@@ -224,7 +236,7 @@ bool UStatsComponent::ConsumeStamina(float Amount)
         LastStaminaUseTime = GetWorld()->GetTimeSeconds();
         StopStaminaRegeneration();
         
-        // Jeśli stamina spadnie do zera, wyczerpanie
+        // Trigger exhaustion if stamina reaches zero
         if (CurrentStamina <= 0.0f)
         {
             bIsExhausted = true;
@@ -266,7 +278,7 @@ void UStatsComponent::UpdateStamina(float DeltaTime)
 {
     if (bIsDead) return;
 
-    // Drenaż staminy podczas sprintu
+    // Drain stamina while sprinting
     if (bIsSprinting && CurrentStamina > 0.0f)
     {
         float OldStamina = CurrentStamina;
@@ -278,7 +290,7 @@ void UStatsComponent::UpdateStamina(float DeltaTime)
             OnStaminaChanged.Broadcast(CurrentStamina, -StaminaDrained);
         }
 
-        // Sprawdzenie wyczerpania
+        // Check for exhaustion
         if (CurrentStamina <= 0.0f && !bIsExhausted)
         {
             bIsExhausted = true;
@@ -287,7 +299,7 @@ void UStatsComponent::UpdateStamina(float DeltaTime)
         }
     }
     
-    // Automatyczna regeneracja staminy - DODANE
+    // Automatic stamina regeneration
     if (!bIsSprinting && !bIsExhausted && CurrentStamina < MaxStamina)
     {
         float CurrentTime = GetWorld()->GetTimeSeconds();
@@ -304,7 +316,7 @@ void UStatsComponent::UpdateStamina(float DeltaTime)
         }
     }
     
-    // Automatyczne wyjście ze stanu wyczerpania
+    // Auto-recover from exhaustion
     if (bIsExhausted && CurrentStamina >= MaxStamina * 0.3f)
     {
         bIsExhausted = false;
