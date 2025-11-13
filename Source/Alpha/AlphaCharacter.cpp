@@ -70,7 +70,7 @@ AAlphaCharacter::AAlphaCharacter() :
 
 	AimingCameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("AimingCameraTimeline"));
 	DefaultCameraLocation = FVector{0.0f, 0.0f, 65.0f};
-	AimingCameraLocation = FVector{200.0f, 60.0f, 65.0f};
+	AimingCameraLocation = FVector{150.0f, 100.0f, 65.0f};
 	CameraBoom->SocketOffset = DefaultCameraLocation;
 
 	// capsule default dimensions = 34.0f, 88.0f
@@ -423,7 +423,7 @@ void AAlphaCharacter::Aim()
 		
 		bAiming = true;
 		bUseControllerRotationYaw = true;
-		GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+		GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 
 		if (AimingCameraTimeline)
 		{
@@ -606,19 +606,18 @@ void AAlphaCharacter::OnAttackPressed()
 
 void AAlphaCharacter::HandleDeath(AActor* DeadActor)
 {
-    // Implementacja logiki śmierci postaci
-    UE_LOG(LogTemp, Warning, TEXT("Character died!"));
+	// Implementacja logiki śmierci postaci
+	UE_LOG(LogTemp, Warning, TEXT("Character died!"));
     
-    // Przykładowe akcje po śmierci:
-    // - Wyłączenie inputu
-    if (MainPlayerController)
-    {
-        DisableInput(MainPlayerController);
-    }
+	// Przykładowe akcje po śmierci:
+	// - Wyłączenie inputu
+	if (MainPlayerController)
+	{
+		DisableInput(MainPlayerController);
+	}
     
-    // - Odtworzenie animacji śmierci
-    // - Wywołanie game over itp.
-}
+	// 
+} 
 
 void AAlphaCharacter::HandleHealthChanged(float NewHealth, float Delta)
 {

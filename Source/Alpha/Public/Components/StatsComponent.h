@@ -36,6 +36,9 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "Events")
     FOnDamageTaken OnDamageTaken;
     
+    UPROPERTY(EditDefaultsOnly, Category="Audio")
+    USoundBase* UseSound;
+    
     //==========================================================================
     //FUNCTIONS
     //==========================================================================

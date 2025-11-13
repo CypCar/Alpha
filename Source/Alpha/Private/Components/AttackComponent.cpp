@@ -150,13 +150,13 @@ void UAttackComponent::DoSwordTrace()
 		Params
 	);
 
-#if ENABLE_DRAW_DEBUG
+/*#if ENABLE_DRAW_DEBUG
 	const float DebugLifeTime = 0.25f; // lub 0.5f jak wolisz
 
 	DrawDebugSphere(GetWorld(), Start, TraceRadius, 8, FColor::Blue, false, DebugLifeTime);
 	DrawDebugSphere(GetWorld(), End, TraceRadius, 8, FColor::Green, false, DebugLifeTime);
 	DrawDebugLine(GetWorld(), Start, End, FColor::Yellow, false, DebugLifeTime, 0, 1.0f);
-#endif
+#endif*/
 
 	if (bHit && Hit.GetActor())
 	{

@@ -1,5 +1,6 @@
 #include "UserInterface/HUD/StatsWidget.h"
 #include "TimerManager.h"
+#include "Components/Border.h"
 #include "Engine/Engine.h"
 
 void UStatsWidget::NativeConstruct()
@@ -28,7 +29,7 @@ void UStatsWidget::NativeConstruct()
     {
         StatusText->SetVisibility(ESlateVisibility::Hidden);
     }
-
+    BorderStatusText->SetVisibility(ESlateVisibility::Hidden);
     UpdateBarColors();
 }
 
@@ -112,6 +113,7 @@ void UStatsWidget::OnDeath(AActor* DeadActor)
     {
         StatusText->SetText(FText::FromString("DEAD"));
         StatusText->SetVisibility(ESlateVisibility::Visible);
+        BorderStatusText->SetVisibility(ESlateVisibility::Visible);
     }
 }
 

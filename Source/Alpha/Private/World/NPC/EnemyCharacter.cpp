@@ -128,3 +128,45 @@ float AEnemyCharacter::GetHealthPercent() const
 {
 	return StatsComponent ? StatsComponent->GetHealthPercentage() : 0.f;
 }
+
+void AEnemyCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (!StatsWidgetComponent) return;
+
+	if (const APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+	{
+		const FVector CameraLocation = CameraManager->GetCameraLocation();
+		const FVector ToCamera = CameraLocation - StatsWidgetComponent->GetComponentLocation();
+		const FRotator LookRotation = FRotationMatrix::MakeFromX(ToCamera).Rotator();
+		StatsWidgetComponent->SetWorldRotation(LookRotation);
+
+		// --- FADING ---
+
+		const float Distance = FVector::Dist(CameraLocation, GetActorLocation());
+
+		float TargetOpacity = 1.0f;
+
+		if (Distance > WidgetFadeStartDistance)
+		{
+			const float Alpha = FMath::Clamp(
+				1.0f - (Distance - WidgetFadeStartDistance) / (WidgetFadeEndDistance - WidgetFadeStartDistance),
+				0.0f,
+				1.0f
+			);
+			TargetOpacity = Alpha;
+		}
+
+		// Bierzemy sam widget z komponentu
+		if (UUserWidget* Widget = Cast<UUserWidget>(StatsWidgetComponent->GetUserWidgetObject()))
+		{
+			float CurrentOpacity = Widget->GetRenderOpacity();
+			float NewOpacity = FMath::FInterpTo(CurrentOpacity, TargetOpacity, DeltaTime, WidgetFadeSpeed);
+			Widget->SetRenderOpacity(NewOpacity);
+
+			bool bShouldBeVisible = NewOpacity > 0.01f;
+			StatsWidgetComponent->SetVisibility(bShouldBeVisible);
+		}
+	}
+}

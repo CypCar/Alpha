@@ -19,6 +19,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
 public:
 	/** Przyjmowanie obrażeń z ApplyDamage / ApplyPointDamage */
@@ -29,6 +30,15 @@ public:
 		AActor* DamageCauser
 	) override;
 
+	UPROPERTY(EditAnywhere, Category="UI|Visibility")
+	float WidgetFadeStartDistance = 1200.0f;
+
+	UPROPERTY(EditAnywhere, Category="UI|Visibility")
+	float WidgetFadeEndDistance = 1500.0f;
+
+	UPROPERTY(EditAnywhere, Category="UI|Visibility")
+	float WidgetFadeSpeed = 5.0f;
+	
 	/** Statystyki (HP/Stamina) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	UStatsComponent* StatsComponent;

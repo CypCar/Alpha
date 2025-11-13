@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Border.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Components/StatsComponent.h"
@@ -58,6 +59,9 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UTextBlock* StatusText;
 
+    UPROPERTY(meta = (BindWidget))
+    UBorder* BorderStatusText;
+    
     UPROPERTY(meta = (BindWidget))
     UWidget* DeathOverlay;
 

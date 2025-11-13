@@ -2,6 +2,7 @@
 #include "TimerManager.h"
 #include "Engine/World.h"
 #include "GameFramework/Controller.h"
+#include "Kismet/GameplayStatics.h"
 
 UStatsComponent::UStatsComponent()
 {
@@ -78,6 +79,15 @@ void UStatsComponent::TakeDamage(float DamageAmount, AController* Instigator)
     if (CurrentHealth <= 0.0f)
     {
         HandleDeath();
+    }
+    
+    if (const AActor* OwnerActor = GetOwner())
+    {
+        UGameplayStatics::PlaySoundAtLocation(
+            this,
+            UseSound,
+            OwnerActor->GetActorLocation()
+        );
     }
 }
 
