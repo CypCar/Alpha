@@ -1,6 +1,15 @@
 //==========================================================================
 // INCLUDES
 //==========================================================================
+// Game
+#include "AlphaCharacter.h"
+#include "UserInterface/AlphaHUD.h"
+#include "UserInterface/Interaction/InteractionWidget.h"
+#include "Components/InventoryComponent.h"
+#include "AlphaPlayerController.h"
+#include "Interfaces/InteractionInterface.h"
+#include "World/LootContainer.h"
+#include "World/Pickup.h"
 // Engine
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -13,15 +22,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Components/AttackComponent.h"
 
-// Game
-#include "AlphaCharacter.h"
-#include "UserInterface/AlphaHUD.h"
-#include "UserInterface/Interaction/InteractionWidget.h"
-#include "Components/InventoryComponent.h"
-#include "AlphaPlayerController.h"
-#include "Interfaces/InteractionInterface.h"
-#include "World/LootContainer.h"
-#include "World/Pickup.h"
+
 
 //==========================================================================
 // LOG CATEGORY

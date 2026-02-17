@@ -18,8 +18,10 @@ public class Alpha : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"GameplayTags"
-		});
+			"GameplayTags",
+            "Slate",
+			"SlateCore"
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
